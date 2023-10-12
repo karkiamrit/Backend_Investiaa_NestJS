@@ -1,0 +1,140 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreatePlaceInput {
+  address: String!
+  name: String!
+  user: UserIdInput!
+}
+
+input CreateUserInput {
+  nickname: String!
+  password: String!
+  role: String!
+  username: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input GetManyInput {
+  """count or data or all, default = data"""
+  dataType: String
+
+  """
+  {key: "ASC" or "DESC" or "asc" or "desc" or 1 or -1} or {key: {direction: "ASC" or "DESC" or "asc" or "desc", nulls: "first" or "last" or "FIRST" or "LAST"}}}
+  """
+  order: JSON
+  pagination: IPagination
+  where: JSON
+}
+
+input GetOneInput {
+  where: JSON!
+}
+
+type GetPlaceType {
+  count: Float
+  data: [Place!]
+}
+
+type GetUserType {
+  count: Float
+  data: [User!]
+}
+
+input IPagination {
+  """Started from 0"""
+  page: Int!
+
+  """Size of page"""
+  size: Int!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type JwtWithUser {
+  jwt: String!
+  user: User!
+}
+
+type Mutation {
+  createManyPlaces(input: [CreatePlaceInput!]!): [Place!]!
+  createManyUsers(input: [CreateUserInput!]!): [User!]!
+  createPlace(input: CreatePlaceInput!): Place!
+  createUser(input: CreateUserInput!): User!
+  deleteFiles(keys: [String!]!): Boolean!
+  deletePlace(id: Float!): JSON!
+  deleteUser(id: String!): JSON!
+  signIn(input: SignInInput!): JwtWithUser!
+
+  """
+  Before you start to sign up, you have to set private key and public key in .env
+  """
+  signUp(input: SignUpInput!): JwtWithUser!
+  updatePlace(id: Float!, input: UpdatePlaceInput!): Place!
+  updateUser(id: String!, input: UpdateUserInput!): User!
+  uploadFile(file: Upload!): String!
+  uploadFiles(files: [Upload!]!): [String!]!
+}
+
+type Place {
+  address: String!
+  id: ID!
+  name: String!
+  user: User
+}
+
+type Query {
+  getManyPlaces(input: GetManyInput): GetPlaceType!
+  getManyUsers(input: GetManyInput): GetUserType!
+  getMe: User!
+  getOnePlace(input: GetOneInput!): Place!
+  getOneUser(input: GetOneInput!): User!
+}
+
+input SignInInput {
+  password: String!
+  username: String!
+}
+
+input SignUpInput {
+  nickname: String!
+  password: String!
+  username: String!
+}
+
+input UpdatePlaceInput {
+  address: String
+  name: String
+}
+
+input UpdateUserInput {
+  nickname: String
+  password: String
+  role: String
+  username: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type User {
+  createdAt: DateTime!
+  id: ID!
+  nickname: String!
+  place: [Place!]
+  role: String!
+  updatedAt: DateTime!
+  username: String!
+}
+
+input UserIdInput {
+  id: String!
+}
