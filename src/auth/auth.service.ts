@@ -12,19 +12,19 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   private signJWT(user: User) {
     return this.jwtService.sign(pick(user, ['id', 'role']));
   }
 
   async signUp(input: SignUpInput): Promise<JwtWithUser> {
-    const doesExistId = await this.userService.getOne({
-      where: { username: input.username },
-    });
 
+    const doesExistId = await this.userService.getOne({
+      where: { phone: input.phone },
+    });
     if (doesExistId) {
-      throw new BadRequestException('Username already exists');
+      throw new BadRequestException('Phone already exists');
     }
 
     const user = await this.userService.create(input);
@@ -39,9 +39,9 @@ export class AuthService {
   }
 
   async validateUser(input: SignInInput) {
-    const { username, password } = input;
+    const { phone, password } = input;
 
-    const user = await this.userService.getOne({ where: { username } });
+    const user = await this.userService.getOne({ where: { phone } });
     if (!user) {
       return null;
     }

@@ -4,13 +4,20 @@ import { SignUpInput } from 'src/auth/inputs/auth.input';
 import { OneRepoQuery, RepoQuery } from 'src/declare/types';
 import { User } from './entities/user.entity';
 import { CreateUserInput, UpdateUserInput } from './inputs/user.input';
+import { FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) { }
 
   getOne(qs: OneRepoQuery<User>, query?: string) {
-    return this.userRepository.getOne(qs, query);
+    if (query) {
+      return this.userRepository.getOne(qs, query);
+    }
+    else {
+      return this.userRepository.findOne(qs as FindOneOptions<User>);
+    }
+
   }
 
   getMany(qs?: RepoQuery<User>, query?: string) {
