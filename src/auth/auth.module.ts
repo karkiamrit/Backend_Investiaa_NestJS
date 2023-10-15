@@ -18,12 +18,12 @@ import { LocalStrategy } from './strategies/local.strategy';
         privateKey: configService.get('JWT_PRIVATE_KEY'),
         publicKey: configService.get('JWT_PUBLIC_KEY'),
         signOptions: {
-          algorithm: 'RS256',
+          // algorithm: 'RS256',
           expiresIn: '1d',
         },
-        verifyOptions: {
-          algorithms: ['RS256'],
-        },
+        // verifyOptions: {
+        //   algorithms: ['RS256'],
+        // },
       }),
     }),
     ConfigModule,
@@ -31,4 +31,4 @@ import { LocalStrategy } from './strategies/local.strategy';
   ],
   providers: [AuthResolver, AuthService, JwtStrategy, LocalStrategy],
 })
-export class AuthModule {}
+export class AuthModule { }

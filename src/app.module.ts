@@ -4,8 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { PlaceModule } from './place/place.module';
-import { UploadModule } from './upload/upload.module';
 import { UserModule } from './user/user.module';
 import { DeclareModule } from './declare/declare.module';
 import { getEnvPath } from './modules/helper/env.helper';
@@ -14,7 +12,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { SharedModule } from './modules/shared/shared.module';
 import { SettingService } from './modules/shared/services/setting.service';
 import { HealthModule } from './health/health.module';
-
+// import { PlaceModule } from './place/place.module';
+// import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -37,11 +36,14 @@ import { HealthModule } from './health/health.module';
     ScheduleModule.forRoot(),
     UserModule,
     AuthModule,
-    PlaceModule,
-    UploadModule,
     DeclareModule,
     CronModule,
     HealthModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
+
+
+
+// PlaceModule,
+// UploadModule,
