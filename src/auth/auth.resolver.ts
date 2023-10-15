@@ -9,12 +9,15 @@ import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
 
 @Resolver()
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Mutation(() => JwtWithUser)
   @UseGuards(SignInGuard)
   signIn(@CurrentUser() user: User, @Args('input') _: SignInInput) {
+    console.log('Received input:', 'hi');
+    console.log(user);
     return this.authService.signIn(user);
+
   }
 
   @Mutation(() => JwtWithUser, {

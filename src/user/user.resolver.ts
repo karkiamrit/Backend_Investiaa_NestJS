@@ -11,7 +11,7 @@ import { CurrentQuery } from 'src/modules/decorators/query.decorator';
 
 @Resolver()
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Query(() => GetUserType)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
