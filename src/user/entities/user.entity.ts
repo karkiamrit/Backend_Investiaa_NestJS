@@ -4,13 +4,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  // OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
-import { Place } from 'src/place/entities/place.entity';
+// import { Place } from 'src/place/entities/place.entity';
 
 const BCRYPT_HASH_ROUNDS = 10;
 
@@ -22,9 +22,13 @@ export class User {
   id: string;
 
   @Field(() => String)
-  @IsEmail()
   @Column()
-  username: string;
+  phone: string;
+
+  // @Field(() => String, { nullable: true })
+  // @IsEmail()
+  // @Column()
+  // username: string;
 
   @Column({ nullable: true })
   password: string;
@@ -49,11 +53,11 @@ export class User {
   })
   updatedAt: Date;
 
-  @Field(() => [Place], { nullable: true })
-  @OneToMany(() => Place, (place) => place.user, {
-    nullable: true,
-  })
-  place: Place[];
+  // @Field(() => [Place], { nullable: true })
+  // @OneToMany(() => Place, (place) => place.user, {
+  //   nullable: true,
+  // })
+  // place: Place[];
 
   @BeforeInsert()
   async beforeInsert() {
