@@ -5,7 +5,11 @@ import { Field, InputType } from '@nestjs/graphql';
 export class CreateUserInput {
   @Field(() => String)
   @IsNotEmpty()
-  username: string;
+  phone: string;
+
+  // @Field(() => String)
+  // @IsNotEmpty()
+  // username: string;
 
   @Field(() => String)
   @IsNotEmpty()
@@ -22,9 +26,13 @@ export class CreateUserInput {
 
 @InputType()
 export class UpdateUserInput {
+  // @Field(() => String, { nullable: true })
+  // @IsOptional()
+  // username?: string;
+
   @Field(() => String, { nullable: true })
   @IsOptional()
-  username?: string;
+  phone?: string;
 
   @Field(() => String, { nullable: true })
   @IsOptional()

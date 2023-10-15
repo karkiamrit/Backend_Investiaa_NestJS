@@ -3,18 +3,18 @@ import { IsNotEmpty } from 'class-validator';
 
 @InputType()
 export class SignInInput {
-  @Field(() => String)
+  @Field()
   @IsNotEmpty()
-  username: string;
+  phone: string;
 
-  @Field(() => String)
+  @Field()
   @IsNotEmpty()
   password: string;
 }
 
 @InputType()
 export class SignUpInput extends SignInInput {
-  @Field(() => String)
+  @Field()
   @IsNotEmpty()
   nickname: string;
 }
