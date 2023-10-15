@@ -1,4 +1,4 @@
-import { graphqlUploadExpress } from 'graphql-upload';
+// import { graphqlUploadExpress } from 'graphql-upload';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -6,6 +6,7 @@ import { AppModule } from './app.module';
 import { LoggingInterceptor } from './modules/interceptors/logging.interceptor';
 import { TimeoutInterceptor } from './modules/interceptors/timeout.interceptor';
 import { ConfigService } from '@nestjs/config';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -27,6 +28,7 @@ async function bootstrap() {
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
   );
 
+  // console.log('hi');
   app.enableCors({
     origin: '*',
     credentials: true,
