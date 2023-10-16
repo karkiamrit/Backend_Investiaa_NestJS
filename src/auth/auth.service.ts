@@ -19,7 +19,6 @@ export class AuthService {
   }
 
   async signUp(input: SignUpInput): Promise<JwtWithUser> {
-
     const doesExistId = await this.userService.getOne({
       where: { phone: input.phone },
     });

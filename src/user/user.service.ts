@@ -17,7 +17,6 @@ export class UserService {
     else {
       return this.userRepository.findOne(qs as FindOneOptions<User>);
     }
-
   }
 
   getMany(qs?: RepoQuery<User>, query?: string) {

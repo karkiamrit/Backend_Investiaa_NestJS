@@ -1,21 +1,20 @@
 version: '3'
 services:
-  app:
-    container_name: nestjs_boilerplate
-    restart: always
-    build: .
-    ports:
-      - '${PORT}:${PORT}'
-    depends_on:
-      - postgres
-    volumes:
-      - type: bind
-        source: ./
-        target: /app
-      # - .:/app
-      - node_modules:/app/node_modules
-    command: yarn dev
-
+  #   app:
+  #     container_name: nestjs_boilerplate
+  #     restart: always
+  #     build: .
+  #     ports:
+  #       - '${PORT}:${PORT}'
+  #     depends_on:
+  #       - postgres
+  #     volumes:
+  #       - type: bind
+  #         source: ./
+  #         target: /app
+  #       # - .:/app
+  #       - node_modules:/app/node_modules
+  #     command: yarn dev
   postgres:
     image: postgres
     container_name: postgres
@@ -30,9 +29,22 @@ services:
       PGTZ: 'UTC'
     ports:
       - '5432:5432'
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      TZ: 'UTC'
+    ports:
+      - '5050:80'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
 
 volumes:
   node_modules:
+  pgadmin:
 
     # version: "3.8"
     # services:
@@ -47,7 +59,7 @@ volumes:
     #       - POSTGRES_PASSWORD=${DB_PASSWORD}
     #       - POSTGRES_USER=${DB_USER}
     #       - POSTGRES_DB=${DB_NAME}
-
+    #       - 
     # volumes:
     #   postgres:
     #     name: dev

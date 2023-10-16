@@ -2,17 +2,53 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input Address {
+  country: String
+  location: String
+  state: String
+}
+
+type AddressInput {
+  country: String
+  location: String
+  state: String
+}
+
 input CreateUserInput {
+  address: [Address!]
+  avatar: String
+  bio: String
+  education: Education
+  email: String
+  email_verified: Boolean = false
+  facebook: String
+  instagram: String
+  kyc_verified: Boolean = false
+  name: String
   nickname: String!
   password: String!
   phone: String!
+  phone_verified: Boolean = false
+  preferred_sector: [String!]
   role: String!
+  twitter: String
+  whatsapp: String
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+input Education {
+  level: String
+  major: String
+}
+
+type EducationInput {
+  level: String
+  major: String
+}
 
 input GetManyInput {
   """count or data or all, default = data"""
@@ -84,17 +120,45 @@ input SignUpInput {
 }
 
 input UpdateUserInput {
+  address: Address
+  avatar: String
+  bio: String
+  education: Education
+  email: String
+  email_verified: Boolean
+  facebook: String
+  instagram: String
+  kyc_verified: Boolean
+  name: String
   nickname: String
   password: String
   phone: String
+  phone_verified: Boolean
+  preferred_sector: [String!]
   role: String
+  twitter: String
+  whatsapp: String
 }
 
 type User {
+  address: AddressInput
+  avatar: String
+  bio: String
   createdAt: DateTime!
+  education: EducationInput
+  email: String
+  email_verified: Boolean!
+  facebook: String!
   id: ID!
+  instagram: String!
+  kyc_verified: Boolean!
+  name: String
   nickname: String!
   phone: String!
+  phone_verified: Boolean!
+  preferred_sector: [String!]
   role: String!
+  twitter: String!
   updatedAt: DateTime!
+  whatsapp: String!
 }

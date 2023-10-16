@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { SignInInput, SignUpInput } from 'src/auth/inputs/auth.input';
 import { UseGuards } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
-import { CurrentUser } from 'src/modules/decorators/user.decorator';
+import { CurrentUser } from 'src/modules/decorators/query.decorator';
 import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
 
 @Resolver()
@@ -17,7 +17,6 @@ export class AuthResolver {
     console.log('Received input:', 'hi');
     console.log(user);
     return this.authService.signIn(user);
-
   }
 
   @Mutation(() => JwtWithUser, {

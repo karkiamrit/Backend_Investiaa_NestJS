@@ -1,22 +1,23 @@
-import { IsEmail } from 'class-validator';
+// import { IsEmail } from 'class-validator';
 import {
+  BaseEntity,
   BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
-  // OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import * as bcrypt from 'bcrypt';
+import { EducationInput, AddressInput } from '../inputs';
 // import { Place } from 'src/place/entities/place.entity';
 
 const BCRYPT_HASH_ROUNDS = 10;
 
 @ObjectType()
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -30,14 +31,14 @@ export class User {
   // @Column()
   // username: string;
 
-  @Column({ nullable: true })
+  @Column()
   password: string;
 
   @Field(() => String)
   @Column()
   nickname: string;
 
-  @Field(() => String)
+  @Field(() => String, { defaultValue: 'user' })
   @Column()
   role: 'admin' | 'user';
 
@@ -52,6 +53,62 @@ export class User {
     type: 'timestamp with time zone',
   })
   updatedAt: Date;
+
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  name: string;
+
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  email?: string;
+
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  bio?: string;
+
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  avatar?: string;
+
+  @Field()
+  @Column({ default: false })
+  email_verified: boolean;
+
+  @Field()
+  @Column({ default: false })
+  phone_verified: boolean;
+
+  @Field()
+  @Column({ default: false })
+  kyc_verified: boolean;
+
+  @Field()
+  @Column({ nullable: true })
+  facebook?: string;
+
+  @Field()
+  @Column({ nullable: true })
+  instagram?: string;
+
+  @Field()
+  @Column({ nullable: true })
+  twitter?: string;
+
+  @Field()
+  @Column({ nullable: true })
+  whatsapp?: string;
+
+  @Field(() => [String], { nullable: true })
+  @Column('json', { nullable: true })
+  preferred_sector?: string[];
+
+  @Field(() => EducationInput, { nullable: true })
+  @Column('json', { nullable: true })
+  education?: EducationInput;
+
+  @Field(() => AddressInput, { nullable: true })
+  @Column('json', { nullable: true })
+  address?: AddressInput;
 
   // @Field(() => [Place], { nullable: true })
   // @OneToMany(() => Place, (place) => place.user, {

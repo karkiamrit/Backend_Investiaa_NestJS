@@ -23,6 +23,7 @@ async function bootstrap() {
     }),
   );
 
+
   app.use(
     '/graphql',
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
