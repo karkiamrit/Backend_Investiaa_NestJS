@@ -6,12 +6,14 @@ import { JwtService } from '@nestjs/jwt';
 import { pick } from 'lodash';
 import { User } from 'src/user/entities/user.entity';
 import { JwtWithUser } from './entities/auth._entity';
+import { OtpService } from '../otp/otp.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly OtpService: OtpService,
   ) { }
 
   private signJWT(user: User) {
@@ -43,6 +45,9 @@ export class AuthService {
     const user = await this.userService.getOne({ where: { phone } });
     if (!user) {
       return null;
+    }
+    if (!user.phone_verified) {
+      throw new BadRequestException('Phone not verified');
     }
     const isValid: boolean = await bcrypt.compare(password, user.password);
 

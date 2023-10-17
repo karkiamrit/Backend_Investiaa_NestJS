@@ -9,7 +9,7 @@ import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
 
 @Resolver()
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Mutation(() => JwtWithUser)
   @UseGuards(SignInGuard)

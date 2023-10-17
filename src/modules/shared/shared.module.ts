@@ -10,4 +10,4 @@ import { ConfigModule } from '@nestjs/config';
   providers: [SettingService],
   exports: [SettingService],
 })
-export class SharedModule { }
+export class SharedModule {}

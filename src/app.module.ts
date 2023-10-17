@@ -1,3 +1,4 @@
+import { OtpModule } from './otp/otp.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -39,8 +40,10 @@ import { HealthModule } from './health/health.module';
     DeclareModule,
     CronModule,
     HealthModule,
+    OtpModule,
   ],
 })
+
 export class AppModule { }
 
 

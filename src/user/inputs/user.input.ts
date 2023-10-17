@@ -84,7 +84,7 @@ export class CreateUserInput {
 }
 
 @InputType()
-export class UpdateUserInput implements Partial<User>{
+export class UpdateUserInput implements Partial<User> {
   // @Field(() => String, { nullable: true })
   // @IsOptional()
   // username?: string;

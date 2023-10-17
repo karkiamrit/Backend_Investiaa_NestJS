@@ -10,7 +10,7 @@ import { CurrentUser } from 'src/modules/decorators/query.decorator';
 
 @Resolver()
 export class UserResolver {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Query(() => GetUserType)
   // @UseGuards(new GraphqlPassportAuthGuard('admin'))
@@ -62,10 +62,9 @@ export class UserResolver {
   @Query(() => User)
   // @UseGuards(new GraphqlPassportAuthGuard('user'))
   getMe(@CurrentUser() user: User) {
-    console.log(user)
+    console.log(user);
     return this.userService.getOne({
       where: { id: user.id },
     });
-
   }
 }
