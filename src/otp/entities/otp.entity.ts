@@ -1,9 +1,15 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/user/entities/user.entity';
 
 export enum OtpType {
-  PHONE_VERIFY = 'PHONE_VERIFY'
+  PHONE_VERIFY = 'PHONE_VERIFY',
 }
 
 @ObjectType()
@@ -20,22 +26,17 @@ export class Otp {
   @Field()
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
-  user: User
+  user: User;
 
   @Field()
   @Column({ type: 'enum', enum: OtpType })
-  operation: OtpType
+  operation: OtpType;
 
   @Field()
   @Column()
-  expires_in: Date
+  expires_in: Date;
 
   @Field()
   @Column({ default: false })
-  is_used: boolean
-
+  is_used: boolean;
 }
-
-
-
-
