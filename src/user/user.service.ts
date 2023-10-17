@@ -8,13 +8,14 @@ import { FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) { }
 
-  getOne(qs: OneRepoQuery<User>, query?: string) {
+  async getOne(qs: OneRepoQuery<User>, query?: string) {
     if (query) {
       return this.userRepository.getOne(qs, query);
-    } else {
-      return this.userRepository.findOne(qs as FindOneOptions<User>);
+    }
+    else {
+      return User.findOne(qs as FindOneOptions<User>);
     }
   }
 
@@ -23,19 +24,24 @@ export class UserService {
   }
 
   async create(input: CreateUserInput | SignUpInput): Promise<User> {
-    return this.userRepository.save(Object.assign(new User(), input));
+    return User.save(Object.assign(new User(), input));
   }
 
   createMany(input: CreateUserInput[]): Promise<User[]> {
     return this.userRepository.save(input);
   }
 
-  async update(id: string, input: UpdateUserInput): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
-    return this.userRepository.save({ ...user, ...input });
+  async update(id: number, input: UpdateUserInput): Promise<User> {
+    const user = await User.findOne({ where: { id } });
+    return User.save({ ...user, ...input });
   }
 
-  async delete(id: string) {
+  async updateProfile(id: number, input: UpdateUserInput): Promise<User> {
+    const user = await User.findOne({ where: { id } });
+    return User.save({ ...user, ...input });
+  }
+
+  async delete(id: number) {
     const { affected } = await this.userRepository.delete({ id });
     return { status: affected > 0 ? 'success' : 'fail' };
   }

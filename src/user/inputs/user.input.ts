@@ -62,6 +62,10 @@ export class CreateUserInput {
   @IsOptional()
   twitter?: string;
 
+  @Field({ nullable: true })
+  @IsOptional()
+  reset_token?: number;
+
   @Field(() => String, { nullable: true })
   @IsOptional()
   instagram?: string;
@@ -132,6 +136,10 @@ export class UpdateUserInput implements Partial<User> {
   @Field(() => Boolean, { nullable: true })
   @IsOptional()
   kyc_verified?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  reset_token?: number;
 
   @Field(() => String, { nullable: true })
   @IsOptional()

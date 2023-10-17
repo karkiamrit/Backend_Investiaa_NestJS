@@ -19,8 +19,8 @@ const BCRYPT_HASH_ROUNDS = 10;
 @Entity()
 export class User extends BaseEntity {
   @Field(() => ID)
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Field(() => String)
   @Column()
@@ -109,6 +109,10 @@ export class User extends BaseEntity {
   @Field(() => AddressInput, { nullable: true })
   @Column('json', { nullable: true })
   address?: AddressInput;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  reset_token?: number;
 
   // @Field(() => [Place], { nullable: true })
   // @OneToMany(() => Place, (place) => place.user, {
