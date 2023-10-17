@@ -1,29 +1,80 @@
-import { JwtWithUser } from './entities/auth._entity';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Context } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { SignInInput, SignUpInput } from 'src/auth/inputs/auth.input';
+import { SignInInput, SignUpInput } from './inputs/auth.input';
+import { JwtWithUser } from '../auth/entities/auth._entity';
 import { UseGuards } from '@nestjs/common';
-import { User } from 'src/user/entities/user.entity';
-import { CurrentUser } from 'src/modules/decorators/query.decorator';
 import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
+import { CurrentUser } from '../modules/decorators/query.decorator';
+import { OtpType } from 'src/otp/entities/otp.entity';
+import { User } from 'src/user/entities/user.entity';
+import { TokenService } from '../token/token.service';
 
 @Resolver()
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService,
+    private readonly tokenService: TokenService) { }
+
+  // @Mutation(() => JwtWithUser)
+  // async signUp(@Args('input') input: SignUpInput): Promise<JwtWithUser> {
+  //   const result = await this.authService.signUp(input);
+  //   return result;
+  // }
+  @Mutation(() => User)
+  async SignUp(
+    @Args('input') input: SignUpInput
+  ): Promise<User> {
+    return await this.authService.signUp(input)
+  }
+
+  @Mutation(() => String)
+  async refresh(
+    @Args('refreshToken') refreshToken: string
+  ): Promise<string> {
+    return await this.tokenService.createAccessTokenFromRefreshToken(refreshToken)
+  }
+
 
   @Mutation(() => JwtWithUser)
-  @UseGuards(SignInGuard)
-  signIn(@CurrentUser() user: User, @Args('input') _: SignInInput) {
-    console.log('Received input:', 'hi');
-    console.log(user);
-    return this.authService.signIn(user);
+  async signIn(@Args('input') input: SignInInput): Promise<JwtWithUser> {
+    const result = await this.authService.signIn(input);
+    return result;
   }
 
-  @Mutation(() => JwtWithUser, {
-    description:
-      'Before you start to sign up, you have to set private key and public key in .env',
-  })
-  signUp(@Args('input') input: SignUpInput) {
-    return this.authService.signUp(input);
+  @Mutation(() => Boolean)
+  async forgotPassword(@Args('email') email: string): Promise<boolean> {
+    const result = await this.authService.forgotPassword(email);
+    return result;
+  }
+
+  @Mutation(() => Boolean)
+  async resetPassword(@Args('token') token: string, @Args('newPassword') newPassword: string): Promise<boolean> {
+    const result = await this.authService.resetPassword(token, newPassword);
+    return result;
+  }
+
+  @Mutation(() => Boolean)
+  async requestOtpVerify(
+    @Args('phone') phone: string,
+    @Args('otpType') otpType: OtpType
+  ): Promise<Boolean> {
+    return await this.authService.requestOtpVerify(phone, otpType)
+  }
+
+  @Mutation(() => Boolean)
+  async verifyPhone(@Args('phone') phone: string, @Args('otpCode') otpCode: string): Promise<boolean> {
+    const result = await this.authService.verifyPhone(phone, otpCode);
+    return result;
+  }
+
+  @Mutation(() => Boolean)
+  logout(
+    @CurrentUser() query: User,
+    @Args('refreshToken') refreshToken: string,
+    @Args('fromAll') fromAll: boolean
+  ): Promise<boolean> {
+    return fromAll
+      ? this.authService.logoutFromAll(query)
+      : this.authService.logout(query, refreshToken)
   }
 }
+
