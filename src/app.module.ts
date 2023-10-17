@@ -1,3 +1,5 @@
+import { TokenModule } from './token/token.module';
+import { MailModule } from './mail/mail.module';
 import { OtpModule } from './otp/otp.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
@@ -41,8 +43,14 @@ import { HealthModule } from './health/health.module';
     CronModule,
     HealthModule,
     OtpModule,
+    MailModule,
+    TokenModule,
   ],
 })
+
+
+
+
 
 export class AppModule { }
 

@@ -26,7 +26,7 @@ declare module 'typeorm/repository/Repository' {
     getOne(
       this: Repository<Entity>,
       qs: OneRepoQuery<Entity>,
-      query: string,
+      query?: string,
     ): Promise<Entity>;
   }
 }
@@ -74,11 +74,11 @@ export class DeclareModule {
       query: string,
     ): Promise<IGetData<T>> {
       // You can remark these lines(if order {}) if you don't want to use strict order roles
-      if (order) {
-        filterOrder.call(this, order);
-      }
-
+      // if (order) {
+      //   filterOrder.call(this, order);
+      // }
       const { relations, select } = getInfoFromQuery<T>(query, true);
+
 
       const condition: FindManyOptions<T> = {
         relations,
@@ -90,7 +90,7 @@ export class DeclareModule {
           take: pagination.size,
         }),
       };
-
+      console.log('is', this)
       const returns = {
         data: async () => ({ data: await this.find(condition) }),
         count: async () => ({ count: await this.count(condition) }),
@@ -99,7 +99,6 @@ export class DeclareModule {
           return { data: res[0], count: res[1] };
         },
       };
-
       return returns[dataType]();
     };
 
