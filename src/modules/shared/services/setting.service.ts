@@ -10,7 +10,7 @@ import { formatError } from 'src/modules/format/graphql-error.format';
 
 @Injectable()
 export class SettingService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly configService: ConfigService) { }
 
   private get(key: string): string {
     const value = this.configService.get<string>(key);
@@ -72,11 +72,11 @@ export class SettingService {
     | Promise<TypeOrmModuleOptions> {
     return {
       type: 'postgres' as any,
-      host: this.getString('DB_HOST'),
+      host: this.getString('POSTGRES_HOST'),
       port: this.getNumber('DB_PORT'),
-      username: this.getString('DB_USER'),
-      password: this.getString('DB_PASSWORD'),
-      database: this.getString('DB_NAME'),
+      username: this.getString('POSTGRES_USER'),
+      password: this.getString('POSTGRES_PASSWORD'),
+      database: this.getString('POSTGRES_DATABASE'),
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
       autoLoadEntities: true,
