@@ -72,13 +72,17 @@ export class SettingService {
     | Promise<TypeOrmModuleOptions> {
     return {
       type: 'postgres' as any,
-      host: this.getString('DB_HOST'),
+      host: this.getString('POSTGRES_HOST'),
       port: this.getNumber('DB_PORT'),
-      username: this.getString('DB_USER'),
-      password: this.getString('DB_PASSWORD'),
-      database: this.getString('DB_NAME'),
+      username: this.getString('POSTGRES_USER'),
+      password: this.getString('POSTGRES_PASSWORD'),
+      database: this.getString('POSTGRES_DATABASE'),
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
+      extra: {
+    	ssl: true,
+    	sslmode: 'require',
+      },
       autoLoadEntities: true,
       logging: false, // if you want to see the query log, change it to true
       // timezone: '+09:00', // if you want to use timezone, change it to your timezone
