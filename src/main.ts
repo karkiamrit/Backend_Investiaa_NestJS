@@ -28,7 +28,22 @@ async function bootstrap() {
     graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
   );
 
-  // console.log('hi');
+  // fetch('/graphql', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json', // Set the appropriate content-type
+  //     // Add other headers if needed
+  //   },
+  //   body: JSON.stringify({
+  //     query: 'Your GraphQL Query',
+  //     // Include variables if required
+  //   }),
+  // })
+  //   .then(response => response.json())
+  //   .then(data => console.log(data))
+  //   .catch(error => console.error(error));
+
+  console.log('hi');
   app.enableCors({
     origin: '*',
     credentials: true,
