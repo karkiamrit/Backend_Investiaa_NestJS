@@ -46,7 +46,7 @@ async function bootstrap() {
   console.log('hi');
   app.enableCors({
     origin: '*',
-    // credentials: true,
+    credentials: true,
   });
   const configService = app.select(AppModule).get(ConfigService);
 
