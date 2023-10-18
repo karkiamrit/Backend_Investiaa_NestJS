@@ -79,6 +79,10 @@ export class SettingService {
       database: this.getString('POSTGRES_DATABASE'),
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
+      extra: {
+        ssl: true,
+        sslmode: 'require',
+      },
       autoLoadEntities: true,
       logging: false, // if you want to see the query log, change it to true
       // timezone: '+09:00', // if you want to use timezone, change it to your timezone
