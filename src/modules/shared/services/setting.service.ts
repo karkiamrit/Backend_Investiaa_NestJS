@@ -80,13 +80,8 @@ export class SettingService {
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
       extra: {
-<<<<<<< HEAD
-    	ssl: true,
-    	sslmode: 'require',
-=======
         ssl: true,
         sslmode: 'require',
->>>>>>> ba1dcdf01efd454c6ceb5658a846c06bf41674da
       },
       autoLoadEntities: true,
       logging: false, // if you want to see the query log, change it to true
