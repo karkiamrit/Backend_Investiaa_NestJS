@@ -54,7 +54,6 @@ export class UserResolver {
     return this.userService.update(id, input);
   }
 
-
   @Mutation(() => User)
   async updateMe(@CurrentUser() user: User, @Args('input') input: UpdateUserInput) {
     user = await this.userService.getOne({ where: { id: user.id } })

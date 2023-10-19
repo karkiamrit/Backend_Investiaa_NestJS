@@ -49,11 +49,8 @@ export class SettingService {
     return this.nodeEnv === 'production';
   }
 
-  get graphqlUseFactory():
-    | Omit<ApolloDriverConfig, 'driver'>
-    | (Promise<Omit<ApolloDriverConfig, 'driver'>> & { uploads: boolean }) {
+  get graphqlUseFactory(): Omit<ApolloDriverConfig, 'driver'> {
     return {
-      uploads: false,
       resolvers: { JSON: GraphQLJSON },
       autoSchemaFile: join(process.cwd(), 'src/graphql-schema.gql'),
       sortSchema: true,
@@ -66,6 +63,7 @@ export class SettingService {
       formatError,
     };
   }
+
 
   get typeOrmUseFactory():
     | TypeOrmModuleOptions
