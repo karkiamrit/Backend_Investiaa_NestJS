@@ -55,6 +55,7 @@ export class SettingService {
       autoSchemaFile: join(process.cwd(), 'src/graphql-schema.gql'),
       sortSchema: true,
       playground: false,
+      introspection: true,
       // ...(!this.isProduction && {
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       // }),
