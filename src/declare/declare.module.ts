@@ -74,11 +74,13 @@ export class DeclareModule {
       query: string,
     ): Promise<IGetData<T>> {
       // You can remark these lines(if order {}) if you don't want to use strict order roles
+
+      // console.log('is', this)
       // if (order) {
       //   filterOrder.call(this, order);
       // }
-      const { relations, select } = getInfoFromQuery<T>(query, true);
 
+      const { relations, select } = getInfoFromQuery<T>(query, true);
 
       const condition: FindManyOptions<T> = {
         relations,
@@ -90,8 +92,10 @@ export class DeclareModule {
           take: pagination.size,
         }),
       };
-      console.log('is', this)
+
+      console.log(this)
       const returns = {
+
         data: async () => ({ data: await this.find(condition) }),
         count: async () => ({ count: await this.count(condition) }),
         all: async () => {

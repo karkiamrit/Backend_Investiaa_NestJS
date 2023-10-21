@@ -11,7 +11,6 @@ export class TypeOrmExModule {
 
     for (const repository of repositories) {
       const entity = Reflect.getMetadata(TYPEORM_CUSTOM_REPOSITORY, repository);
-
       if (!entity) {
         continue;
       }

@@ -8,10 +8,9 @@ import { GetMailType, Mail } from './entities/mail.entity';
 import { CreateMailInput, UpdateMailInput } from './inputs/mail.input';
 @Resolver()
 export class MailResolver {
-  constructor(private readonly mailService: MailService) {}
+  constructor(private readonly mailService: MailService) { }
 
-  @Query(() => Mail)
-  @UseGuards(new GraphqlPassportAuthGuard('admin'))
+
   @Mutation(() => Mail)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
   createMail(@Args('input') input: CreateMailInput) {
