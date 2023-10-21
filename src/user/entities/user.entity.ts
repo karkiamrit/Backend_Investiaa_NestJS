@@ -36,7 +36,7 @@ export class User extends BaseEntity {
 
   @Field(() => String)
   @Column()
-  nickname: string;
+  username: string;
 
   @Field(() => String, { defaultValue: 'user' })
   @Column()

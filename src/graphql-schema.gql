@@ -32,7 +32,6 @@ input CreateUserInput {
   instagram: String
   kyc_verified: Boolean = false
   name: String
-  nickname: String!
   password: String!
   phone: String!
   phone_verified: Boolean = false
@@ -40,6 +39,7 @@ input CreateUserInput {
   reset_token: Float
   role: String!
   twitter: String
+  username: String!
   whatsapp: String
 }
 
@@ -139,9 +139,9 @@ input SignInInput {
 }
 
 input SignUpInput {
-  nickname: String!
   password: String!
   phone: String!
+  username: String!
 }
 
 input UpdateMailInput {
@@ -162,7 +162,6 @@ input UpdateUserInput {
   instagram: String
   kyc_verified: Boolean
   name: String
-  nickname: String
   password: String
   phone: String
   phone_verified: Boolean
@@ -170,6 +169,7 @@ input UpdateUserInput {
   reset_token: Float
   role: String
   twitter: String
+  username: String
   whatsapp: String
 }
 
@@ -186,7 +186,6 @@ type User {
   instagram: String!
   kyc_verified: Boolean!
   name: String
-  nickname: String!
   phone: String!
   phone_verified: Boolean!
   preferred_sector: [String!]
@@ -194,5 +193,6 @@ type User {
   role: String!
   twitter: String!
   updatedAt: DateTime!
+  username: String!
   whatsapp: String!
 }

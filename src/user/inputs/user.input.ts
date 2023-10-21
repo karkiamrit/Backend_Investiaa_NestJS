@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, MaxLength, MinLength } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 import { EducationInput } from './education.input';
 import { AddressInput } from './address.input';
@@ -8,19 +8,19 @@ import { User } from '../entities/user.entity';
 export class CreateUserInput {
   @Field(() => String)
   @IsNotEmpty()
+  @MinLength(10, { message: 'Phone number should be atleast 10 digits long' })
+  @MaxLength(10, { message: 'Phone number should be atmost 10 digits long' })
   phone: string;
-
-  // @Field(() => String)
-  // @IsNotEmpty()
-  // username: string;
 
   @Field(() => String)
   @IsNotEmpty()
+  @MinLength(10, { message: 'Phone number should be atleast 10 digits long' })
   password: string;
 
   @Field(() => String)
   @IsNotEmpty()
-  nickname: string;
+  @MaxLength(255, { message: 'Username number should be atmost 255 characters long' })
+  username: string;
 
   @Field(() => String)
   @IsNotEmpty()
@@ -32,6 +32,7 @@ export class CreateUserInput {
 
   @Field(() => String, { nullable: true })
   @IsOptional()
+  @IsEmail()
   email?: string;
 
   @Field(() => String, { nullable: true })
@@ -103,7 +104,7 @@ export class UpdateUserInput implements Partial<User> {
 
   @Field(() => String, { nullable: true })
   @IsOptional()
-  nickname?: string;
+  username?: string;
 
   @Field(() => String, { nullable: true })
   @IsOptional()
