@@ -93,7 +93,6 @@ export class DeclareModule {
         }),
       };
 
-      console.log(this)
       const returns = {
 
         data: async () => ({ data: await this.find(condition) }),

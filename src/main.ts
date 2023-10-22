@@ -27,8 +27,6 @@ async function bootstrap() {
   //   '/graphql',
   //   graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
   // );
-
-  console.log('hi');
   app.enableCors({
     origin: '*',
     credentials: true,

@@ -11,12 +11,17 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) { }
 
   async getOne(qs: OneRepoQuery<User>, query?: string) {
-    console.log('getone' + this.userRepository.target)
-    return this.userRepository.getOne(qs, query);
+    if (query) {
+      return this.userRepository.getOne(qs, query);
+    }
+    else {
+      return User.findOne(qs as FindOneOptions<User>);
+    }
+
   }
 
   getMany(qs?: RepoQuery<User>, query?: string) {
-    console.log(this.userRepository.target)
+
     return this.userRepository.getMany(qs || {}, query);
 
   }

@@ -5,14 +5,12 @@ import { Token } from './entities/token.entity';
 import { SignOptions, TokenExpiredError, JwtPayload } from 'jsonwebtoken'
 import * as jwt from 'jsonwebtoken'
 import { User } from 'src/user/entities/user.entity';
-import { UserRepository } from 'src/user/user.repository';
 import { ACCESS_TOKEN_EXPIRY, ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRECT } from 'src/util/config/config';
 
 @Injectable()
 export class TokenService {
   constructor(
-    private readonly tokenRepo: TokenRepository,
-    private readonly userRepo: UserRepository
+    private readonly tokenRepo: TokenRepository
   ) { }
 
   private readonly BASE_OPTIONS: SignOptions = {
@@ -144,8 +142,7 @@ export class TokenService {
     if (!subId) {
       throw new Error('malformed')
     }
-
-    return await this.userRepo.findOne({ where: { id: subId } })
+    return await User.findOne({ where: { id: subId } })
   }
 
   /**

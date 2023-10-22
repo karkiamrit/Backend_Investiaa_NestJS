@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { MailRepository } from './mail.repository';
 import { Mail } from './entities/mail.entity';
 import { CreateMailInput, UpdateMailInput } from './inputs/mail.input';
-import _ from 'lodash';
+import * as _ from 'lodash';
 import { Mailer, StringFields } from 'src/util/mailer';
 @Injectable()
 export class MailService extends Mailer {
@@ -22,10 +22,8 @@ export class MailService extends Mailer {
   }
 
   async sendResetPasswordLink(email: string, link: string): Promise<boolean> {
-
     let mail = await Mail.findOne({ where: { id: 1 } });
     if (!mail) return false;
-
     mail = _.merge(mail, {
       html_content: this.resolveTemplateFields(mail.html_content, { link }),
       text_content: this.resolveTemplateFields(mail.text_content, { link }),
@@ -45,16 +43,14 @@ export class MailService extends Mailer {
 
   resolveTemplateFields(content: string, fields: StringFields) {
     let text = _.clone(content);
-
     const variables: string[] = Object.keys(fields);
-
     for (let i = 0; i < variables.length; i++) {
       const key: string = variables[i];
       const value: string = fields[key];
+      text = text?.replace(new RegExp(`{${key}}`, 'g'), value);
 
-      text = text?.replace(new RegExp(`{{${key}}}`, 'g'), value);
     }
-
     return text;
+
   }
 }
