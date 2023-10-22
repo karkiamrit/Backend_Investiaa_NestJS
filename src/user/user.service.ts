@@ -12,12 +12,7 @@ export class UserService {
 
   async getOne(qs: OneRepoQuery<User>, query?: string) {
     console.log('getone' + this.userRepository.target)
-    if (query) {
-      return this.userRepository.getOne(qs, query);
-    }
-    else {
-      return User.findOne(qs as FindOneOptions<User>);
-    }
+    return this.userRepository.getOne(qs, query);
   }
 
   getMany(qs?: RepoQuery<User>, query?: string) {
