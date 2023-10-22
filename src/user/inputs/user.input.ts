@@ -14,7 +14,7 @@ export class CreateUserInput {
 
   @Field(() => String)
   @IsNotEmpty()
-  @MinLength(10, { message: 'Phone number should be atleast 10 digits long' })
+  // @MinLength(10, { message: 'Phone number should be atleast 10 digits long' })
   password: string;
 
   @Field(() => String)
@@ -90,9 +90,6 @@ export class CreateUserInput {
 
 @InputType()
 export class UpdateUserInput implements Partial<User> {
-  // @Field(() => String, { nullable: true })
-  // @IsOptional()
-  // username?: string;
 
   @Field(() => String, { nullable: true })
   @IsOptional()

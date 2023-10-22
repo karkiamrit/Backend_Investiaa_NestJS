@@ -44,12 +44,12 @@ export class AuthService {
 
   async signIn(input: SignInInput): Promise<JwtWithUser> {
     const user = await this.userService.getOne({ where: { phone: input.phone } });
+    console.log(user)
     if (!user) {
       throw new ApolloError('User doesn\'t exist', 'USER_NOT_FOUND', {
         statusCode: 404, // Not Found
       });
     }
-
     if (!user.phone_verified) {
       throw new ApolloError('Please verify your phone number to proceed', 'PHONE_NOT_VERIFIED', {
         statusCode: 403, // Forbidden
@@ -58,7 +58,7 @@ export class AuthService {
 
     const isValidPassword = await bcrypt.compare(input.password, user.password);
     if (!isValidPassword) {
-      throw new ApolloError('Invalid phone or password', 'INVALID_CREDENTIALS', {
+      throw new ApolloError('Invalid password', 'INVALID_CREDENTIALS', {
         statusCode: 401, // Unauthorized
       });
     }

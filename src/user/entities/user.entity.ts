@@ -13,7 +13,6 @@ import * as bcrypt from 'bcrypt';
 import { EducationInput, AddressInput } from '../inputs';
 // import { Place } from 'src/place/entities/place.entity';
 
-const BCRYPT_HASH_ROUNDS = 10;
 
 @ObjectType()
 @Entity()
@@ -25,11 +24,6 @@ export class User extends BaseEntity {
   @Field(() => String)
   @Column()
   phone: string;
-
-  // @Field(() => String, { nullable: true })
-  // @IsEmail()
-  // @Column()
-  // username: string;
 
   @Column()
   password: string;
@@ -122,9 +116,6 @@ export class User extends BaseEntity {
 
   @BeforeInsert()
   async beforeInsert() {
-    if (this.password) {
-      this.password = await bcrypt.hash(this.password, BCRYPT_HASH_ROUNDS);
-    }
 
     if (!this.role) {
       this.role = 'user';

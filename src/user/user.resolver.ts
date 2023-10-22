@@ -23,8 +23,8 @@ export class UserResolver {
     return this.userService.getMany(qs, query);
   }
 
-  @Query(() => User)
-  @UseGuards(new GraphqlPassportAuthGuard('admin'))
+  @Query(() => User || null)
+  // @UseGuards(new GraphqlPassportAuthGuard('admin'))
   getOneUser(
     @Args({ name: 'input' })
     qs: GetOneInput<User>,

@@ -11,9 +11,8 @@ export class SignInInput {
 
   @Field()
   @IsNotEmpty()
-  @MinLength(10, { message: 'Password shout be atleast 10 digits long' })
+  // @MinLength(10, { message: 'Password shout be atleast 10 digits long' })
   password: string;
-
 }
 
 @InputType()

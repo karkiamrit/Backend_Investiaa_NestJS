@@ -14,11 +14,6 @@ export class AuthResolver {
   constructor(private readonly authService: AuthService,
     private readonly tokenService: TokenService) { }
 
-  // @Mutation(() => JwtWithUser)
-  // async signUp(@Args('input') input: SignUpInput): Promise<JwtWithUser> {
-  //   const result = await this.authService.signUp(input);
-  //   return result;
-  // }
   @Mutation(() => User)
   async SignUp(
     @Args('input') input: SignUpInput
