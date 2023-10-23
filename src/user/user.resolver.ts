@@ -61,7 +61,6 @@ export class UserResolver {
     return this.userService.updateProfile(user.id, input);
   }
 
-
   @Mutation(() => GraphQLJSON)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
   deleteUser(@Args('id') id: number) {
