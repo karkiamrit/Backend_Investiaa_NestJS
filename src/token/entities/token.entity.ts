@@ -19,15 +19,13 @@ export class Token extends BaseEntity {
   @Field()
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: User
+  user: User;
 
   @Field()
   @Column()
-  expires_in: Date
+  expires_in: Date;
 
   @Field()
   @Column({ default: false })
-  is_revoked: boolean
-
+  is_revoked: boolean;
 }
-

@@ -11,7 +11,7 @@ import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
 
 @Resolver()
 export class UserResolver {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Query(() => GetUserType)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
@@ -55,9 +55,12 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async updateMe(@CurrentUser() user: User, @Args('input') input: UpdateUserInput) {
-    user = await this.userService.getOne({ where: { id: user.id } })
-    console.log(user)
+  async updateMe(
+    @CurrentUser() user: User,
+    @Args('input') input: UpdateUserInput,
+  ) {
+    user = await this.userService.getOne({ where: { id: user.id } });
+    console.log(user);
     return this.userService.updateProfile(user.id, input);
   }
 
@@ -70,7 +73,6 @@ export class UserResolver {
   @Query(() => User)
   @UseGuards(SignInGuard)
   getMe(@CurrentUser() user: User) {
-
     return this.userService.getOne({
       where: { id: user.id },
     });

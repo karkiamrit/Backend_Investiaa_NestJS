@@ -10,7 +10,7 @@ import { formatError } from 'src/modules/format/graphql-error.format';
 
 @Injectable()
 export class SettingService {
-  constructor(private readonly configService: ConfigService) { }
+  constructor(private readonly configService: ConfigService) {}
 
   private get(key: string): string {
     const value = this.configService.get<string>(key);
@@ -64,7 +64,6 @@ export class SettingService {
       formatError,
     };
   }
-
 
   get typeOrmUseFactory():
     | TypeOrmModuleOptions

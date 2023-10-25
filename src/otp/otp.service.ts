@@ -5,8 +5,7 @@ import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class OtpService {
-  constructor(private readonly otpRepository: OtpRepository) { }
-
+  constructor(private readonly otpRepository: OtpRepository) {}
 
   /**
    * Create and save an OTP object to the database.

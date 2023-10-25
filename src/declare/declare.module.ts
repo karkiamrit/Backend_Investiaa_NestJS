@@ -94,7 +94,6 @@ export class DeclareModule {
       };
 
       const returns = {
-
         data: async () => ({ data: await this.find(condition) }),
         count: async () => ({ count: await this.count(condition) }),
         all: async () => {

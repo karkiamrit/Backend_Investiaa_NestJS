@@ -11,23 +11,22 @@ import { TokenService } from '../token/token.service';
 
 @Resolver()
 export class AuthResolver {
-  constructor(private readonly authService: AuthService,
-    private readonly tokenService: TokenService) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly tokenService: TokenService,
+  ) {}
 
   @Mutation(() => User)
-  async SignUp(
-    @Args('input') input: SignUpInput
-  ): Promise<User> {
-    return await this.authService.signUp(input)
+  async SignUp(@Args('input') input: SignUpInput): Promise<User> {
+    return await this.authService.signUp(input);
   }
 
   @Mutation(() => String)
-  async refresh(
-    @Args('refreshToken') refreshToken: string
-  ): Promise<string> {
-    return await this.tokenService.createAccessTokenFromRefreshToken(refreshToken)
+  async refresh(@Args('refreshToken') refreshToken: string): Promise<string> {
+    return await this.tokenService.createAccessTokenFromRefreshToken(
+      refreshToken,
+    );
   }
-
 
   @Mutation(() => JwtWithUser)
   async signIn(@Args('input') input: SignInInput): Promise<JwtWithUser> {
@@ -42,7 +41,10 @@ export class AuthResolver {
   }
 
   @Mutation(() => Boolean)
-  async resetPassword(@Args('token') token: string, @Args('newPassword') newPassword: string): Promise<boolean> {
+  async resetPassword(
+    @Args('token') token: string,
+    @Args('newPassword') newPassword: string,
+  ): Promise<boolean> {
     const result = await this.authService.resetPassword(token, newPassword);
     return result;
   }
@@ -50,13 +52,16 @@ export class AuthResolver {
   @Mutation(() => Boolean)
   async requestOtpVerify(
     @Args('phone') phone: string,
-    @Args('otpType') otpType: OtpType
-  ): Promise<Boolean> {
-    return await this.authService.requestOtpVerify(phone, otpType)
+    @Args('otpType') otpType: OtpType,
+  ): Promise<boolean> {
+    return await this.authService.requestOtpVerify(phone, otpType);
   }
 
   @Mutation(() => Boolean)
-  async verifyPhone(@Args('phone') phone: string, @Args('otpCode') otpCode: string): Promise<boolean> {
+  async verifyPhone(
+    @Args('phone') phone: string,
+    @Args('otpCode') otpCode: string,
+  ): Promise<boolean> {
     const result = await this.authService.verifyPhone(phone, otpCode);
     return result;
   }
@@ -65,11 +70,10 @@ export class AuthResolver {
   logout(
     @CurrentUser() query: User,
     @Args('refreshToken') refreshToken: string,
-    @Args('fromAll') fromAll: boolean
+    @Args('fromAll') fromAll: boolean,
   ): Promise<boolean> {
     return fromAll
       ? this.authService.logoutFromAll(query)
-      : this.authService.logout(query, refreshToken)
+      : this.authService.logout(query, refreshToken);
   }
 }
-

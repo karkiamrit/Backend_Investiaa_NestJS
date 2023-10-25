@@ -39,11 +39,10 @@ import { OtpRepository } from 'src/otp/otp.repository';
     MailService,
     Http,
     TokenRepository,
-    MailRepository
+    MailRepository,
   ],
 })
-export class AuthModule { }
-
+export class AuthModule {}
 
 // JwtModule.registerAsync({
 //   imports: [ConfigModule],

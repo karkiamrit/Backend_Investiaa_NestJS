@@ -13,7 +13,6 @@ import * as bcrypt from 'bcrypt';
 import { EducationInput, AddressInput } from '../inputs';
 // import { Place } from 'src/place/entities/place.entity';
 
-
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
@@ -116,7 +115,6 @@ export class User extends BaseEntity {
 
   @BeforeInsert()
   async beforeInsert() {
-
     if (!this.role) {
       this.role = 'user';
     }

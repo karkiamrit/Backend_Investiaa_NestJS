@@ -9,4 +9,4 @@ import { UserService } from './user.service';
   providers: [UserResolver, UserService],
   exports: [UserService],
 })
-export class UserModule { }
+export class UserModule {}

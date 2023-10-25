@@ -2,21 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { OneRepoQuery, RepoQuery } from 'src/declare/types';
 import { TokenRepository } from './token.repository';
 import { Token } from './entities/token.entity';
-import { SignOptions, TokenExpiredError, JwtPayload } from 'jsonwebtoken'
-import * as jwt from 'jsonwebtoken'
+import { SignOptions, TokenExpiredError, JwtPayload } from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { User } from 'src/user/entities/user.entity';
-import { ACCESS_TOKEN_EXPIRY, ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRECT } from 'src/util/config/config';
+import {
+  ACCESS_TOKEN_EXPIRY,
+  ACCESS_TOKEN_SECRET,
+  REFRESH_TOKEN_SECRECT,
+} from 'src/util/config/config';
 
 @Injectable()
 export class TokenService {
-  constructor(
-    private readonly tokenRepo: TokenRepository
-  ) { }
+  constructor(private readonly tokenRepo: TokenRepository) {}
 
   private readonly BASE_OPTIONS: SignOptions = {
     issuer: 'suvaye',
-    audience: 'suvaye'
-  }
+    audience: 'suvaye',
+  };
 
   /**
    * It creates a refresh token in database, then sign it with JWT
@@ -25,46 +27,48 @@ export class TokenService {
    * @returns A refresh token
    */
   async createRefreshToken(user: User, expiresIn: number): Promise<string> {
-    const token = await this.tokenRepo.createToken(user, expiresIn)
+    const token = await this.tokenRepo.createToken(user, expiresIn);
 
     const options: SignOptions = {
       ...this.BASE_OPTIONS,
       subject: String(user.id),
       jwtid: String(token.id),
       expiresIn,
-      algorithm: 'HS256'
-    }
+      algorithm: 'HS256',
+    };
 
-    const refreshToken = jwt.sign({}, REFRESH_TOKEN_SECRECT, options)
-    return refreshToken
+    const refreshToken = jwt.sign({}, REFRESH_TOKEN_SECRECT, options);
+    return refreshToken;
   }
 
   /**
    * It creates an access token and sign it with JWT
    * @param user - The user object that we want to generate token for
    * @param expiresIn - The number of seconds the token will be valid for
-   * @returns 
+   * @returns
    */
   async createAccessToken(user: User, expiresIn: number): Promise<string> {
     const options: SignOptions = {
       ...this.BASE_OPTIONS,
       subject: String(user.id),
       expiresIn,
-      algorithm: 'HS256'
-    }
+      algorithm: 'HS256',
+    };
 
-    const accessToken = jwt.sign({}, ACCESS_TOKEN_SECRET, options)
-    return accessToken
+    const accessToken = jwt.sign({}, ACCESS_TOKEN_SECRET, options);
+    return accessToken;
   }
 
   /**
-   * It resolves the refresh token to a user, then create access token for that user 
+   * It resolves the refresh token to a user, then create access token for that user
    * @param {string} refreshToken - Refresh token that was sent to client
    * @returns {user: User, token: string}
    */
-  async createAccessTokenFromRefreshToken(refreshToken: string): Promise<string> {
-    const { user } = await this.resolveRefreshToken(refreshToken)
-    return await this.createAccessToken(user, Number(ACCESS_TOKEN_EXPIRY))
+  async createAccessTokenFromRefreshToken(
+    refreshToken: string,
+  ): Promise<string> {
+    const { user } = await this.resolveRefreshToken(refreshToken);
+    return await this.createAccessToken(user, Number(ACCESS_TOKEN_EXPIRY));
   }
 
   /**
@@ -72,22 +76,24 @@ export class TokenService {
    * @param {string} accessToken - The decoded access token
    * @returns An object with a user and token
    */
-  async resolveRefreshToken(accessToken: string): Promise<{ user: User, token: Token }> {
-    const payload = await this.decodeRefreshToken(accessToken)
+  async resolveRefreshToken(
+    accessToken: string,
+  ): Promise<{ user: User; token: Token }> {
+    const payload = await this.decodeRefreshToken(accessToken);
 
-    const token = await this.getStoredTokenFromRefreshTokenPayload(payload)
+    const token = await this.getStoredTokenFromRefreshTokenPayload(payload);
     if (!token) {
-      throw new Error('malformed')
+      throw new Error('malformed');
     }
     if (token.is_revoked) {
-      throw new Error('revoked')
+      throw new Error('revoked');
     }
 
-    const user = await this.getUserFromRefreshTokenPayload(payload)
+    const user = await this.getUserFromRefreshTokenPayload(payload);
     if (!user) {
-      throw new Error('malformed')
+      throw new Error('malformed');
     }
-    return { user, token }
+    return { user, token };
   }
 
   /**
@@ -102,12 +108,12 @@ export class TokenService {
           reject(
             err instanceof TokenExpiredError
               ? new Error('expired')
-              : new Error('malformed')
-          )
+              : new Error('malformed'),
+          );
         }
-        resolve(payload as JwtPayload)
-      })
-    })
+        resolve(payload as JwtPayload);
+      });
+    });
   }
 
   /**
@@ -122,12 +128,12 @@ export class TokenService {
           reject(
             err instanceof TokenExpiredError
               ? new Error('expired')
-              : new Error('malformed')
-          )
+              : new Error('malformed'),
+          );
         }
-        resolve(payload as JwtPayload)
-      })
-    })
+        resolve(payload as JwtPayload);
+      });
+    });
   }
 
   /**
@@ -136,13 +142,15 @@ export class TokenService {
    * @param {JwtPayload} payload - A payload of the token
    * @returns A user or null object
    */
-  async getUserFromRefreshTokenPayload(payload: JwtPayload): Promise<User | null> {
-    const subId = Number(payload.sub)
+  async getUserFromRefreshTokenPayload(
+    payload: JwtPayload,
+  ): Promise<User | null> {
+    const subId = Number(payload.sub);
 
     if (!subId) {
-      throw new Error('malformed')
+      throw new Error('malformed');
     }
-    return await User.findOne({ where: { id: subId } })
+    return await User.findOne({ where: { id: subId } });
   }
 
   /**
@@ -151,14 +159,16 @@ export class TokenService {
    * @param {JwtPayload} payload - A payload of the token
    * @returns A token or null object
    */
-  async getStoredTokenFromRefreshTokenPayload(payload: JwtPayload): Promise<Token | null> {
-    const tokenId = Number(payload.jti)
+  async getStoredTokenFromRefreshTokenPayload(
+    payload: JwtPayload,
+  ): Promise<Token | null> {
+    const tokenId = Number(payload.jti);
 
     if (!tokenId) {
-      throw new Error('malformed')
+      throw new Error('malformed');
     }
 
-    return await this.tokenRepo.findTokenById(tokenId)
+    return await this.tokenRepo.findTokenById(tokenId);
   }
 
   /**
@@ -168,13 +178,13 @@ export class TokenService {
    * @returns - A boolean value
    */
   async deleteRefreshToken(user: User, payload: JwtPayload): Promise<boolean> {
-    const tokenId = payload.jti
+    const tokenId = payload.jti;
 
     if (!tokenId) {
-      throw new Error('malformed')
+      throw new Error('malformed');
     }
 
-    return await this.tokenRepo.deleteToken(user, Number(tokenId))
+    return await this.tokenRepo.deleteToken(user, Number(tokenId));
   }
 
   /**
@@ -183,6 +193,6 @@ export class TokenService {
    * @returns - A boolean value
    */
   async deleteRefreshTokensForUser(user: User): Promise<boolean> {
-    return await this.tokenRepo.deleteTokensForUser(user)
+    return await this.tokenRepo.deleteTokensForUser(user);
   }
 }

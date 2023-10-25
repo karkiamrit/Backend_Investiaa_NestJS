@@ -6,9 +6,9 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-    })
+    }),
   ],
   providers: [SettingService],
   exports: [SettingService],
 })
-export class SharedModule { }
+export class SharedModule {}

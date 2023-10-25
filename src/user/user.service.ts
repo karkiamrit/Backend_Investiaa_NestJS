@@ -8,22 +8,18 @@ import { FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) { }
+  constructor(private readonly userRepository: UserRepository) {}
 
   async getOne(qs: OneRepoQuery<User>, query?: string) {
     if (query) {
       return this.userRepository.getOne(qs, query);
-    }
-    else {
+    } else {
       return User.findOne(qs as FindOneOptions<User>);
     }
-
   }
 
   getMany(qs?: RepoQuery<User>, query?: string) {
-
     return this.userRepository.getMany(qs || {}, query);
-
   }
 
   async create(input: CreateUserInput | SignUpInput): Promise<User> {

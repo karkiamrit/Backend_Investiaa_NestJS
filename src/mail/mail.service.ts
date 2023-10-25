@@ -48,9 +48,7 @@ export class MailService extends Mailer {
       const key: string = variables[i];
       const value: string = fields[key];
       text = text?.replace(new RegExp(`{${key}}`, 'g'), value);
-
     }
     return text;
-
   }
 }
