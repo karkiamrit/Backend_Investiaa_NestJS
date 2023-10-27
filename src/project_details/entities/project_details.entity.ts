@@ -10,6 +10,10 @@ export class Project_details {
 
   @Field(() => String)
   @Column()
+  logo: string;
+
+  @Field(() => String)
+  @Column()
   name: string;
 
   @Field(() => String)
@@ -56,21 +60,9 @@ export class Project_details {
   @Column()
   usp: string;
 
-  @Field(() => String)
+  @Field(() => [String])
   @Column()
-  facebook: string;
-
-  @Field(() => String)
-  @Column()
-  linkedin: string;
-
-  @Field(() => String)
-  @Column()
-  instagram: string;
-
-  @Field(() => String)
-  @Column()
-  twitter: string;
+  social_media_links: string[];
 
   @Field(() => String)
   @Column()
@@ -79,9 +71,6 @@ export class Project_details {
   @Field(() => String)
   @Column()
   prior_investors: string;
-
-
-
 }
 
 @ObjectType()
