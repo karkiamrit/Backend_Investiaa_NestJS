@@ -15,9 +15,8 @@ type AddressInput {
 }
 
 input CreateEntrepreneurInput {
-  has_prior_startups: Boolean! = false
+  has_prior_startups: Boolean!
   profession: ProfessionInput
-  profession_experience: Float
 }
 
 input CreateMailInput {
@@ -73,8 +72,7 @@ type Entrepreneur {
   has_prior_startups: Boolean!
   id: ID!
   profession: Profession
-  profession_experience: Float
-  user: User!
+  user: User
 }
 
 type GetEntrepreneurType {
@@ -146,6 +144,7 @@ type Mutation {
   createProject_details(input: CreateProject_detailsInput!): Project_details!
   createUser(input: CreateUserInput!): User!
   deleteEntrepreneur(id: Float!): Entrepreneur!
+  deleteEntrepreneurProfile: Entrepreneur!
   deleteMail(id: Float!): Mail!
   deleteProject_details(id: Float!): Project_details!
   deleteUser(id: Float!): JSON!
@@ -156,6 +155,7 @@ type Mutation {
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(input: SignInInput!): JwtWithUser!
   updateEntrepreneur(id: Float!, input: UpdateEntrepreneurInput!): Entrepreneur!
+  updateEntrepreneurProfile(input: UpdateEntrepreneurInput!): Entrepreneur!
   updateMail(id: Float!, input: UpdateMailInput!): Mail!
   updateMe(input: UpdateUserInput!): User!
   updateProject_details(id: Float!, input: UpdateProject_detailsInput!): Project_details!
@@ -164,13 +164,13 @@ type Mutation {
 }
 
 type Profession {
-  designation: String!
-  years_of_experience: Float!
+  designation: String
+  years_of_experience: Float
 }
 
 input ProfessionInput {
-  designation: String!
-  years_of_experience: Float!
+  designation: String
+  years_of_experience: Float
 }
 
 type Project_details {
@@ -215,9 +215,8 @@ input SignUpInput {
 }
 
 input UpdateEntrepreneurInput {
-  has_prior_startups: Boolean! = false
+  has_prior_startups: Boolean
   profession: ProfessionInput
-  profession_experience: Float
 }
 
 input UpdateMailInput {
@@ -273,7 +272,7 @@ type User {
   reset_token: Float
   role: String!
   twitter: String!
-  type: [String!]!
+  type: [String!]
   updatedAt: DateTime!
   username: String!
   whatsapp: String!

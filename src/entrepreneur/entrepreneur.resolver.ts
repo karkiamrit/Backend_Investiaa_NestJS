@@ -13,9 +13,13 @@ import {
   UpdateEntrepreneurInput,
 } from './inputs/entrepreneur.input';
 import { User } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
 @Resolver()
 export class EntrepreneurResolver {
-  constructor(private readonly entrepreneurService: EntrepreneurService) { }
+  constructor(private readonly entrepreneurService: EntrepreneurService,
+    private readonly userService: UserService
+
+  ) { }
 
   @Query(() => GetEntrepreneurType)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
@@ -27,7 +31,7 @@ export class EntrepreneurResolver {
     return this.entrepreneurService.getMany(qs, query);
   }
 
-  @Query(() => Entrepreneur)
+  @Query(() => Entrepreneur || null)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
   getOneEntrepreneur(
     @Args({ name: 'input' })
@@ -38,15 +42,12 @@ export class EntrepreneurResolver {
   }
 
   @Mutation(() => Entrepreneur)
-  @UseGuards(new GraphqlPassportAuthGuard('admin'))
   async createEntrepreneur(@Args('input') input: CreateEntrepreneurInput,
     @CurrentQuery() user: User) {
 
-    const createdEntrepreneur = await this.entrepreneurService.create(input, user);
-    if (!user.type.includes('ENTREPRENEUR')) {
-      user.type.push('ENTREPRENEUR')
-    }
-    return { entrepreneur: createdEntrepreneur };
+    const currentUser = await this.userService.getOne({ where: { id: user.id } })
+    currentUser.type.push('ENTREPRENEUR')
+    return await this.entrepreneurService.create(input, currentUser);
   }
 
   @Mutation(() => Entrepreneur)
@@ -62,5 +63,46 @@ export class EntrepreneurResolver {
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
   deleteEntrepreneur(@Args('id') id: number) {
     return this.entrepreneurService.delete(id);
+  }
+
+  @Mutation(() => Entrepreneur)
+  async updateEntrepreneurProfile(
+    @Args('input') input: UpdateEntrepreneurInput,
+    @CurrentQuery() user: User, // Assuming user context is available
+  ) {
+    const currentUser = await this.userService.getOne({ where: { id: user.id } })
+    const entrepreneur = await this.entrepreneurService.getOneByUserId(currentUser.id);
+    if (!entrepreneur) {
+      throw new Error('Entrepreneur profile not found for the user.');
+    }
+
+    // Check if the user owns the profile
+    if (entrepreneur.user.id !== currentUser.id) {
+      throw new Error('Unauthorized to update this profile.');
+    }
+
+    // Update the profile
+    return this.entrepreneurService.update(entrepreneur.id, input);
+  }
+
+  @Mutation(() => Entrepreneur)
+  async deleteEntrepreneurProfile(
+    @CurrentQuery() user: User, // Assuming user context is available
+  ) {
+    const currentUser = await this.userService.getOne({ where: { id: user.id } })
+    const entrepreneur = await this.entrepreneurService.getOneByUserId(currentUser.id);
+
+    if (!entrepreneur) {
+      throw new Error('Entrepreneur profile not found for the user.');
+    }
+
+    // Check if the user owns the profile
+    if (entrepreneur.user.id !== currentUser.id) {
+      throw new Error('Unauthorized to delete this profile.');
+    }
+
+
+    // Delete the profile
+    return this.entrepreneurService.delete(entrepreneur.id);
   }
 }

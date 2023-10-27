@@ -3,9 +3,9 @@ import { ObjectType, InputType, Field } from '@nestjs/graphql';
 @ObjectType()
 @InputType('ProfessionInput')
 export class Profession {
-    @Field()
+    @Field({ nullable: true })
     designation?: string;
 
-    @Field()
+    @Field({ nullable: true })
     years_of_experience?: number;
 }

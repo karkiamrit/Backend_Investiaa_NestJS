@@ -9,7 +9,6 @@ import {
 import { Field, InputType } from '@nestjs/graphql';
 import { EducationInput } from './education.input';
 import { AddressInput } from './address.input';
-import { User } from '../entities/user.entity';
 
 @InputType()
 export class CreateUserInput {
@@ -102,7 +101,7 @@ export class CreateUserInput {
 }
 
 @InputType()
-export class UpdateUserInput implements Partial<User> {
+export class UpdateUserInput {
   @Field(() => String, { nullable: true })
   @IsOptional()
   phone?: string;

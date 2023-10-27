@@ -24,7 +24,7 @@ export class UserResolver {
   }
 
   @Query(() => User || null)
-  @UseGuards(new GraphqlPassportAuthGuard('admin'))
+  // @UseGuards(new GraphqlPassportAuthGuard('admin'))
   getOneUser(
     @Args({ name: 'input' })
     qs: GetOneInput<User>,

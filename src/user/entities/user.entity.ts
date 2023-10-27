@@ -34,9 +34,9 @@ export class User extends BaseEntity {
   @Column()
   role: 'admin' | 'user';
 
-  @Field(() => [String])
-  @Column('simple-array', { nullable: true })
-  type: string[];
+  @Field(() => [String], { nullable: true })
+  @Column('text', { array: true, default: [] })
+  type?: string[];
 
   @Field(() => Date)
   @CreateDateColumn({

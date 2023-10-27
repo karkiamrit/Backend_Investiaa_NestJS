@@ -116,8 +116,8 @@ export class DeclareModule {
         select,
         ...(where && { where: processWhere(where) }),
       };
-
       return this.findOne(condition);
+
     };
   }
 }

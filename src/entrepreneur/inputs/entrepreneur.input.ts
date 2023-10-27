@@ -1,39 +1,32 @@
 import { IsBoolean, IsNotEmpty, IsNumber, IsObject, IsOptional } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 import { Profession } from './profession.input';
+import { Entrepreneur } from '../entities/entrepreneur.entity';
 
 @InputType()
-export class CreateEntrepreneurInput {
-  @Field(() => Number, { nullable: true })
-  @IsOptional()
-  @IsNumber()
-  profession_experience?: number;
+export class CreateEntrepreneurInput extends Entrepreneur {
 
   @Field(() => Profession, { nullable: true })
   @IsOptional()
   @IsObject()
   profession: Profession;
 
-  @Field({ defaultValue: false })
+  @Field()
   @IsBoolean()
   @IsNotEmpty()
   has_prior_startups: boolean;
 }
 
 @InputType()
-export class UpdateEntrepreneurInput {
-  @Field(() => Number, { nullable: true })
-  @IsOptional()
-  @IsNumber()
-  profession_experience?: number;
+export class UpdateEntrepreneurInput implements Partial<Entrepreneur>{
 
   @Field(() => Profession, { nullable: true })
   @IsOptional()
   @IsObject()
   profession?: Profession;
 
-  @Field({ defaultValue: false })
-  @IsBoolean()
+  @Field({ nullable: true })
   @IsOptional()
+  @IsBoolean()
   has_prior_startups?: boolean;
 }
