@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsEmail,
   IsNotEmpty,
   IsOptional,
@@ -33,6 +34,10 @@ export class CreateUserInput {
   @Field(() => String)
   @IsNotEmpty()
   role: 'admin' | 'user';
+
+  @Field(() => [String], { nullable: true })
+  @IsOptional()
+  type?: string[];
 
   @Field(() => String, { nullable: true })
   @IsNotEmpty()
@@ -101,6 +106,10 @@ export class UpdateUserInput implements Partial<User> {
   @Field(() => String, { nullable: true })
   @IsOptional()
   phone?: string;
+
+  @Field(() => [String], { nullable: true })
+  @IsOptional()
+  type?: string[];
 
   @Field(() => String, { nullable: true })
   @IsOptional()

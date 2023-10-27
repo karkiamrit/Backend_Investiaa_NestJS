@@ -3,12 +3,12 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MailService } from './mail.service';
 import { GetManyInput, GetOneInput } from 'src/declare/inputs/custom.input';
-import { CurrentUser } from 'src/modules/decorators/query.decorator';
+import { CurrentQuery } from 'src/modules/decorators/query.decorator';
 import { GetMailType, Mail } from './entities/mail.entity';
 import { CreateMailInput, UpdateMailInput } from './inputs/mail.input';
 @Resolver()
 export class MailResolver {
-  constructor(private readonly mailService: MailService) {}
+  constructor(private readonly mailService: MailService) { }
 
   @Mutation(() => Mail)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))

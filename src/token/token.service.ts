@@ -13,7 +13,7 @@ import {
 
 @Injectable()
 export class TokenService {
-  constructor(private readonly tokenRepo: TokenRepository) {}
+  constructor(private readonly tokenRepo: TokenRepository) { }
 
   private readonly BASE_OPTIONS: SignOptions = {
     issuer: 'suvaye',
@@ -189,7 +189,7 @@ export class TokenService {
 
   /**
    * It deletes all the refresh tokens from the database and returns a boolean value
-   * @param {User} user - The user object that is returned from @CurrentUser decorator
+   * @param {User} user - The user object that is returned from @CurrentQuery decorator
    * @returns - A boolean value
    */
   async deleteRefreshTokensForUser(user: User): Promise<boolean> {

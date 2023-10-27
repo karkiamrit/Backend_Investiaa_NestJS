@@ -14,11 +14,21 @@ type AddressInput {
   state: String
 }
 
+input CreateEntrepreneurInput {
+  has_prior_startups: Boolean! = false
+  profession: ProfessionInput
+  profession_experience: Float
+}
+
 input CreateMailInput {
   html_content: String
   name: String!
   subject: String!
   text_content: String!
+}
+
+input CreateProject_detailsInput {
+  name: String!
 }
 
 input CreateUserInput {
@@ -39,6 +49,7 @@ input CreateUserInput {
   reset_token: Float
   role: String!
   twitter: String
+  type: [String!]
   username: String!
   whatsapp: String
 }
@@ -58,6 +69,19 @@ type EducationInput {
   major: String
 }
 
+type Entrepreneur {
+  has_prior_startups: Boolean!
+  id: ID!
+  profession: Profession
+  profession_experience: Float
+  user: User!
+}
+
+type GetEntrepreneurType {
+  count: Float
+  data: [Entrepreneur!]
+}
+
 input GetManyInput {
   """count or data or all, default = data"""
   dataType: String
@@ -72,6 +96,11 @@ input GetManyInput {
 
 input GetOneInput {
   where: JSON!
+}
+
+type GetProject_detailsType {
+  count: Float
+  data: [Project_details!]
 }
 
 type GetUserType {
@@ -110,10 +139,15 @@ type Mail {
 
 type Mutation {
   SignUp(input: SignUpInput!): User!
+  createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
   createMail(input: CreateMailInput!): Mail!
+  createManyProject_details(input: [CreateProject_detailsInput!]!): [Project_details!]!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
+  createProject_details(input: CreateProject_detailsInput!): Project_details!
   createUser(input: CreateUserInput!): User!
+  deleteEntrepreneur(id: Float!): Entrepreneur!
   deleteMail(id: Float!): Mail!
+  deleteProject_details(id: Float!): Project_details!
   deleteUser(id: Float!): JSON!
   forgotPassword(email: String!): Boolean!
   logout(fromAll: Boolean!, refreshToken: String!): Boolean!
@@ -121,15 +155,51 @@ type Mutation {
   requestOtpVerify(otpType: String!, phone: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(input: SignInInput!): JwtWithUser!
+  updateEntrepreneur(id: Float!, input: UpdateEntrepreneurInput!): Entrepreneur!
   updateMail(id: Float!, input: UpdateMailInput!): Mail!
   updateMe(input: UpdateUserInput!): User!
+  updateProject_details(id: Float!, input: UpdateProject_detailsInput!): Project_details!
   updateUser(id: Float!, input: UpdateUserInput!): User!
   verifyPhone(otpCode: String!, phone: String!): Boolean!
 }
 
+type Profession {
+  designation: String!
+  years_of_experience: Float!
+}
+
+input ProfessionInput {
+  designation: String!
+  years_of_experience: Float!
+}
+
+type Project_details {
+  adhoc_file: String!
+  description: String!
+  domain: String!
+  financial_projection_docs: String!
+  fund_preference: String!
+  id: ID!
+  logo: String!
+  name: String!
+  pitch_deck: String!
+  prior_investors: String!
+  registeration_docs: String!
+  social_media_links: [String!]!
+  status: String!
+  tagline: String!
+  tax_clearence_docs: String!
+  team_members: String!
+  usp: String!
+}
+
 type Query {
+  getManyEntrepreneurs(input: GetManyInput): GetEntrepreneurType!
+  getManyProject_detailss(input: GetManyInput): GetProject_detailsType!
   getManyUsers(input: GetManyInput): GetUserType!
   getMe: User!
+  getOneEntrepreneur(input: GetOneInput!): Entrepreneur!
+  getOneProject_details(input: GetOneInput!): Project_details!
   getOneUser(input: GetOneInput!): User!
 }
 
@@ -144,11 +214,21 @@ input SignUpInput {
   username: String!
 }
 
+input UpdateEntrepreneurInput {
+  has_prior_startups: Boolean! = false
+  profession: ProfessionInput
+  profession_experience: Float
+}
+
 input UpdateMailInput {
   html_content: String
   name: String!
   subject: String
   text_content: String
+}
+
+input UpdateProject_detailsInput {
+  name: String!
 }
 
 input UpdateUserInput {
@@ -169,6 +249,7 @@ input UpdateUserInput {
   reset_token: Float
   role: String
   twitter: String
+  type: [String!]
   username: String
   whatsapp: String
 }
@@ -192,6 +273,7 @@ type User {
   reset_token: Float
   role: String!
   twitter: String!
+  type: [String!]!
   updatedAt: DateTime!
   username: String!
   whatsapp: String!

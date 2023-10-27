@@ -4,7 +4,7 @@ import { SignInInput, SignUpInput } from './inputs/auth.input';
 import { JwtWithUser } from '../auth/entities/auth._entity';
 import { UseGuards } from '@nestjs/common';
 import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
-import { CurrentUser } from '../modules/decorators/query.decorator';
+import { CurrentQuery } from '../modules/decorators/query.decorator';
 import { OtpType } from 'src/otp/entities/otp.entity';
 import { User } from 'src/user/entities/user.entity';
 import { TokenService } from '../token/token.service';
@@ -14,7 +14,7 @@ export class AuthResolver {
   constructor(
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,
-  ) {}
+  ) { }
 
   @Mutation(() => User)
   async SignUp(@Args('input') input: SignUpInput): Promise<User> {
@@ -68,7 +68,7 @@ export class AuthResolver {
 
   @Mutation(() => Boolean)
   logout(
-    @CurrentUser() query: User,
+    @CurrentQuery() query: User,
     @Args('refreshToken') refreshToken: string,
     @Args('fromAll') fromAll: boolean,
   ): Promise<boolean> {

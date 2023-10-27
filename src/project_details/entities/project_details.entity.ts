@@ -61,7 +61,7 @@ export class Project_details {
   usp: string;
 
   @Field(() => [String])
-  @Column()
+  @Column('simple-array')
   social_media_links: string[];
 
   @Field(() => String)

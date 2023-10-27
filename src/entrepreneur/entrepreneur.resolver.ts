@@ -12,9 +12,10 @@ import {
   CreateEntrepreneurInput,
   UpdateEntrepreneurInput,
 } from './inputs/entrepreneur.input';
+import { User } from 'src/user/entities/user.entity';
 @Resolver()
 export class EntrepreneurResolver {
-  constructor(private readonly entrepreneurService: EntrepreneurService) {}
+  constructor(private readonly entrepreneurService: EntrepreneurService) { }
 
   @Query(() => GetEntrepreneurType)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
@@ -38,17 +39,14 @@ export class EntrepreneurResolver {
 
   @Mutation(() => Entrepreneur)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
-  createEntrepreneur(@Args('input') input: CreateEntrepreneurInput) {
-    return this.entrepreneurService.create(input);
-  }
+  async createEntrepreneur(@Args('input') input: CreateEntrepreneurInput,
+    @CurrentQuery() user: User) {
 
-  @Mutation(() => [Entrepreneur])
-  @UseGuards(new GraphqlPassportAuthGuard('admin'))
-  createManyEntrepreneur(
-    @Args({ name: 'input', type: () => [CreateEntrepreneurInput] })
-    input: CreateEntrepreneurInput[],
-  ) {
-    return this.entrepreneurService.createMany(input);
+    const createdEntrepreneur = await this.entrepreneurService.create(input, user);
+    if (!user.type.includes('ENTREPRENEUR')) {
+      user.type.push('ENTREPRENEUR')
+    }
+    return { entrepreneur: createdEntrepreneur };
   }
 
   @Mutation(() => Entrepreneur)

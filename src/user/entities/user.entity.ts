@@ -9,7 +9,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import * as bcrypt from 'bcrypt';
 import { EducationInput, AddressInput } from '../inputs';
 // import { Place } from 'src/place/entities/place.entity';
 
@@ -34,6 +33,10 @@ export class User extends BaseEntity {
   @Field(() => String, { defaultValue: 'user' })
   @Column()
   role: 'admin' | 'user';
+
+  @Field(() => [String])
+  @Column('simple-array', { nullable: true })
+  type: string[];
 
   @Field(() => Date)
   @CreateDateColumn({

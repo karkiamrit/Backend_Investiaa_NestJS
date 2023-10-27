@@ -6,19 +6,19 @@ import GraphQLJSON from 'graphql-type-json';
 import { GetManyInput, GetOneInput } from 'src/declare/inputs/custom.input';
 import { GetUserType, User } from './entities/user.entity';
 import { CreateUserInput, UpdateUserInput } from './inputs/user.input';
-import { CurrentUser } from 'src/modules/decorators/query.decorator';
+import { CurrentQuery } from 'src/modules/decorators/query.decorator';
 import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
 
 @Resolver()
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Query(() => GetUserType)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
   getManyUsers(
     @Args({ name: 'input', nullable: true })
     qs: GetManyInput<User>,
-    @CurrentUser() query: string,
+    @CurrentQuery() query: string,
   ) {
     return this.userService.getMany(qs, query);
   }
@@ -28,7 +28,7 @@ export class UserResolver {
   getOneUser(
     @Args({ name: 'input' })
     qs: GetOneInput<User>,
-    @CurrentUser() query: string,
+    @CurrentQuery() query: string,
   ) {
     return this.userService.getOne(qs, query);
   }
@@ -56,7 +56,7 @@ export class UserResolver {
 
   @Mutation(() => User)
   async updateMe(
-    @CurrentUser() user: User,
+    @CurrentQuery() user: User,
     @Args('input') input: UpdateUserInput,
   ) {
     user = await this.userService.getOne({ where: { id: user.id } });
@@ -72,7 +72,7 @@ export class UserResolver {
 
   @Query(() => User)
   @UseGuards(SignInGuard)
-  getMe(@CurrentUser() user: User) {
+  getMe(@CurrentQuery() user: User) {
     return this.userService.getOne({
       where: { id: user.id },
     });

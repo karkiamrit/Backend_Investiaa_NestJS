@@ -48,13 +48,13 @@ import { HealthModule } from './health/health.module';
     MailModule,
     TokenModule,
     Project_detailsModule,
+    EntrepreneurModule,
   ],
 })
 
 
 
 
-    EntrepreneurModule,
 export class AppModule { }
 
 
