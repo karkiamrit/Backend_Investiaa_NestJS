@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 import { LoggingInterceptor } from './modules/interceptors/logging.interceptor';
 import { TimeoutInterceptor } from './modules/interceptors/timeout.interceptor';
 import { ConfigService } from '@nestjs/config';
-// import { graphqlUploadExpress } from 'graphql-upload';
+import { graphqlUploadExpress } from 'graphql-upload-ts';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

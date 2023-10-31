@@ -1,6 +1,13 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { User } from 'src/user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 import { Profession } from '../inputs/profession.input';
 
 @ObjectType()
@@ -15,14 +22,13 @@ export class Entrepreneur extends BaseEntity {
   has_prior_startups?: boolean;
 
   @Field(() => User, { nullable: true })
-  @OneToOne(() => User, { onDelete: "CASCADE", eager: true })
-  @JoinColumn({ name: "user_id" })
+  @OneToOne(() => User, { onDelete: 'CASCADE', eager: true })
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @Field(() => Profession, { nullable: true })
   @Column('json')
   profession: Profession;
-
 }
 
 @ObjectType()

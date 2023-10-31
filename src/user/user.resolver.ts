@@ -8,10 +8,10 @@ import { GetUserType, User } from './entities/user.entity';
 import { CreateUserInput, UpdateUserInput } from './inputs/user.input';
 import { CurrentQuery } from 'src/modules/decorators/query.decorator';
 import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
-
+import { CurrentUser } from 'src/modules/decorators/user.decorator';
 @Resolver()
 export class UserResolver {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Query(() => GetUserType)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
@@ -55,6 +55,7 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   async updateMe(
     @CurrentQuery() user: User,
     @Args('input') input: UpdateUserInput,
@@ -69,10 +70,9 @@ export class UserResolver {
   deleteUser(@Args('id') id: number) {
     return this.userService.delete(id);
   }
-
   @Query(() => User)
-  @UseGuards(SignInGuard)
-  getMe(@CurrentQuery() user: User) {
+  // @UseGuards(new GraphqlPassportAuthGuard('user'))
+  getMe(@CurrentUser() user: User) {
     return this.userService.getOne({
       where: { id: user.id },
     });

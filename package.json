@@ -49,7 +49,7 @@
     "export": "^0.1.337",
     "graphql": "^16.7.1",
     "graphql-type-json": "^0.3.2",
-    "graphql-upload": "^12.0.0",
+    "graphql-upload-ts": "^2.1.0",
     "lodash": "^4.17.21",
     "nodemailer": "^6.9.6",
     "ora": "^6.3.1",

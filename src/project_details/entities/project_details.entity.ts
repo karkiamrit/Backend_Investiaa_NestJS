@@ -1,5 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Entrepreneur } from 'src/entrepreneur/entities/entrepreneur.entity';
 
 @ObjectType()
 @Entity()
@@ -71,6 +78,11 @@ export class Project_details {
   @Field(() => String)
   @Column()
   prior_investors: string;
+
+  @Field(() => Entrepreneur)
+  @OneToOne(() => Entrepreneur, { onDelete: 'CASCADE', eager: true })
+  @JoinColumn({ name: 'entrepreneur_id' })
+  entrepreneur: Entrepreneur;
 }
 
 @ObjectType()

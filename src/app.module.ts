@@ -18,7 +18,7 @@ import { SharedModule } from './modules/shared/shared.module';
 import { SettingService } from './modules/shared/services/setting.service';
 import { HealthModule } from './health/health.module';
 // import { PlaceModule } from './place/place.module';
-// import { UploadModule } from './upload/upload.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -51,13 +51,4 @@ import { HealthModule } from './health/health.module';
     EntrepreneurModule,
   ],
 })
-
-
-
-
-export class AppModule { }
-
-
-
-// PlaceModule,
-// UploadModule,
+export class AppModule {}

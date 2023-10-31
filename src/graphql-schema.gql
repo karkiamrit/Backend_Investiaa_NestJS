@@ -27,7 +27,22 @@ input CreateMailInput {
 }
 
 input CreateProject_detailsInput {
+  adhoc_file: String!
+  description: String!
+  domain: String!
+  financial_projection_docs: String!
+  fund_preference: String!
+  logo: String!
   name: String!
+  pitch_deck: String!
+  prior_investors: String!
+  registeration_docs: String!
+  social_media_links: [String!]!
+  status: String!
+  tagline: String!
+  tax_clearence_docs: String!
+  team_members: String!
+  usp: String!
 }
 
 input CreateUserInput {
@@ -139,7 +154,6 @@ type Mutation {
   SignUp(input: SignUpInput!): User!
   createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
   createMail(input: CreateMailInput!): Mail!
-  createManyProject_details(input: [CreateProject_detailsInput!]!): [Project_details!]!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
   createProject_details(input: CreateProject_detailsInput!): Project_details!
   createUser(input: CreateUserInput!): User!
@@ -177,6 +191,7 @@ type Project_details {
   adhoc_file: String!
   description: String!
   domain: String!
+  entrepreneur: Entrepreneur!
   financial_projection_docs: String!
   fund_preference: String!
   id: ID!
@@ -227,7 +242,22 @@ input UpdateMailInput {
 }
 
 input UpdateProject_detailsInput {
+  adhoc_file: String!
+  description: String!
+  domain: String!
+  financial_projection_docs: String!
+  fund_preference: String!
+  logo: String!
   name: String!
+  pitch_deck: String!
+  prior_investors: String!
+  registeration_docs: String!
+  social_media_links: [String!]!
+  status: String!
+  tagline: String!
+  tax_clearence_docs: String!
+  team_members: String!
+  usp: String!
 }
 
 input UpdateUserInput {

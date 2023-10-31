@@ -2,8 +2,8 @@ import { GraphqlPassportAuthGuard } from '../modules/guards/graphql-passport-aut
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { EntrepreneurService } from './entrepreneur.service';
-import { GetManyInput, GetOneInput } from 'src/declare/inputs/custom.input';
-import { CurrentQuery } from 'src/modules/decorators/query.decorator';
+import { GetManyInput, GetOneInput } from '../declare/inputs/custom.input';
+import { CurrentQuery } from '../modules/decorators/query.decorator';
 import {
   GetEntrepreneurType,
   Entrepreneur,
@@ -16,10 +16,10 @@ import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 @Resolver()
 export class EntrepreneurResolver {
-  constructor(private readonly entrepreneurService: EntrepreneurService,
-    private readonly userService: UserService
-
-  ) { }
+  constructor(
+    private readonly entrepreneurService: EntrepreneurService,
+    private readonly userService: UserService,
+  ) {}
 
   @Query(() => GetEntrepreneurType)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
@@ -32,7 +32,7 @@ export class EntrepreneurResolver {
   }
 
   @Query(() => Entrepreneur || null)
-  @UseGuards(new GraphqlPassportAuthGuard('admin'))
+  // @UseGuards(new GraphqlPassportAuthGuard('admin'))
   getOneEntrepreneur(
     @Args({ name: 'input' })
     qs: GetOneInput<Entrepreneur>,
@@ -42,11 +42,14 @@ export class EntrepreneurResolver {
   }
 
   @Mutation(() => Entrepreneur)
-  async createEntrepreneur(@Args('input') input: CreateEntrepreneurInput,
-    @CurrentQuery() user: User) {
-
-    const currentUser = await this.userService.getOne({ where: { id: user.id } })
-    currentUser.type.push('ENTREPRENEUR')
+  async createEntrepreneur(
+    @Args('input') input: CreateEntrepreneurInput,
+    @CurrentQuery() user: User,
+  ) {
+    const currentUser = await this.userService.getOne({
+      where: { id: user.id },
+    });
+    currentUser.type.push('ENTREPRENEUR');
     return await this.entrepreneurService.create(input, currentUser);
   }
 
@@ -70,8 +73,12 @@ export class EntrepreneurResolver {
     @Args('input') input: UpdateEntrepreneurInput,
     @CurrentQuery() user: User, // Assuming user context is available
   ) {
-    const currentUser = await this.userService.getOne({ where: { id: user.id } })
-    const entrepreneur = await this.entrepreneurService.getOneByUserId(currentUser.id);
+    const currentUser = await this.userService.getOne({
+      where: { id: user.id },
+    });
+    const entrepreneur = await this.entrepreneurService.getOneByUserId(
+      currentUser.id,
+    );
     if (!entrepreneur) {
       throw new Error('Entrepreneur profile not found for the user.');
     }
@@ -89,8 +96,12 @@ export class EntrepreneurResolver {
   async deleteEntrepreneurProfile(
     @CurrentQuery() user: User, // Assuming user context is available
   ) {
-    const currentUser = await this.userService.getOne({ where: { id: user.id } })
-    const entrepreneur = await this.entrepreneurService.getOneByUserId(currentUser.id);
+    const currentUser = await this.userService.getOne({
+      where: { id: user.id },
+    });
+    const entrepreneur = await this.entrepreneurService.getOneByUserId(
+      currentUser.id,
+    );
 
     if (!entrepreneur) {
       throw new Error('Entrepreneur profile not found for the user.');
@@ -100,7 +111,6 @@ export class EntrepreneurResolver {
     if (entrepreneur.user.id !== currentUser.id) {
       throw new Error('Unauthorized to delete this profile.');
     }
-
 
     // Delete the profile
     return this.entrepreneurService.delete(entrepreneur.id);

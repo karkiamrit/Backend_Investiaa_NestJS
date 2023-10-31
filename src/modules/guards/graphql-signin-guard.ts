@@ -8,10 +8,24 @@ export class SignInGuard extends AuthGuard('local') {
     super();
   }
 
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    try {
+      
+      const isAuthSuccessful = await super.canActivate(context);
+      if (!isAuthSuccessful) {
+        return false;
+      }
+      return true;
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  }
+
   getRequest(context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context);
     const request = ctx.getContext().req;
     request.body = ctx.getArgs().input;
+    console.log('user is', request.user);
     return request;
   }
 }

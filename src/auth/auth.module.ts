@@ -18,20 +18,22 @@ import { Http } from 'src/util/http';
 import { TokenRepository } from 'src/token/token.repository';
 import { MailRepository } from 'src/mail/mail.repository';
 import { OtpRepository } from 'src/otp/otp.repository';
+import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }),
     ConfigModule,
     UserModule,
-    MailModule,
     OtpModule,
+    MailModule,
     TokenModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   providers: [
     AuthResolver,
     AuthService,
     JwtStrategy,
     LocalStrategy,
+    SignInGuard,
     OtpService,
     OtpRepository,
     UserRepository,

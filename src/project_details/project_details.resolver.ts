@@ -12,9 +12,12 @@ import {
   CreateProject_detailsInput,
   UpdateProject_detailsInput,
 } from './inputs/project_details.input';
+import { User } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
 @Resolver()
 export class Project_detailsResolver {
   constructor(
+    private readonly user_Service: UserService,
     private readonly project_detailsService: Project_detailsService,
   ) {}
 
@@ -39,19 +42,22 @@ export class Project_detailsResolver {
   }
 
   @Mutation(() => Project_details)
-  @UseGuards(new GraphqlPassportAuthGuard('admin'))
-  createProject_details(@Args('input') input: CreateProject_detailsInput) {
-    return this.project_detailsService.create(input);
+  // @UseGuards(new GraphqlPassportAuthGuard('admin'))
+  async createProject_details(@Args('input') input: CreateProject_detailsInput,  @CurrentQuery() user: User) {
+    const currentUser = await this.user_Service.getOne({
+      where: { id: user.id },
+    });
+    return this.project_detailsService.create(input, currentUser);
   }
 
-  @Mutation(() => [Project_details])
-  @UseGuards(new GraphqlPassportAuthGuard('admin'))
-  createManyProject_details(
-    @Args({ name: 'input', type: () => [CreateProject_detailsInput] })
-    input: CreateProject_detailsInput[],
-  ) {
-    return this.project_detailsService.createMany(input);
-  }
+  // @Mutation(() => [Project_details])
+  // @UseGuards(new GraphqlPassportAuthGuard('admin'))
+  // createManyProject_details(
+  //   @Args({ name: 'input', type: () => [CreateProject_detailsInput] })
+  //   input: CreateProject_detailsInput[],
+  // ) {
+  //   return this.project_detailsService.createMany(input);
+  // }
 
   @Mutation(() => Project_details)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))

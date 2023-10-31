@@ -13,7 +13,7 @@ import {
 
 @Injectable()
 export class TokenService {
-  constructor(private readonly tokenRepo: TokenRepository) { }
+  constructor(private readonly tokenRepo: TokenRepository) {}
 
   private readonly BASE_OPTIONS: SignOptions = {
     issuer: 'suvaye',

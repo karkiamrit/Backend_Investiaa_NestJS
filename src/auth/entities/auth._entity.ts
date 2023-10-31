@@ -11,4 +11,5 @@ export class JwtWithUser {
 
   @Field(() => User)
   user: User;
+  
 }

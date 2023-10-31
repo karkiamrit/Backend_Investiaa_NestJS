@@ -50,7 +50,6 @@ export class AuthService {
     const user = await this.userService.getOne({
       where: { phone: input.phone },
     });
-    console.log(user);
     if (!user) {
       throw new ApolloError("User doesn't exist", 'USER_NOT_FOUND', {
         statusCode: 404, // Not Found

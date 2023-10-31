@@ -3,18 +3,19 @@ import { AuthService } from './auth.service';
 import { SignInInput, SignUpInput } from './inputs/auth.input';
 import { JwtWithUser } from '../auth/entities/auth._entity';
 import { UseGuards } from '@nestjs/common';
-import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
+import { SignInGuard } from '../modules/guards/graphql-signin-guard';
 import { CurrentQuery } from '../modules/decorators/query.decorator';
-import { OtpType } from 'src/otp/entities/otp.entity';
-import { User } from 'src/user/entities/user.entity';
+import { OtpType } from '../otp/entities/otp.entity';
+import { User } from '../user/entities/user.entity';
 import { TokenService } from '../token/token.service';
+import { CurrentUser } from '../modules/decorators/user.decorator';
 
 @Resolver()
 export class AuthResolver {
   constructor(
     private readonly authService: AuthService,
     private readonly tokenService: TokenService,
-  ) { }
+  ) {}
 
   @Mutation(() => User)
   async SignUp(@Args('input') input: SignUpInput): Promise<User> {
@@ -22,12 +23,14 @@ export class AuthResolver {
   }
 
   @Mutation(() => String)
+  @UseGuards(SignInGuard)
   async refresh(@Args('refreshToken') refreshToken: string): Promise<string> {
     return await this.tokenService.createAccessTokenFromRefreshToken(
       refreshToken,
     );
   }
 
+  @UseGuards(SignInGuard)
   @Mutation(() => JwtWithUser)
   async signIn(@Args('input') input: SignInInput): Promise<JwtWithUser> {
     const result = await this.authService.signIn(input);
