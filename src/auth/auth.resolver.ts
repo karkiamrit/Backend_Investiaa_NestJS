@@ -8,7 +8,6 @@ import { CurrentQuery } from '../modules/decorators/query.decorator';
 import { OtpType } from '../otp/entities/otp.entity';
 import { User } from '../user/entities/user.entity';
 import { TokenService } from '../token/token.service';
-import { CurrentUser } from '../modules/decorators/user.decorator';
 
 @Resolver()
 export class AuthResolver {
@@ -30,8 +29,8 @@ export class AuthResolver {
     );
   }
 
-  @UseGuards(SignInGuard)
   @Mutation(() => JwtWithUser)
+  @UseGuards(SignInGuard)
   async signIn(@Args('input') input: SignInInput): Promise<JwtWithUser> {
     const result = await this.authService.signIn(input);
     return result;

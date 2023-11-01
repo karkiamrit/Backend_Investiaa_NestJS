@@ -14,37 +14,6 @@ type AddressInput {
   state: String
 }
 
-input CreateEntrepreneurInput {
-  has_prior_startups: Boolean!
-  profession: ProfessionInput
-}
-
-input CreateMailInput {
-  html_content: String
-  name: String!
-  subject: String!
-  text_content: String!
-}
-
-input CreateProject_detailsInput {
-  adhoc_file: String!
-  description: String!
-  domain: String!
-  financial_projection_docs: String!
-  fund_preference: String!
-  logo: String!
-  name: String!
-  pitch_deck: String!
-  prior_investors: String!
-  registeration_docs: String!
-  social_media_links: [String!]!
-  status: String!
-  tagline: String!
-  tax_clearence_docs: String!
-  team_members: String!
-  usp: String!
-}
-
 input CreateUserInput {
   address: [Address!]
   avatar: String
@@ -90,11 +59,6 @@ type Entrepreneur {
   user: User
 }
 
-type GetEntrepreneurType {
-  count: Float
-  data: [Entrepreneur!]
-}
-
 input GetManyInput {
   """count or data or all, default = data"""
   dataType: String
@@ -109,11 +73,6 @@ input GetManyInput {
 
 input GetOneInput {
   where: JSON!
-}
-
-type GetProject_detailsType {
-  count: Float
-  data: [Project_details!]
 }
 
 type GetUserType {
@@ -152,15 +111,8 @@ type Mail {
 
 type Mutation {
   SignUp(input: SignUpInput!): User!
-  createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
-  createMail(input: CreateMailInput!): Mail!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
-  createProject_details(input: CreateProject_detailsInput!): Project_details!
   createUser(input: CreateUserInput!): User!
-  deleteEntrepreneur(id: Float!): Entrepreneur!
-  deleteEntrepreneurProfile: Entrepreneur!
-  deleteMail(id: Float!): Mail!
-  deleteProject_details(id: Float!): Project_details!
   deleteUser(id: Float!): JSON!
   forgotPassword(email: String!): Boolean!
   logout(fromAll: Boolean!, refreshToken: String!): Boolean!
@@ -168,11 +120,7 @@ type Mutation {
   requestOtpVerify(otpType: String!, phone: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(input: SignInInput!): JwtWithUser!
-  updateEntrepreneur(id: Float!, input: UpdateEntrepreneurInput!): Entrepreneur!
-  updateEntrepreneurProfile(input: UpdateEntrepreneurInput!): Entrepreneur!
-  updateMail(id: Float!, input: UpdateMailInput!): Mail!
   updateMe(input: UpdateUserInput!): User!
-  updateProject_details(id: Float!, input: UpdateProject_detailsInput!): Project_details!
   updateUser(id: Float!, input: UpdateUserInput!): User!
   verifyPhone(otpCode: String!, phone: String!): Boolean!
 }
@@ -209,12 +157,8 @@ type Project_details {
 }
 
 type Query {
-  getManyEntrepreneurs(input: GetManyInput): GetEntrepreneurType!
-  getManyProject_detailss(input: GetManyInput): GetProject_detailsType!
   getManyUsers(input: GetManyInput): GetUserType!
   getMe: User!
-  getOneEntrepreneur(input: GetOneInput!): Entrepreneur!
-  getOneProject_details(input: GetOneInput!): Project_details!
   getOneUser(input: GetOneInput!): User!
 }
 
@@ -227,37 +171,6 @@ input SignUpInput {
   password: String!
   phone: String!
   username: String!
-}
-
-input UpdateEntrepreneurInput {
-  has_prior_startups: Boolean
-  profession: ProfessionInput
-}
-
-input UpdateMailInput {
-  html_content: String
-  name: String!
-  subject: String
-  text_content: String
-}
-
-input UpdateProject_detailsInput {
-  adhoc_file: String!
-  description: String!
-  domain: String!
-  financial_projection_docs: String!
-  fund_preference: String!
-  logo: String!
-  name: String!
-  pitch_deck: String!
-  prior_investors: String!
-  registeration_docs: String!
-  social_media_links: [String!]!
-  status: String!
-  tagline: String!
-  tax_clearence_docs: String!
-  team_members: String!
-  usp: String!
 }
 
 input UpdateUserInput {

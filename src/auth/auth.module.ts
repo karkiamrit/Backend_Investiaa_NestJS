@@ -3,7 +3,7 @@ import { UserModule } from 'src/user/user.module';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 // import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './strategies/jwt.strategy';
+import { CustomJwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
@@ -18,7 +18,7 @@ import { Http } from 'src/util/http';
 import { TokenRepository } from 'src/token/token.repository';
 import { MailRepository } from 'src/mail/mail.repository';
 import { OtpRepository } from 'src/otp/otp.repository';
-import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
+
 @Module({
   imports: [
     ConfigModule,
@@ -26,17 +26,16 @@ import { SignInGuard } from 'src/modules/guards/graphql-signin-guard';
     OtpModule,
     MailModule,
     TokenModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule.register({ defaultStrategy: 'custom-jwt' }),
   ],
   providers: [
     AuthResolver,
     AuthService,
-    JwtStrategy,
+    UserRepository,
+    CustomJwtStrategy,
     LocalStrategy,
-    SignInGuard,
     OtpService,
     OtpRepository,
-    UserRepository,
     TokenService,
     MailService,
     Http,

@@ -3,7 +3,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
-export class GraphqlPassportAuthGuard extends AuthGuard('jwt') {
+export class CustomAuthGuard extends AuthGuard('custom-jwt') {
   _roles: string[] = ['user'];
 
   constructor(roles?: string | string[]) {
@@ -14,7 +14,6 @@ export class GraphqlPassportAuthGuard extends AuthGuard('jwt') {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    await super.canActivate(context);
     const ctx = GqlExecutionContext.create(context);
     const req = ctx.getContext().req;
     const { role } = req.user;
