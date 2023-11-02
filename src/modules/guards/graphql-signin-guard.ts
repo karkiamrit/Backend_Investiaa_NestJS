@@ -1,10 +1,11 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SignInGuard extends AuthGuard('local') {
-  constructor() {
+  constructor(private configService: ConfigService) {
     super();
   }
 
@@ -17,7 +18,8 @@ export class SignInGuard extends AuthGuard('local') {
       const ctx = GqlExecutionContext.create(context);
       const request = ctx.getContext().req;
       request.body = ctx.getArgs().input;
-      console.log('user is', request.user);
+      // console.log('user is', request.user);
+      console.log(this.configService.get('JWT_PUBLIC_KEY'));
       return true;
     } catch (e) {
       throw new Error(e.message);
