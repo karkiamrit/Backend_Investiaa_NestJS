@@ -4,29 +4,18 @@ import { SignInInput, SignUpInput } from './inputs/auth.input';
 import { JwtWithUser } from '../auth/entities/auth._entity';
 import { UseGuards } from '@nestjs/common';
 import { SignInGuard } from '../modules/guards/graphql-signin-guard';
-import { CurrentQuery } from '../modules/decorators/query.decorator';
 import { OtpType } from '../otp/entities/otp.entity';
 import { User } from '../user/entities/user.entity';
-import { TokenService } from '../token/token.service';
+import { CurrentUser } from 'src/modules/decorators/user.decorator';
+import { GraphqlPassportAuthGuard } from 'src/modules/guards/graphql-passport-auth.guard';
 
 @Resolver()
 export class AuthResolver {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly tokenService: TokenService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Mutation(() => User)
   async SignUp(@Args('input') input: SignUpInput): Promise<User> {
     return await this.authService.signUp(input);
-  }
-
-  @Mutation(() => String)
-  @UseGuards(SignInGuard)
-  async refresh(@Args('refreshToken') refreshToken: string): Promise<string> {
-    return await this.tokenService.createAccessTokenFromRefreshToken(
-      refreshToken,
-    );
   }
 
   @Mutation(() => JwtWithUser)
@@ -69,13 +58,12 @@ export class AuthResolver {
   }
 
   @Mutation(() => Boolean)
-  logout(
-    @CurrentQuery() query: User,
-    @Args('refreshToken') refreshToken: string,
-    @Args('fromAll') fromAll: boolean,
+  @UseGuards(new GraphqlPassportAuthGuard())
+  async logout(
+    @CurrentUser() user: User,
+    @Args('accessToken') accessToken: string,
   ): Promise<boolean> {
-    return fromAll
-      ? this.authService.logoutFromAll(query)
-      : this.authService.logout(query, refreshToken);
+    const success = await this.authService.logout(user, accessToken);
+    return success;
   }
 }

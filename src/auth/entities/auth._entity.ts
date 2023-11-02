@@ -4,12 +4,11 @@ import { User } from 'src/user/entities/user.entity';
 @ObjectType()
 export class JwtWithUser {
   @Field(() => String)
-  access_token: string;
+  jwt: string;
 
-  @Field(() => String)
-  refresh_token: string;
+  // @Field(() => String)
+  // refresh_token: string;
 
   @Field(() => User)
   user: User;
-  
 }

@@ -19,16 +19,52 @@ import { OtpType } from 'src/otp/entities/otp.entity';
 import { TokenService } from 'src/token/token.service';
 import { ApolloError } from 'apollo-server-core';
 import { Http } from 'src/util/http';
+const crypto = require('crypto');
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly OtpService: OtpService,
-    private readonly MailService: MailService,
+    private readonly otpService: OtpService,
+    private readonly mailService: MailService,
     private readonly tokenService: TokenService,
     private readonly http: Http,
+    private readonly jwtService: JwtService,
   ) {}
+
+  private generateUniqueIdentifier(): string {
+    const uniqueIdentifier = crypto.randomBytes(16).toString('hex');
+    return uniqueIdentifier;
+  }
+
+  private signJWT(user: User) {
+    // You need to create a function to generate a unique identifier
+    const uniqueIdentifier = this.generateUniqueIdentifier();
+    const payload = {
+      sub: user.id,
+      jti: uniqueIdentifier, // Include the unique identifier for the token
+      role: user.role,
+      // Include other claims as needed
+    };
+
+    return this.jwtService.sign(payload);
+  }
+
+  private generateResetPasswordToken(user: User): string {
+    const uniqueIdentifier = this.generateUniqueIdentifier();
+    const payload = {
+      sub: user.id,
+      phone: user.phone,
+      jti: uniqueIdentifier, // Include the user's phone number in the token
+    };
+
+    // Sign a JWT token with a short expiration time
+    const token = this.jwtService.sign(payload, {
+      expiresIn: '1h', // Set the expiration time as needed
+    });
+
+    return token;
+  }
 
   async signUp(input: SignUpInput): Promise<User> {
     const { phone } = input;
@@ -55,68 +91,52 @@ export class AuthService {
         statusCode: 404, // Not Found
       });
     }
-    if (!user.phone_verified) {
-      throw new ApolloError(
-        'Please verify your phone number to proceed',
-        'PHONE_NOT_VERIFIED',
-        {
-          statusCode: 403, // Forbidden
-        },
-      );
-    }
 
-    const isValidPassword = await bcrypt.compare(input.password, user.password);
-    if (!isValidPassword) {
-      throw new ApolloError('Invalid password', 'INVALID_CREDENTIALS', {
-        statusCode: 401, // Unauthorized
-      });
-    }
+    const jwt = this.signJWT(user);
 
-    const refresh_token = await this.tokenService.createRefreshToken(
-      user,
-      Number(REFRESH_TOKEN_EXPIRY),
-    );
-    const access_token = await this.tokenService.createAccessToken(
-      user,
-      Number(ACCESS_TOKEN_EXPIRY),
-    );
-
-    return { user, access_token, refresh_token };
+    return { user, jwt };
   }
 
   async forgotPassword(email: string): Promise<boolean> {
-    const user = await this.userService.getOne({ where: { email: email } });
+    const user = await this.userService.getOne({ where: { email } });
     if (!user) {
-      throw new ApolloError("Email doesn't exist!", 'EMAIL_NOT_FOUND', {
+      throw new ApolloError("Phone number doesn't exist!", 'PHONE_NOT_FOUND', {
         statusCode: 404, // Not Found
       });
     }
 
-    const token = await this.tokenService.createAccessToken(
-      user,
-      Number(ACCESS_TOKEN_EXPIRY),
-    );
-    const url = `${FULL_WEB_URL}/reset-password/${token}`;
+    // Generate a reset password token
+    const resetPasswordToken = this.generateResetPasswordToken(user);
 
-    return await this.MailService.sendResetPasswordLink(email, url);
+    // Create a reset password URL with the token
+    const resetPasswordUrl = `${FULL_WEB_URL}/reset-password/${resetPasswordToken}`;
+
+    // Send the reset password link to the user's email
+    await this.mailService.sendResetPasswordLink(user.email, resetPasswordUrl);
+
+    return true;
   }
 
-  async resetPassword(token: string, password: string) {
+  async resetPassword(token: string, password: string): Promise<boolean> {
     try {
-      const payload = await this.tokenService.decodeAccessToken(token);
+      // Verify and decode the token to get user information
+      const payload = this.jwtService.verify(token);
+      const userId = payload.sub; // Assuming 'sub' contains the user's ID
 
-      const user =
-        await this.tokenService.getUserFromRefreshTokenPayload(payload);
+      // Find the user based on the decoded user ID
+      const user = await this.userService.getOne({ where: { id: userId } });
       if (!user) {
-        throw new ApolloError('Malformed token', 'MALFORMED_TOKEN', {
-          statusCode: 400, // Bad Request
+        throw new ApolloError('User not found', 'USER_NOT_FOUND', {
+          statusCode: 404, // Not Found
         });
       }
 
-      const hashPassword = await bcrypt.hash(password, 12);
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash(password, 12);
 
+      // Update the user's password with the new hashed password
       const updatedUser = await this.userService.update(user.id, {
-        password: hashPassword,
+        password: hashedPassword,
       });
 
       if (!updatedUser) {
@@ -150,7 +170,7 @@ export class AuthService {
         throw new BadRequestException('User not found');
       }
 
-      const otp = await this.OtpService.create(user, otpType);
+      const otp = await this.otpService.create(user, otpType);
       console.log(otp);
 
       const message = `Your OTP for ${otpType.toLowerCase()} is ${otp.code}`;
@@ -190,15 +210,22 @@ export class AuthService {
     }
   }
 
-  async logout(query: User, refreshToken: string): Promise<boolean> {
-    const user = await this.userService.getOne({ where: { id: query.id } });
-    const payload = await this.tokenService.decodeRefreshToken(refreshToken);
-    return await this.tokenService.deleteRefreshToken(user, payload);
-  }
+  async logout(user: User, accessToken: string): Promise<boolean> {
+    // Get the token identifier (JTI) from the provided access token
+    const tokenPayload: any = this.jwtService.decode(accessToken);
+    console.log(tokenPayload);
+    const tokenIdentifier: string = tokenPayload.jti;
+    
+    // Check if the token is in the blacklist
+    if (await this.tokenService.isTokenBlacklisted(tokenIdentifier)) {
+      // Token is already invalidated, return false
+      return false;
+    }
 
-  async logoutFromAll(query: User): Promise<boolean> {
-    const user = await this.userService.getOne({ where: { id: query.id } });
-    return await this.tokenService.deleteRefreshTokensForUser(user);
+    // Add the token's JTI to the blacklist
+    await this.tokenService.addToBlacklist(tokenIdentifier);
+
+    return true;
   }
 
   async validateUser(input: SignInInput) {
