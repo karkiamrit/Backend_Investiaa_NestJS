@@ -18,10 +18,11 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   async validate(payload: any, done: VerifiedCallback) {
     try {
+      console.log(payload);
       const userData = await this.userService.getOne({
         where: { id: payload.sub },
       });
-
+      console.log('userdata', userData);
       done(null, userData);
     } catch (err) {
       throw new UnauthorizedException('Error', err.message);
