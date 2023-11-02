@@ -46,20 +46,5 @@ volumes:
   node_modules:
   pgadmin:
 
-    # version: "3.8"
-    # services:
-    #   postgres:
-    #     image: postgres:14
-    #     container_name: postgres
-    #     ports:
-    #       - 5432:5432
-    #     volumes:
-    #       - postgres:/var/lib/postgresql/data
-    #     environment:
-    #       - POSTGRES_PASSWORD=${DB_PASSWORD}
-    #       - POSTGRES_USER=${DB_USER}
-    #       - POSTGRES_DB=${DB_NAME}
-    #       - 
-    # volumes:
-    #   postgres:
-    #     name: dev
+
+#docker run -e POSTGRES_HOST="ep-rough-frost-65190913-pooler.us-east-1.postgres.vercel-storage.com" -e POSTGRES_USER="default" -e POSTGRES_PASSWORD="dJjcWSs0eYQ2" -e POSTGRES_DATABASE="verceldb" -p 8000:8000 03879e3b6793e5106ca0501ed1927a216c9a18bd399e67b930fad4941f089693
