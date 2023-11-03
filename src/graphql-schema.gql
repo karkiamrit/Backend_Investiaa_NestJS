@@ -19,6 +19,25 @@ input CreateEntrepreneurInput {
   profession: ProfessionInput
 }
 
+input CreateProjectInput {
+  adhoc_file: String!
+  description: String!
+  domain: String!
+  financial_projection_docs: String!
+  fund_preference: String!
+  logo: String!
+  name: String!
+  pitch_deck: String!
+  prior_investors: String!
+  registeration_docs: String!
+  social_media_links: [String!]!
+  status: String!
+  tagline: String!
+  tax_clearence_docs: String!
+  team_members: String!
+  usp: String!
+}
+
 input CreateUserInput {
   address: [Address!]
   avatar: String
@@ -37,7 +56,6 @@ input CreateUserInput {
   reset_token: Float
   role: String!
   twitter: String
-  type: [String!]
   username: String!
   whatsapp: String
 }
@@ -85,6 +103,11 @@ input GetOneInput {
   where: JSON!
 }
 
+type GetProjectType {
+  count: Float
+  data: [Project!]
+}
+
 type GetUserType {
   count: Float
   data: [User!]
@@ -122,9 +145,12 @@ type Mutation {
   SignUp(input: SignUpInput!): User!
   createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
+  createProject(input: CreateProjectInput!): Project!
   createUser(input: CreateUserInput!): User!
-  deleteEntrepreneur(id: Float!): Entrepreneur!
-  deleteEntrepreneurProfile: Entrepreneur!
+  deleteEntrepreneur(id: Float!): JSON!
+  deleteEntrepreneurProfile: JSON!
+  deleteProject(id: Float!): JSON!
+  deleteProjectProfile: JSON!
   deleteUser(id: Float!): JSON!
   forgotPassword(email: String!): Boolean!
   logout(accessToken: String!): Boolean!
@@ -134,6 +160,8 @@ type Mutation {
   updateEntrepreneur(id: Float!, input: UpdateEntrepreneurInput!): Entrepreneur!
   updateEntrepreneurProfile(input: UpdateEntrepreneurInput!): Entrepreneur!
   updateMe(input: UpdateUserInput!): User!
+  updateProject(id: Float!, input: UpdateProjectInput!): Project!
+  updateProjectProfile(input: UpdateProjectInput!): Project!
   updateUser(id: Float!, input: UpdateUserInput!): User!
   verifyPhone(otpCode: String!, phone: String!): Boolean!
 }
@@ -148,8 +176,9 @@ input ProfessionInput {
   years_of_experience: Float
 }
 
-type Project_details {
+type Project {
   adhoc_file: String!
+  createdAt: DateTime!
   description: String!
   domain: String!
   entrepreneur: Entrepreneur!
@@ -166,15 +195,20 @@ type Project_details {
   tagline: String!
   tax_clearence_docs: String!
   team_members: String!
+  updatedAt: DateTime!
   usp: String!
 }
 
 type Query {
   getManyEntrepreneurs(input: GetManyInput): GetEntrepreneurType!
+  getManyProjects(input: GetManyInput): GetProjectType!
   getManyUsers(input: GetManyInput): GetUserType!
   getMe: User!
+  getMyEntrepreneurProfile: Entrepreneur!
   getOneEntrepreneur(input: GetOneInput!): Entrepreneur!
+  getOneProject(input: GetOneInput!): Project!
   getOneUser(input: GetOneInput!): User!
+  getProjectProfile: Project!
 }
 
 input SignInInput {
@@ -191,6 +225,25 @@ input SignUpInput {
 input UpdateEntrepreneurInput {
   has_prior_startups: Boolean
   profession: ProfessionInput
+}
+
+input UpdateProjectInput {
+  adhoc_file: String
+  description: String
+  domain: String
+  financial_projection_docs: String
+  fund_preference: String
+  logo: String
+  name: String
+  pitch_deck: String
+  prior_investors: String
+  registeration_docs: String
+  social_media_links: [String!]
+  status: String
+  tagline: String
+  tax_clearence_docs: String
+  team_members: String
+  usp: String
 }
 
 input UpdateUserInput {
@@ -211,7 +264,6 @@ input UpdateUserInput {
   reset_token: Float
   role: String
   twitter: String
-  type: [String!]
   username: String
   whatsapp: String
 }
@@ -235,7 +287,6 @@ type User {
   reset_token: Float
   role: String!
   twitter: String!
-  type: [String!]
   updatedAt: DateTime!
   username: String!
   whatsapp: String!

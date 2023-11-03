@@ -15,7 +15,6 @@ import { TokenModule } from 'src/token/token.module';
 import { TokenService } from 'src/token/token.service';
 import { MailService } from 'src/mail/mail.service';
 import { Http } from 'src/util/http';
-import { TokenRepository } from 'src/token/token.repository';
 import { MailRepository } from 'src/mail/mail.repository';
 import { OtpRepository } from 'src/otp/otp.repository';
 
@@ -54,7 +53,6 @@ import { OtpRepository } from 'src/otp/otp.repository';
     TokenService,
     MailService,
     Http,
-    TokenRepository,
     MailRepository,
   ],
 })

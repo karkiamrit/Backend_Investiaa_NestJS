@@ -1,5 +1,5 @@
+import { ProjectModule } from './project/project.module';
 import { EntrepreneurModule } from './entrepreneur/entrepreneur.module';
-import { Project_detailsModule } from './project_details/project_details.module';
 import { TokenModule } from './token/token.module';
 import { MailModule } from './mail/mail.module';
 import { OtpModule } from './otp/otp.module';
@@ -46,8 +46,8 @@ import { HealthModule } from './health/health.module';
     HealthModule,
     OtpModule,
     MailModule,
+    ProjectModule,
     TokenModule,
-    Project_detailsModule,
     EntrepreneurModule,
   ],
 })

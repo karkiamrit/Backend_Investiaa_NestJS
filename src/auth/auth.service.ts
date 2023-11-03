@@ -212,10 +212,11 @@ export class AuthService {
 
   async logout(user: User, accessToken: string): Promise<boolean> {
     // Get the token identifier (JTI) from the provided access token
+    const expirationInSeconds = 24 * 60 * 60; // 1 day in seconds
+
     const tokenPayload: any = this.jwtService.decode(accessToken);
-    console.log(tokenPayload);
     const tokenIdentifier: string = tokenPayload.jti;
-    
+
     // Check if the token is in the blacklist
     if (await this.tokenService.isTokenBlacklisted(tokenIdentifier)) {
       // Token is already invalidated, return false
@@ -223,7 +224,10 @@ export class AuthService {
     }
 
     // Add the token's JTI to the blacklist
-    await this.tokenService.addToBlacklist(tokenIdentifier);
+    await this.tokenService.blacklistToken(
+      tokenIdentifier,
+      expirationInSeconds,
+    );
 
     return true;
   }
