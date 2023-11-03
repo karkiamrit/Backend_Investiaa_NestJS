@@ -56,7 +56,6 @@ export class EntrepreneurService {
   }
 
   async delete(id: number) {
-    // const entrepreneur = this.entrepreneurRepository.findOne({ where: { id } });
     await this.entrepreneurRepository.delete({ id });
     return { status: 'success' };
   }
@@ -70,5 +69,13 @@ export class EntrepreneurService {
 
   async findEntrepreneurByUserId(userId: number): Promise<Entrepreneur | null> {
     return await this.entrepreneurRepository.findEntrepreneurByUserId(userId);
+  }
+
+  async getMyEntrepreneurProfile(
+    entrepreneurId: number,
+  ): Promise<Entrepreneur | null> {
+    return await this.entrepreneurRepository.findOne({
+      where: { id: entrepreneurId },
+    });
   }
 }

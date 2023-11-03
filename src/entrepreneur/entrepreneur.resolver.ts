@@ -15,6 +15,7 @@ import {
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { CurrentUser } from '../modules/decorators/user.decorator';
+import GraphQLJSON from 'graphql-type-json';
 @Resolver()
 export class EntrepreneurResolver {
   constructor(
@@ -42,13 +43,22 @@ export class EntrepreneurResolver {
     return this.entrepreneurService.getOne(qs, query);
   }
 
+  @Query(() => Entrepreneur || null)
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
+  async getMyEntrepreneurProfile(@CurrentUser() user: User) {
+    const entrepreneur = await this.entrepreneurService.getOneByUserId(user.id);
+    if (!entrepreneur) {
+      throw new Error('Entrepreneur profile not found for the user.');
+    }
+    return this.entrepreneurService.getMyEntrepreneurProfile(entrepreneur.id);
+  }
+
   @Mutation(() => Entrepreneur)
   @UseGuards(new GraphqlPassportAuthGuard())
   async createEntrepreneur(
     @Args('input') input: CreateEntrepreneurInput,
     @CurrentUser() user: User,
   ) {
-    user.type.push('ENTREPRENEUR');
     return await this.entrepreneurService.create(input, user);
   }
 
@@ -61,7 +71,7 @@ export class EntrepreneurResolver {
     return this.entrepreneurService.update(id, input);
   }
 
-  @Mutation(() => Entrepreneur)
+  @Mutation(() => GraphQLJSON)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
   deleteEntrepreneur(@Args('id') id: number) {
     return this.entrepreneurService.delete(id);
@@ -87,12 +97,10 @@ export class EntrepreneurResolver {
     return this.entrepreneurService.update(entrepreneur.id, input);
   }
 
-  @Mutation(() => Entrepreneur)
-  async deleteEntrepreneurProfile(
-    @CurrentUser() user: User, // Assuming user context is available
-  ) {
+  @Mutation(() => GraphQLJSON)
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
+  async deleteEntrepreneurProfile(@CurrentUser() user: User) {
     const entrepreneur = await this.entrepreneurService.getOneByUserId(user.id);
-
     if (!entrepreneur) {
       throw new Error('Entrepreneur profile not found for the user.');
     }
@@ -103,6 +111,8 @@ export class EntrepreneurResolver {
     }
 
     // Delete the profile
-    return this.entrepreneurService.delete(entrepreneur.id);
+    this.entrepreneurService.delete(entrepreneur.id);
+
+    return { status: 'success' };
   }
 }
