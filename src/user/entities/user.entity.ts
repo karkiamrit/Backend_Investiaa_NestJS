@@ -34,10 +34,6 @@ export class User extends BaseEntity {
   @Column()
   role: 'admin' | 'user';
 
-  @Field(() => [String], { nullable: true })
-  @Column('text', { array: true, default: [] })
-  type?: string[];
-
   @Field(() => Date)
   @CreateDateColumn({
     type: 'timestamp with time zone',

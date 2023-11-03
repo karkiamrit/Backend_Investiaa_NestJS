@@ -34,10 +34,6 @@ export class CreateUserInput {
   @IsNotEmpty()
   role: 'admin' | 'user';
 
-  @Field(() => [String], { nullable: true })
-  @IsOptional()
-  type?: string[];
-
   @Field(() => String, { nullable: true })
   @IsNotEmpty()
   name: string;
@@ -105,10 +101,6 @@ export class UpdateUserInput {
   @Field(() => String, { nullable: true })
   @IsOptional()
   phone?: string;
-
-  @Field(() => [String], { nullable: true })
-  @IsOptional()
-  type?: string[];
 
   @Field(() => String, { nullable: true })
   @IsOptional()
