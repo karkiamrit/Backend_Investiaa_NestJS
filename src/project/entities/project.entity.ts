@@ -3,17 +3,20 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Entrepreneur } from 'src/entrepreneur/entities/entrepreneur.entity';
+import { PriorInvestor } from '../inputs/prior_investors';
+import { TeamMember } from '../inputs/team_members.input';
+import { ArrayMaxSize } from 'class-validator';
 
 @ObjectType()
 @Entity()
 export class Project {
-  
   @Field(() => ID)
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -74,16 +77,20 @@ export class Project {
   @Column('simple-array')
   social_media_links: string[];
 
-  @Field(() => String)
-  @Column()
-  team_members: string;
+  @Field(() => [TeamMember])
+  @Column('json', { nullable: true })
+  @ArrayMaxSize(5)
+  team_members: TeamMember[];
 
-  @Field(() => String)
-  @Column()
-  prior_investors: string;
+  @Field(() => [PriorInvestor])
+  @Column('json', { nullable: true })
+  prior_investors: PriorInvestor[];
 
   @Field(() => Entrepreneur)
-  @OneToOne(() => Entrepreneur, { onDelete: 'CASCADE', eager: true })
+  @ManyToOne(() => Entrepreneur, (entrepreneur) => entrepreneur.projects, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   @JoinColumn({ name: 'entrepreneur_id' })
   entrepreneur: Entrepreneur;
 
