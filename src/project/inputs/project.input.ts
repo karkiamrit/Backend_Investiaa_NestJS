@@ -5,6 +5,8 @@ import {
   ArrayNotEmpty,
 } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
+import { TeamMember } from './team_members.input';
+import { PriorInvestor } from './prior_investors';
 // import { GraphQLUpload, Upload } from 'graphql-upload-ts';
 
 @InputType()
@@ -66,13 +68,13 @@ export class CreateProjectInput {
   @ArrayNotEmpty()
   social_media_links: string[];
 
-  @Field(() => String)
+  @Field(() => [TeamMember], { nullable: true })
   @IsNotEmpty()
-  team_members: string;
+  team_members: TeamMember[];
 
-  @Field(() => String)
+  @Field(() => [PriorInvestor], { nullable: true })
   @IsNotEmpty()
-  prior_investors: string;
+  prior_investors: PriorInvestor[];
 }
 
 @InputType()
@@ -135,11 +137,11 @@ export class UpdateProjectInput {
   @ArrayNotEmpty()
   social_media_links?: string[];
 
-  @Field(() => String, { nullable: true })
+  @Field(() => [TeamMember], { nullable: true })
   @IsOptional()
-  team_members?: string;
+  team_members?: TeamMember[];
 
-  @Field(() => String, { nullable: true })
+  @Field(() => [PriorInvestor], { nullable: true })
   @IsOptional()
-  prior_investors?: string;
+  prior_investors?: PriorInvestor[];
 }
