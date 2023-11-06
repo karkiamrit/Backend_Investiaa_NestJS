@@ -31,6 +31,11 @@ export class ProjectService {
 
   async create(input: CreateProjectInput, CurrentUser: User): Promise<Project> {
     try {
+      if (CurrentUser.kyc_verified === false) {
+        throw new Error(
+          `Please complete your KYC verification before registering your startup`,
+        );
+      }
       const projectdetails = new Project();
       Object.assign(projectdetails, input);
       const currentEntrepreneur =

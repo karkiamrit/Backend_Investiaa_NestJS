@@ -77,69 +77,69 @@ export class CreateProjectInput {
 
 @InputType()
 export class UpdateProjectInput {
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   name?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   logo?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   status?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   description?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   domain?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   fund_preference?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   tagline?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   tax_clearence_docs?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   registeration_docs?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   financial_projection_docs?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   pitch_deck?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   adhoc_file?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   usp?: string;
 
-  @Field(() => [String],{nullable:true })
+  @Field(() => [String], { nullable: true })
   @IsOptional()
   @IsArray()
   @ArrayNotEmpty()
   social_media_links?: string[];
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   team_members?: string;
 
-  @Field(() => String,{nullable:true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
   prior_investors?: string;
 }

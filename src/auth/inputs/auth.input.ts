@@ -20,4 +20,8 @@ export class SignUpInput extends SignInInput {
   @Field()
   @IsNotEmpty()
   username: string;
+
+  @Field()
+  @IsNotEmpty()
+  email: string;
 }

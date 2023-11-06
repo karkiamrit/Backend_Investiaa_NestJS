@@ -19,6 +19,10 @@ input CreateEntrepreneurInput {
   profession: ProfessionInput
 }
 
+input CreateInvestorInput {
+  profession_experience: Float
+}
+
 input CreateProjectInput {
   adhoc_file: String!
   description: String!
@@ -87,6 +91,11 @@ type GetEntrepreneurType {
   data: [Entrepreneur!]
 }
 
+type GetInvestorType {
+  count: Float
+  data: [Investor!]
+}
+
 input GetManyInput {
   """count or data or all, default = data"""
   dataType: String
@@ -121,6 +130,13 @@ input IPagination {
   size: Int!
 }
 
+type Investor {
+  createdAt: DateTime!
+  id: ID!
+  profession_experience: Float
+  updatedAt: DateTime!
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -144,11 +160,14 @@ type Mail {
 type Mutation {
   SignUp(input: SignUpInput!): User!
   createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
+  createInvestor(input: CreateInvestorInput!): Investor!
+  createManyInvestor(input: [CreateInvestorInput!]!): [Investor!]!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
   createProject(input: CreateProjectInput!): Project!
   createUser(input: CreateUserInput!): User!
   deleteEntrepreneur(id: Float!): JSON!
   deleteEntrepreneurProfile: JSON!
+  deleteInvestor(id: Float!): Investor!
   deleteProject(id: Float!): JSON!
   deleteProjectProfile: JSON!
   deleteUser(id: Float!): JSON!
@@ -159,6 +178,7 @@ type Mutation {
   signIn(input: SignInInput!): JwtWithUser!
   updateEntrepreneur(id: Float!, input: UpdateEntrepreneurInput!): Entrepreneur!
   updateEntrepreneurProfile(input: UpdateEntrepreneurInput!): Entrepreneur!
+  updateInvestor(id: Float!, input: UpdateInvestorInput!): Investor!
   updateMe(input: UpdateUserInput!): User!
   updateProject(id: Float!, input: UpdateProjectInput!): Project!
   updateProjectProfile(input: UpdateProjectInput!): Project!
@@ -201,11 +221,13 @@ type Project {
 
 type Query {
   getManyEntrepreneurs(input: GetManyInput): GetEntrepreneurType!
+  getManyInvestors(input: GetManyInput): GetInvestorType!
   getManyProjects(input: GetManyInput): GetProjectType!
   getManyUsers(input: GetManyInput): GetUserType!
   getMe: User!
   getMyEntrepreneurProfile: Entrepreneur!
   getOneEntrepreneur(input: GetOneInput!): Entrepreneur!
+  getOneInvestor(input: GetOneInput!): Investor!
   getOneProject(input: GetOneInput!): Project!
   getOneUser(input: GetOneInput!): User!
   getProjectProfile: Project!
@@ -217,6 +239,7 @@ input SignInInput {
 }
 
 input SignUpInput {
+  email: String!
   password: String!
   phone: String!
   username: String!
@@ -225,6 +248,10 @@ input SignUpInput {
 input UpdateEntrepreneurInput {
   has_prior_startups: Boolean
   profession: ProfessionInput
+}
+
+input UpdateInvestorInput {
+  profession_experience: Float
 }
 
 input UpdateProjectInput {

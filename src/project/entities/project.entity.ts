@@ -13,9 +13,11 @@ import { Entrepreneur } from 'src/entrepreneur/entities/entrepreneur.entity';
 @ObjectType()
 @Entity()
 export class Project {
+  
   @Field(() => ID)
   @PrimaryGeneratedColumn('increment')
   id: number;
+
   @Field(() => String)
   @Column()
   logo: string;
