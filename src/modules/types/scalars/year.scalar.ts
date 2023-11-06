@@ -1,5 +1,5 @@
 import { Scalar, CustomScalar } from '@nestjs/graphql';
-import { Kind } from 'graphql';
+import { Kind, ValueNode } from 'graphql';
 
 @Scalar('Year')
 export class YearScalar implements CustomScalar<number, Date> {
@@ -13,7 +13,7 @@ export class YearScalar implements CustomScalar<number, Date> {
     return value.getFullYear();
   }
 
-  parseLiteral(ast: any): Date {
+  parseLiteral(ast: ValueNode): Date {
     if (ast.kind === Kind.INT) {
       return this.parseValue(parseInt(ast.value, 10));
     }
