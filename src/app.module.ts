@@ -1,4 +1,3 @@
-import { InvestorModule } from './investor/investor.module';
 import { ProjectModule } from './project/project.module';
 import { EntrepreneurModule } from './entrepreneur/entrepreneur.module';
 import { TokenModule } from './token/token.module';
@@ -47,7 +46,6 @@ import { HealthModule } from './health/health.module';
     HealthModule,
     OtpModule,
     MailModule,
-    InvestorModule,
     ProjectModule,
     TokenModule,
     EntrepreneurModule,

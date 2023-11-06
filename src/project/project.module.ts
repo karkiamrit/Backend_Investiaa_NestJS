@@ -7,8 +7,9 @@ import { EntrepreneurRepository } from 'src/entrepreneur/entrepreneur.repository
 import { UserService } from 'src/user/user.service';
 import { UserRepository } from 'src/user/user.repository';
 import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
+// import { YearScalar } from 'src/modules/types/scalars/year.scalar';
+
 // import { FileService } from '../util/file';
-``;
 @Module({
   imports: [TypeOrmExModule.forCustomRepository([ProjectRepository])],
   providers: [

@@ -3,12 +3,14 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { User } from '../../user/entities/user.entity';
 import { Profession } from '../inputs/profession.input';
+import { Project } from '../../project/entities/project.entity';
 
 @ObjectType()
 @Entity()
@@ -29,6 +31,9 @@ export class Entrepreneur extends BaseEntity {
   @Field(() => Profession, { nullable: true })
   @Column('json')
   profession: Profession;
+
+  @OneToMany(() => Project, (project) => project.entrepreneur)
+  projects: Project[];
 }
 
 @ObjectType()

@@ -19,10 +19,6 @@ input CreateEntrepreneurInput {
   profession: ProfessionInput
 }
 
-input CreateInvestorInput {
-  profession_experience: Float
-}
-
 input CreateProjectInput {
   adhoc_file: String!
   description: String!
@@ -32,13 +28,13 @@ input CreateProjectInput {
   logo: String!
   name: String!
   pitch_deck: String!
-  prior_investors: String!
+  prior_investors: [PriorInvestorInput!]
   registeration_docs: String!
   social_media_links: [String!]!
   status: String!
   tagline: String!
   tax_clearence_docs: String!
-  team_members: String!
+  team_members: [TeamMemberInput!]
   usp: String!
 }
 
@@ -91,11 +87,6 @@ type GetEntrepreneurType {
   data: [Entrepreneur!]
 }
 
-type GetInvestorType {
-  count: Float
-  data: [Investor!]
-}
-
 input GetManyInput {
   """count or data or all, default = data"""
   dataType: String
@@ -130,13 +121,6 @@ input IPagination {
   size: Int!
 }
 
-type Investor {
-  createdAt: DateTime!
-  id: ID!
-  profession_experience: Float
-  updatedAt: DateTime!
-}
-
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -160,16 +144,12 @@ type Mail {
 type Mutation {
   SignUp(input: SignUpInput!): User!
   createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
-  createInvestor(input: CreateInvestorInput!): Investor!
-  createManyInvestor(input: [CreateInvestorInput!]!): [Investor!]!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
   createProject(input: CreateProjectInput!): Project!
   createUser(input: CreateUserInput!): User!
   deleteEntrepreneur(id: Float!): JSON!
   deleteEntrepreneurProfile: JSON!
-  deleteInvestor(id: Float!): Investor!
   deleteProject(id: Float!): JSON!
-  deleteProjectProfile: JSON!
   deleteUser(id: Float!): JSON!
   forgotPassword(email: String!): Boolean!
   logout(accessToken: String!): Boolean!
@@ -178,12 +158,24 @@ type Mutation {
   signIn(input: SignInInput!): JwtWithUser!
   updateEntrepreneur(id: Float!, input: UpdateEntrepreneurInput!): Entrepreneur!
   updateEntrepreneurProfile(input: UpdateEntrepreneurInput!): Entrepreneur!
-  updateInvestor(id: Float!, input: UpdateInvestorInput!): Investor!
   updateMe(input: UpdateUserInput!): User!
   updateProject(id: Float!, input: UpdateProjectInput!): Project!
-  updateProjectProfile(input: UpdateProjectInput!): Project!
   updateUser(id: Float!, input: UpdateUserInput!): User!
   verifyPhone(otpCode: String!, phone: String!): Boolean!
+}
+
+type PriorInvestor {
+  amount: Float
+  date: DateTime
+  equity: Float
+  name: String
+}
+
+input PriorInvestorInput {
+  amount: Float
+  date: DateTime
+  equity: Float
+  name: String
 }
 
 type Profession {
@@ -208,29 +200,27 @@ type Project {
   logo: String!
   name: String!
   pitch_deck: String!
-  prior_investors: String!
+  prior_investors: [PriorInvestor!]!
   registeration_docs: String!
   social_media_links: [String!]!
   status: String!
   tagline: String!
   tax_clearence_docs: String!
-  team_members: String!
+  team_members: [TeamMember!]!
   updatedAt: DateTime!
   usp: String!
 }
 
 type Query {
   getManyEntrepreneurs(input: GetManyInput): GetEntrepreneurType!
-  getManyInvestors(input: GetManyInput): GetInvestorType!
   getManyProjects(input: GetManyInput): GetProjectType!
   getManyUsers(input: GetManyInput): GetUserType!
   getMe: User!
   getMyEntrepreneurProfile: Entrepreneur!
   getOneEntrepreneur(input: GetOneInput!): Entrepreneur!
-  getOneInvestor(input: GetOneInput!): Investor!
   getOneProject(input: GetOneInput!): Project!
   getOneUser(input: GetOneInput!): User!
-  getProjectProfile: Project!
+  getProjectProfiles: [Project!]!
 }
 
 input SignInInput {
@@ -245,13 +235,31 @@ input SignUpInput {
   username: String!
 }
 
+type TeamMember {
+  bio: String
+  contact_number: Float
+  designation: String
+  education_level: String
+  email: String
+  expertise: String
+  name: String
+  photo: String
+}
+
+input TeamMemberInput {
+  bio: String
+  contact_number: Float
+  designation: String
+  education_level: String
+  email: String
+  expertise: String
+  name: String
+  photo: String
+}
+
 input UpdateEntrepreneurInput {
   has_prior_startups: Boolean
   profession: ProfessionInput
-}
-
-input UpdateInvestorInput {
-  profession_experience: Float
 }
 
 input UpdateProjectInput {
@@ -263,13 +271,13 @@ input UpdateProjectInput {
   logo: String
   name: String
   pitch_deck: String
-  prior_investors: String
+  prior_investors: [PriorInvestorInput!]
   registeration_docs: String
   social_media_links: [String!]
   status: String
   tagline: String
   tax_clearence_docs: String
-  team_members: String
+  team_members: [TeamMemberInput!]
   usp: String
 }
 
