@@ -25,7 +25,7 @@ export class ProjectResolver {
   }
 
   @Query(() => Project)
-  @UseGuards(new GraphqlPassportAuthGuard('admin'))
+  // @UseGuards(new GraphqlPassportAuthGuard('admin'))
   getOneProject(
     @Args({ name: 'input' })
     qs: GetOneInput<Project>,
@@ -53,31 +53,14 @@ export class ProjectResolver {
   }
 
   @Mutation(() => GraphQLJSON)
-  @UseGuards(new GraphqlPassportAuthGuard('admin'))
+  @UseGuards(new GraphqlPassportAuthGuard())
   deleteProject(@Args('id') id: number) {
     return this.projectService.delete(id);
   }
 
-  @Query(() => Project)
+  @Query(() => [Project])
   @UseGuards(new GraphqlPassportAuthGuard('user'))
-  getProjectProfile(@CurrentUser() user: User) {
-    return this.projectService.getProjectProfile(user);
-  }
-
-  @Mutation(() => Project)
-  @UseGuards(new GraphqlPassportAuthGuard('user'))
-  async updateProjectProfile(
-    @Args('input') input: UpdateProjectInput,
-    @CurrentUser() user: User,
-  ) {
-    const currentProject = await this.projectService.getProjectProfile(user);
-    return this.projectService.update(currentProject.id, input);
-  }
-
-  @Mutation(() => GraphQLJSON)
-  @UseGuards(new GraphqlPassportAuthGuard('user'))
-  async deleteProjectProfile(@CurrentUser() user: User) {
-    const currentProject = await this.projectService.getProjectProfile(user);
-    return this.projectService.delete(currentProject.id);
+  getProjectProfiles(@CurrentUser() user: User) {
+    return this.projectService.getProjectProfiles(user);
   }
 }
