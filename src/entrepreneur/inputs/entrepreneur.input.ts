@@ -6,7 +6,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
-import { Profession } from './profession.input';
+import { Profession } from '../../modules/types/common/profession.input';
 import { Entrepreneur } from '../entities/entrepreneur.entity';
 
 @InputType()

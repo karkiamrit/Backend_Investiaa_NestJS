@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { User } from '../../user/entities/user.entity';
-import { Profession } from '../inputs/profession.input';
+import { Profession } from '../../modules/types/common/profession.input';
 import { Project } from '../../project/entities/project.entity';
 
 @ObjectType()
