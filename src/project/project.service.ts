@@ -32,24 +32,29 @@ export class ProjectService {
     );
   }
 
-  private convertTeamMember(teamMembers: TeamMember[]): TeamMember[] {
-    let team_members = [];
+  private convertTeamMemberToJSON(teamMembers: TeamMember[]): TeamMember[] {
+    const team_members = [];
+    let id = 1;
     for (const teamMember of teamMembers) {
       const newTeamMember = new TeamMember();
       Object.assign(newTeamMember, teamMember);
+      newTeamMember.id = id;
       team_members.push(newTeamMember);
+      id = id + 1;
     }
     return team_members;
   }
 
-  private convertPriorInvestor(
+  private convertPriorInvestorToJSON(
     priorInvestors: PriorInvestor[],
   ): PriorInvestor[] {
-    let prior_investors = [];
+    const prior_investors = [];
+    let id = 1;
     for (const priorInvestor of priorInvestors) {
       const newPriorInvestor = new PriorInvestor();
       Object.assign(newPriorInvestor, priorInvestor);
       prior_investors.push(newPriorInvestor);
+      id = id + 1;
     }
     return prior_investors;
   }
@@ -68,10 +73,12 @@ export class ProjectService {
       let team_members = [];
       let prior_investors = [];
       if (input.team_members) {
-        team_members = this.convertTeamMember(input.team_members);
+        team_members = this.convertTeamMemberToJSON(input.team_members);
       }
       if (input.prior_investors) {
-        prior_investors = this.convertPriorInvestor(input.prior_investors);
+        prior_investors = this.convertPriorInvestorToJSON(
+          input.prior_investors,
+        );
       }
       if (!currentEntrepreneur) {
         throw new Error(

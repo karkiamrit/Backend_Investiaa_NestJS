@@ -19,6 +19,15 @@ input CreateEntrepreneurInput {
   profession: ProfessionInput
 }
 
+input CreateInvestorInput {
+  investment_preferences: [String!]!
+  investment_range: InvestmentRangeInput!
+  preferred_investment_stage: [String!]!
+  prior_investments: [PriorInvestmentInput!]!
+  profession: ProfessionInput
+  profession_experience: Float
+}
+
 input CreateProjectInput {
   adhoc_file: String!
   description: String!
@@ -87,6 +96,11 @@ type GetEntrepreneurType {
   data: [Entrepreneur!]
 }
 
+type GetInvestorType {
+  count: Float
+  data: [Investor!]
+}
+
 input GetManyInput {
   """count or data or all, default = data"""
   dataType: String
@@ -121,6 +135,29 @@ input IPagination {
   size: Int!
 }
 
+type InvestmentRange {
+  from: Float
+  to: Float
+}
+
+input InvestmentRangeInput {
+  from: Float
+  to: Float
+}
+
+type Investor {
+  createdAt: DateTime!
+  id: ID!
+  investment_preferences: [String!]!
+  investment_range: InvestmentRange
+  preferred_investment_stage: [String!]!
+  prior_investments: [PriorInvestment!]!
+  profession: Profession!
+  profession_experience: Float
+  updatedAt: DateTime!
+  user: User
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -144,11 +181,14 @@ type Mail {
 type Mutation {
   SignUp(input: SignUpInput!): User!
   createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
+  createInvestor(input: CreateInvestorInput!): Investor!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
   createProject(input: CreateProjectInput!): Project!
   createUser(input: CreateUserInput!): User!
   deleteEntrepreneur(id: Float!): JSON!
   deleteEntrepreneurProfile: JSON!
+  deleteInvestor(id: Float!): Investor!
+  deleteInvestorProfile: JSON!
   deleteProject(id: Float!): JSON!
   deleteUser(id: Float!): JSON!
   forgotPassword(email: String!): Boolean!
@@ -158,16 +198,31 @@ type Mutation {
   signIn(input: SignInInput!): JwtWithUser!
   updateEntrepreneur(id: Float!, input: UpdateEntrepreneurInput!): Entrepreneur!
   updateEntrepreneurProfile(input: UpdateEntrepreneurInput!): Entrepreneur!
+  updateInvestor(id: Float!, input: UpdateInvestorInput!): Investor!
+  updateInvestorProfile(input: UpdateInvestorInput!): Investor!
   updateMe(input: UpdateUserInput!): User!
   updateProject(id: Float!, input: UpdateProjectInput!): Project!
   updateUser(id: Float!, input: UpdateUserInput!): User!
   verifyPhone(otpCode: String!, phone: String!): Boolean!
 }
 
+type PriorInvestment {
+  company_name: String
+  date: DateTime
+  id: Float
+}
+
+input PriorInvestmentInput {
+  company_name: String
+  date: DateTime
+  id: Float
+}
+
 type PriorInvestor {
   amount: Float
   date: DateTime
   equity: Float
+  id: Float
   name: String
 }
 
@@ -175,6 +230,7 @@ input PriorInvestorInput {
   amount: Float
   date: DateTime
   equity: Float
+  id: Float
   name: String
 }
 
@@ -213,11 +269,14 @@ type Project {
 
 type Query {
   getManyEntrepreneurs(input: GetManyInput): GetEntrepreneurType!
+  getManyInvestors(input: GetManyInput): GetInvestorType!
   getManyProjects(input: GetManyInput): GetProjectType!
   getManyUsers(input: GetManyInput): GetUserType!
   getMe: User!
   getMyEntrepreneurProfile: Entrepreneur!
+  getMyInvestorProfile: Investor!
   getOneEntrepreneur(input: GetOneInput!): Entrepreneur!
+  getOneInvestor(input: GetOneInput!): Investor!
   getOneProject(input: GetOneInput!): Project!
   getOneUser(input: GetOneInput!): User!
   getProjectProfiles: [Project!]!
@@ -242,6 +301,7 @@ type TeamMember {
   education_level: String
   email: String
   expertise: String
+  id: Float
   name: String
   photo: String
 }
@@ -253,6 +313,7 @@ input TeamMemberInput {
   education_level: String
   email: String
   expertise: String
+  id: Float
   name: String
   photo: String
 }
@@ -260,6 +321,15 @@ input TeamMemberInput {
 input UpdateEntrepreneurInput {
   has_prior_startups: Boolean
   profession: ProfessionInput
+}
+
+input UpdateInvestorInput {
+  investment_preferences: [String!]
+  investment_range: InvestmentRangeInput
+  preferred_investment_stage: [String!]
+  prior_investments: [PriorInvestmentInput!]
+  profession: ProfessionInput
+  profession_experience: Float
 }
 
 input UpdateProjectInput {
