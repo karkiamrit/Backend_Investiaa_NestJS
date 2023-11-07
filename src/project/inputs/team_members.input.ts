@@ -1,14 +1,13 @@
 import { IsOptional } from 'class-validator';
-import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
-import { BaseEntity, PrimaryGeneratedColumn } from 'typeorm';
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { BaseEntity } from 'typeorm';
 // import { GraphQLUpload, Upload } from 'graphql-upload-ts';
 
 @ObjectType()
 @InputType('TeamMemberInput')
 export class TeamMember extends BaseEntity {
-  // @PrimaryGeneratedColumn('increment')
-  // @Field(() => ID)
-  // id?: number;
+  @Field(() => Number, {nullable: true })
+  id?: number;
 
   @Field(() => String, { nullable: true })
   @IsOptional()
@@ -41,6 +40,4 @@ export class TeamMember extends BaseEntity {
   @Field(() => String, { nullable: true })
   @IsOptional()
   photo?: string;
-
-  
 }
