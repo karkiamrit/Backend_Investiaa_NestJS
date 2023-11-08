@@ -4,7 +4,6 @@ import { BaseEntity } from 'typeorm';
 @ObjectType()
 @InputType('PriorInvestmentInput')
 export class PriorInvestment extends BaseEntity {
-  
   @Field(() => Number, { nullable: true })
   id: number;
 

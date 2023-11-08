@@ -19,7 +19,8 @@ import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
     EntrepreneurRepository,
     UserService,
     UserRepository,
+    ProjectRepository
   ],
-  exports: [ProjectService],
+  exports: [ProjectService, ProjectRepository],
 })
 export class ProjectModule {}

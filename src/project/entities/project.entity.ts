@@ -1,22 +1,25 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Entrepreneur } from 'src/entrepreneur/entities/entrepreneur.entity';
+import { Entrepreneur } from '../../entrepreneur/entities/entrepreneur.entity';
 import { PriorInvestor } from '../inputs/prior_investors';
 import { TeamMember } from '../inputs/team_members.input';
 import { ArrayMaxSize } from 'class-validator';
+import { Bid } from '../../bid/entities/bid.entity';
 
 @ObjectType()
 @Entity()
-export class Project {
+export class Project extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -93,6 +96,9 @@ export class Project {
   })
   @JoinColumn({ name: 'entrepreneur_id' })
   entrepreneur: Entrepreneur;
+
+  @OneToMany(() => Bid, (bid) => bid.project)
+  bids: Bid[];
 
   @Field()
   @CreateDateColumn({

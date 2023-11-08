@@ -6,7 +6,7 @@ import { BaseEntity } from 'typeorm';
 @ObjectType()
 @InputType('TeamMemberInput')
 export class TeamMember extends BaseEntity {
-  @Field(() => Number, {nullable: true })
+  @Field(() => Number, { nullable: true })
   id?: number;
 
   @Field(() => String, { nullable: true })

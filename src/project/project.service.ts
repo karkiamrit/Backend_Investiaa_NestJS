@@ -26,37 +26,12 @@ export class ProjectService {
   async getProjectProfiles(user: User) {
     const entrepreneur =
       await this.entrepreneurService.findEntrepreneurByUserId(user.id);
-    console.log(entrepreneur.id);
+    if (!entrepreneur) {
+      throw new Error(`You haven't registered your startup yet`);
+    }
     return this.projectdetailsRepository.findProjectsByEntrepreneurId(
       entrepreneur.id,
     );
-  }
-
-  private convertTeamMemberToJSON(teamMembers: TeamMember[]): TeamMember[] {
-    const team_members = [];
-    let id = 1;
-    for (const teamMember of teamMembers) {
-      const newTeamMember = new TeamMember();
-      Object.assign(newTeamMember, teamMember);
-      newTeamMember.id = id;
-      team_members.push(newTeamMember);
-      id = id + 1;
-    }
-    return team_members;
-  }
-
-  private convertPriorInvestorToJSON(
-    priorInvestors: PriorInvestor[],
-  ): PriorInvestor[] {
-    const prior_investors = [];
-    let id = 1;
-    for (const priorInvestor of priorInvestors) {
-      const newPriorInvestor = new PriorInvestor();
-      Object.assign(newPriorInvestor, priorInvestor);
-      prior_investors.push(newPriorInvestor);
-      id = id + 1;
-    }
-    return prior_investors;
   }
 
   async create(input: CreateProjectInput, CurrentUser: User): Promise<Project> {
@@ -117,5 +92,32 @@ export class ProjectService {
     }
     await this.projectdetailsRepository.delete({ id });
     return { status: 'success' };
+  }
+
+  private convertTeamMemberToJSON(teamMembers: TeamMember[]): TeamMember[] {
+    const team_members = [];
+    let id = 1;
+    for (const teamMember of teamMembers) {
+      const newTeamMember = new TeamMember();
+      Object.assign(newTeamMember, teamMember);
+      newTeamMember.id = id;
+      team_members.push(newTeamMember);
+      id = id + 1;
+    }
+    return team_members;
+  }
+
+  private convertPriorInvestorToJSON(
+    priorInvestors: PriorInvestor[],
+  ): PriorInvestor[] {
+    const prior_investors = [];
+    let id = 1;
+    for (const priorInvestor of priorInvestors) {
+      const newPriorInvestor = new PriorInvestor();
+      Object.assign(newPriorInvestor, priorInvestor);
+      prior_investors.push(newPriorInvestor);
+      id = id + 1;
+    }
+    return prior_investors;
   }
 }

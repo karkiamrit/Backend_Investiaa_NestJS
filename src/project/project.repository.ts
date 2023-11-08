@@ -5,7 +5,7 @@ import { Repository } from 'typeorm/repository/Repository';
 @CustomRepository(Project)
 export class ProjectRepository extends Repository<Project> {
   async findProjectsByEntrepreneurId(entrepreneurId: number) {
-    const projects = await this.createQueryBuilder('project')
+    const projects = await Project.createQueryBuilder('project')
       .where('project.entrepreneur.id = :entrepreneurId', { entrepreneurId })
       .getMany();
     return projects;
