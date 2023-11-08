@@ -1,3 +1,4 @@
+import { BidModule } from './bid/bid.module';
 import { InvestorModule } from './investor/investor.module';
 import { ProjectModule } from './project/project.module';
 import { EntrepreneurModule } from './entrepreneur/entrepreneur.module';
@@ -49,6 +50,7 @@ import { HealthModule } from './health/health.module';
     MailModule,
     InvestorModule,
     ProjectModule,
+    BidModule,
     TokenModule,
     EntrepreneurModule,
   ],
