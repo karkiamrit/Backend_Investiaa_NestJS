@@ -14,6 +14,29 @@ type AddressInput {
   state: String
 }
 
+type Bid {
+  createdAt: DateTime!
+  equity: Float
+  equity_amount: Float
+  id: ID!
+  investor: Investor
+  loan_amount: Float
+  loan_percent: Float
+  loan_years: Float
+  project: Project
+  service_offered: [String!]
+  updatedAt: DateTime!
+}
+
+input CreateBidInput {
+  equity: Float!
+  equity_amount: Float!
+  loan_amount: Float
+  loan_percent: Float
+  loan_years: Float!
+  service_offered: [String!]!
+}
+
 input CreateEntrepreneurInput {
   has_prior_startups: Boolean!
   profession: ProfessionInput
@@ -89,6 +112,11 @@ type Entrepreneur {
   id: ID!
   profession: Profession
   user: User
+}
+
+type GetBidType {
+  count: Float
+  data: [Bid!]
 }
 
 type GetEntrepreneurType {
@@ -180,11 +208,14 @@ type Mail {
 
 type Mutation {
   SignUp(input: SignUpInput!): User!
+  createBid(input: CreateBidInput!, projectID: Float!): Bid!
   createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
   createInvestor(input: CreateInvestorInput!): Investor!
+  createManyBid(input: [CreateBidInput!]!): [Bid!]!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
   createProject(input: CreateProjectInput!): Project!
   createUser(input: CreateUserInput!): User!
+  deleteBid(id: Float!): Bid!
   deleteEntrepreneur(id: Float!): JSON!
   deleteEntrepreneurProfile: JSON!
   deleteInvestor(id: Float!): Investor!
@@ -196,6 +227,7 @@ type Mutation {
   requestOtpVerify(otpType: String!, phone: String!): Boolean!
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(input: SignInInput!): JwtWithUser!
+  updateBid(id: Float!, input: UpdateBidInput!): Bid!
   updateEntrepreneur(id: Float!, input: UpdateEntrepreneurInput!): Entrepreneur!
   updateEntrepreneurProfile(input: UpdateEntrepreneurInput!): Entrepreneur!
   updateInvestor(id: Float!, input: UpdateInvestorInput!): Investor!
@@ -268,13 +300,16 @@ type Project {
 }
 
 type Query {
+  getManyBids(input: GetManyInput): GetBidType!
   getManyEntrepreneurs(input: GetManyInput): GetEntrepreneurType!
   getManyInvestors(input: GetManyInput): GetInvestorType!
   getManyProjects(input: GetManyInput): GetProjectType!
   getManyUsers(input: GetManyInput): GetUserType!
   getMe: User!
+  getMyBidProfile(input: GetManyInput): GetBidType!
   getMyEntrepreneurProfile: Entrepreneur!
   getMyInvestorProfile: Investor!
+  getOneBid(input: GetOneInput!): Bid!
   getOneEntrepreneur(input: GetOneInput!): Entrepreneur!
   getOneInvestor(input: GetOneInput!): Investor!
   getOneProject(input: GetOneInput!): Project!
@@ -316,6 +351,15 @@ input TeamMemberInput {
   id: Float
   name: String
   photo: String
+}
+
+input UpdateBidInput {
+  equity: Float
+  equity_amount: Float
+  loan_amount: Float
+  loan_percent: Float
+  loan_years: Float
+  service_offered: [String!]
 }
 
 input UpdateEntrepreneurInput {
