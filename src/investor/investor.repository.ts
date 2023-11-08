@@ -4,8 +4,7 @@ import { Repository } from 'typeorm/repository/Repository';
 
 @CustomRepository(Investor)
 export class InvestorRepository extends Repository<Investor> {
-
-    async findInvestorByUserId(userId: number): Promise<Investor | null> {
-        return await Investor.findOne({ where: { user: { id: userId } } });
-      }
+  async findInvestorByUserId(userId: number): Promise<Investor | null> {
+    return await Investor.findOne({ where: { user: { id: userId } } });
+  }
 }

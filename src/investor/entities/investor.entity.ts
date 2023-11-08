@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -13,6 +14,7 @@ import { User } from '../../user/entities/user.entity';
 import { Profession } from '../../modules/types/common/profession.input';
 import { InvestmentRange } from '../inputs/investment_range.types';
 import { PriorInvestment } from '../inputs/prior_investment.type';
+import { Bid } from '../../bid/entities/bid.entity';
 
 @ObjectType()
 @Entity()
@@ -20,6 +22,9 @@ export class Investor extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn('increment')
   id: number;
+
+  @OneToMany(()=> Bid, bid => bid.investor)
+  bids: Bid[];
 
   @Field(() => Profession)
   @Column('json', { nullable: true })

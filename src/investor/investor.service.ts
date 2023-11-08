@@ -8,6 +8,7 @@ import {
 } from './inputs/investor.input';
 import { User } from '../user/entities/user.entity';
 import { PriorInvestment } from './inputs/prior_investment.type';
+import { BidService } from '../bid/bid.service';
 
 @Injectable()
 export class InvestorService {
