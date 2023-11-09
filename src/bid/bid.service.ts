@@ -8,6 +8,7 @@ import { InvestorService } from '../investor/investor.service';
 import { ProjectRepository } from '../project/project.repository';
 import { ProjectService } from '../project/project.service';
 import { Project } from '../project/entities/project.entity';
+import { Investor } from '../investor/entities/investor.entity';
 
 @Injectable()
 export class BidService {
@@ -19,7 +20,6 @@ export class BidService {
   ) {}
 
   getMany(qs?: RepoQuery<Bid>, query?: string) {
-    console.log(qs);
     return this.bidRepository.getMany(qs || {}, query);
   }
 
@@ -32,6 +32,11 @@ export class BidService {
     projectID: number,
     user: User,
   ): Promise<Bid> {
+    if (!user.kyc_verified) {
+      throw new Error(
+        'You cannot bid on a project if you are not KYC verified',
+      );
+    }
     const currentInvestor = await this.validateInvestor(user);
     const selectedProject = await this.validateSelectedProject(projectID, user);
     const bid = new Bid();
@@ -54,10 +59,6 @@ export class BidService {
     const bid = this.bidRepository.findOne({ where: { id } });
     await this.bidRepository.delete({ id });
     return bid;
-  }
-
-  async getMyBids(qs?: RepoQuery<Bid>, query?: string) {
-    return this.bidRepository.getMany(qs, query);
   }
 
   async validateInvestor(user: User) {
@@ -87,5 +88,21 @@ export class BidService {
       throw new Error('You cannot bid on your own project');
     }
     return selectedProject;
+  }
+
+  async validateBid(query: string, user: User, id: number) {
+    const currentInvestor = await this.validateInvestor(user);
+    let myBids = await this.getMany(
+      { where: { investor: { id: currentInvestor.id } } },
+      query,
+    );
+    let selectedBid = await this.getOne({ where: { id: id } }, query);
+    if (selectedBid === null) {
+      throw new Error('Bid does not exist');
+    }
+    const bidArray = myBids.data as Bid[];
+    if (!bidArray.some((bid) => bid.id === selectedBid.id)) {
+      throw new Error('You are not allowed to update this bid');
+    }
   }
 }
