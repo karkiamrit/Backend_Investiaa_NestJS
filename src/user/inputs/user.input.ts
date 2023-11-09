@@ -112,10 +112,6 @@ export class UpdateUserInput {
 
   @Field(() => String, { nullable: true })
   @IsOptional()
-  role?: 'admin' | 'user';
-
-  @Field(() => String, { nullable: true })
-  @IsOptional()
   name?: string;
 
   @Field(() => String, { nullable: true })
@@ -173,6 +169,13 @@ export class UpdateUserInput {
   @Field(() => AddressInput, { nullable: true })
   @IsOptional()
   address?: AddressInput;
+}
+
+@InputType()
+export class UpdateUserInputAdmin extends UpdateUserInput{
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  role?: 'admin' | 'user';
 }
 
 @InputType()

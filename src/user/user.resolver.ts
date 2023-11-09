@@ -3,9 +3,13 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import GraphQLJSON from 'graphql-type-json';
-import { GetManyInput, GetOneInput } from 'src/declare/inputs/custom.input';
+import { GetManyInput, GetOneInput } from '../declare/inputs/custom.input';
 import { GetUserType, User } from './entities/user.entity';
-import { CreateUserInput, UpdateUserInput } from './inputs/user.input';
+import {
+  CreateUserInput,
+  UpdateUserInput,
+  UpdateUserInputAdmin,
+} from './inputs/user.input';
 import { CurrentQuery } from '../modules/decorators/query.decorator';
 import { CurrentUser } from '../modules/decorators/user.decorator';
 
@@ -50,7 +54,10 @@ export class UserResolver {
 
   @Mutation(() => User)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
-  updateUser(@Args('id') id: number, @Args('input') input: UpdateUserInput) {
+  updateUser(
+    @Args('id') id: number,
+    @Args('input') input: UpdateUserInputAdmin,
+  ) {
     return this.userService.update(id, input);
   }
 

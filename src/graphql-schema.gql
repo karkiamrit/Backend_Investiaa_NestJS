@@ -216,11 +216,13 @@ type Mutation {
   createProject(input: CreateProjectInput!): Project!
   createUser(input: CreateUserInput!): User!
   deleteBid(id: Float!): Bid!
+  deleteBidProfile(id: Float!): Bid!
   deleteEntrepreneur(id: Float!): JSON!
   deleteEntrepreneurProfile: JSON!
   deleteInvestor(id: Float!): Investor!
   deleteInvestorProfile: JSON!
   deleteProject(id: Float!): JSON!
+  deleteProjectProfile(id: Float!): Project!
   deleteUser(id: Float!): JSON!
   forgotPassword(email: String!): Boolean!
   logout(accessToken: String!): Boolean!
@@ -228,13 +230,15 @@ type Mutation {
   resetPassword(newPassword: String!, token: String!): Boolean!
   signIn(input: SignInInput!): JwtWithUser!
   updateBid(id: Float!, input: UpdateBidInput!): Bid!
+  updateBidProfile(id: Float!, input: UpdateBidInput!): Bid!
   updateEntrepreneur(id: Float!, input: UpdateEntrepreneurInput!): Entrepreneur!
   updateEntrepreneurProfile(input: UpdateEntrepreneurInput!): Entrepreneur!
   updateInvestor(id: Float!, input: UpdateInvestorInput!): Investor!
   updateInvestorProfile(input: UpdateInvestorInput!): Investor!
   updateMe(input: UpdateUserInput!): User!
   updateProject(id: Float!, input: UpdateProjectInput!): Project!
-  updateUser(id: Float!, input: UpdateUserInput!): User!
+  updateProjectProfile(id: Float!, input: UpdateProjectInput!): Project!
+  updateUser(id: Float!, input: UpdateUserInputAdmin!): User!
   verifyPhone(otpCode: String!, phone: String!): Boolean!
 }
 
@@ -309,6 +313,7 @@ type Query {
   getMyBidProfile(input: GetManyInput): GetBidType!
   getMyEntrepreneurProfile: Entrepreneur!
   getMyInvestorProfile: Investor!
+  getMyProjectProfile(input: GetManyInput): GetProjectType!
   getOneBid(input: GetOneInput!): Bid!
   getOneEntrepreneur(input: GetOneInput!): Entrepreneur!
   getOneInvestor(input: GetOneInput!): Investor!
@@ -396,6 +401,27 @@ input UpdateProjectInput {
 }
 
 input UpdateUserInput {
+  address: Address
+  avatar: String
+  bio: String
+  education: Education
+  email: String
+  email_verified: Boolean
+  facebook: String
+  instagram: String
+  kyc_verified: Boolean
+  name: String
+  password: String
+  phone: String
+  phone_verified: Boolean
+  preferred_sector: [String!]
+  reset_token: Float
+  twitter: String
+  username: String
+  whatsapp: String
+}
+
+input UpdateUserInputAdmin {
   address: Address
   avatar: String
   bio: String
