@@ -44,7 +44,7 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Project)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('admin'))
   updateProject(
     @Args('id') id: number,
     @Args('input') input: UpdateProjectInput,
@@ -62,5 +62,51 @@ export class ProjectResolver {
   @UseGuards(new GraphqlPassportAuthGuard('user'))
   getProjectProfiles(@CurrentUser() user: User) {
     return this.projectService.getProjectProfiles(user);
+  }
+
+  @Query(() => GetProjectType)
+  @UseGuards(new GraphqlPassportAuthGuard())
+  async getMyProjectProfile(
+    @Args({ name: 'input', nullable: true })
+    qs: GetManyInput<Project>,
+    @CurrentUser() user: User,
+    @CurrentQuery() query: string,
+  ) {
+    const currentEntrepreneur =
+      await this.projectService.validateEntrepreneur(user);
+    console.log(currentEntrepreneur.id);
+    const fixedEntrepreneurField = {
+      entrepreneur: { id: currentEntrepreneur.id },
+    };
+
+    const queryString: GetManyInput<Project> = {
+      where: { ...fixedEntrepreneurField },
+      order: qs.order,
+      pagination: qs.pagination,
+    };
+    return await this.projectService.getMany(queryString, query);
+  }
+
+  @Mutation(() => Project)
+  @UseGuards(new GraphqlPassportAuthGuard())
+  async updateProjectProfile(
+    @Args('id') id: number,
+    @Args('input') input: UpdateProjectInput,
+    @CurrentUser() user: User,
+    @CurrentQuery() query: string,
+  ) {
+    await this.projectService.validateProject(query, user, id);
+    return this.projectService.update(id, input);
+  }
+
+  @Mutation(() => Project)
+  @UseGuards(new GraphqlPassportAuthGuard())
+  async deleteProjectProfile(
+    @Args('id') id: number,
+    @CurrentUser() user: User,
+    @CurrentQuery() query: string,
+  ) {
+    await this.projectService.validateProject(query, user, id);
+    return this.projectService.delete(id);
   }
 }
