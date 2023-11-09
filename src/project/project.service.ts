@@ -120,4 +120,29 @@ export class ProjectService {
     }
     return prior_investors;
   }
+
+  async validateEntrepreneur(user: User) {
+    const currentEntrepreneur =
+      await this.entrepreneurService.findEntrepreneurByUserId(user.id);
+    if (!currentEntrepreneur) {
+      throw new Error('You cannot bid on a project if you are not an investor');
+    }
+    return currentEntrepreneur;
+  }
+
+  async validateProject(query: string, user: User, id: number) {
+    const currentInvestor = await this.validateEntrepreneur(user);
+    let myProjects = await this.getMany(
+      { where: { entrepreneur: { id: currentInvestor.id } } },
+      query,
+    );
+    let selectedProject = await this.getOne({ where: { id: id } }, query);
+    if (selectedProject === null) {
+      throw new Error('Project does not exist');
+    }
+    const bidArray = myProjects.data as Project[];
+    if (!bidArray.some((project) => project.id === selectedProject.id)) {
+      throw new Error('You are not allowed to update this project');
+    }
+  }
 }
