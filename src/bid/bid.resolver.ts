@@ -23,7 +23,7 @@ export class BidResolver {
     return this.bidService.getMany(qs, query);
   }
 
-  @Query(() => Bid)
+  @Query(() => Bid || null)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
   getOneBid(
     @Args({ name: 'input' })

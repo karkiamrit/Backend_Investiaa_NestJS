@@ -9,6 +9,7 @@ import { ProjectRepository } from '../project/project.repository';
 import { ProjectService } from '../project/project.service';
 import { Project } from '../project/entities/project.entity';
 import { Investor } from '../investor/entities/investor.entity';
+import { FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class BidService {
@@ -24,7 +25,11 @@ export class BidService {
   }
 
   getOne(qs: OneRepoQuery<Bid>, query?: string) {
-    return this.bidRepository.getOne(qs, query);
+    if (query) {
+      return this.bidRepository.getOne(qs, query);
+    } else {
+      return Bid.findOne(qs as FindOneOptions<Bid>);
+    }
   }
 
   async create(

@@ -103,12 +103,12 @@ export class DeclareModule {
       };
       return returns[dataType]();
     };
-
     Repository.prototype.getOne = async function <T>(
       this: Repository<T>,
       { where }: OneRepoQuery<T>,
       query: string,
     ): Promise<T> {
+      console.log(this);
       const { relations, select } = getInfoFromQuery<T>(query);
 
       const condition: FindOneOptions<T> = {

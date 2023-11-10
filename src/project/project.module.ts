@@ -3,10 +3,11 @@ import { TypeOrmExModule } from '../modules/decorators/typeorm.module';
 import { ProjectService } from './project.service';
 import { ProjectRepository } from './project.repository';
 import { ProjectResolver } from './project.resolver';
-import { EntrepreneurRepository } from 'src/entrepreneur/entrepreneur.repository';
-import { UserService } from 'src/user/user.service';
-import { UserRepository } from 'src/user/user.repository';
-import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
+import { EntrepreneurRepository } from '../entrepreneur/entrepreneur.repository';
+import { UserService } from '../user/user.service';
+import { UserRepository } from '../user/user.repository';
+import { EntrepreneurService } from '../entrepreneur/entrepreneur.service';
+
 // import { YearScalar } from 'src/modules/types/scalars/year.scalar';
 
 // import { FileService } from '../util/file';
@@ -19,8 +20,7 @@ import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
     EntrepreneurRepository,
     UserService,
     UserRepository,
-    ProjectRepository
   ],
-  exports: [ProjectService, ProjectRepository],
+  exports: [ProjectService],
 })
 export class ProjectModule {}

@@ -48,11 +48,11 @@ import { HealthModule } from './health/health.module';
     HealthModule,
     OtpModule,
     MailModule,
+    EntrepreneurModule,
     InvestorModule,
     ProjectModule,
     BidModule,
     TokenModule,
-    EntrepreneurModule,
   ],
 })
 export class AppModule {}

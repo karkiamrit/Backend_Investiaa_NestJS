@@ -7,20 +7,26 @@ import { User } from 'src/user/entities/user.entity';
 import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
 import { TeamMember } from './inputs/team_members.input';
 import { PriorInvestor } from './inputs/prior_investors';
+import { FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class ProjectService {
   constructor(
-    private readonly projectdetailsRepository: ProjectRepository,
     private readonly entrepreneurService: EntrepreneurService,
+    private readonly projectRepository: ProjectRepository,
   ) {}
 
   getMany(qs?: RepoQuery<Project>, query?: string) {
-    return this.projectdetailsRepository.getMany(qs || {}, query);
+    return this.projectRepository.getMany(qs || {}, query);
   }
 
   getOne(qs: OneRepoQuery<Project>, query?: string) {
-    return this.projectdetailsRepository.getOne(qs, query);
+    if (query) {
+      this;
+      return this.projectRepository.getOne(qs, query);
+    } else {
+      return Project.findOne(qs as FindOneOptions<Project>);
+    }
   }
 
   async getProjectProfiles(user: User) {
@@ -29,9 +35,7 @@ export class ProjectService {
     if (!entrepreneur) {
       throw new Error(`You haven't registered your startup yet`);
     }
-    return this.projectdetailsRepository.findProjectsByEntrepreneurId(
-      entrepreneur.id,
-    );
+    return this.projectRepository.findProjectsByEntrepreneurId(entrepreneur.id);
   }
 
   async create(input: CreateProjectInput, CurrentUser: User): Promise<Project> {
@@ -48,10 +52,10 @@ export class ProjectService {
       let team_members = [];
       let prior_investors = [];
       if (input.team_members) {
-        team_members = this.convertTeamMemberToJSON(input.team_members);
+        team_members = await this.convertTeamMemberToJSON(input.team_members);
       }
       if (input.prior_investors) {
-        prior_investors = this.convertPriorInvestorToJSON(
+        prior_investors = await this.convertPriorInvestorToJSON(
           input.prior_investors,
         );
       }
@@ -62,9 +66,8 @@ export class ProjectService {
       } else {
         projectdetails.team_members = team_members;
         projectdetails.prior_investors = prior_investors;
-
         projectdetails.entrepreneur = currentEntrepreneur;
-        return await this.projectdetailsRepository.save(projectdetails);
+        return await this.projectRepository.save(projectdetails);
       }
     } catch (error) {
       // Handle any unexpected errors here
@@ -73,28 +76,30 @@ export class ProjectService {
   }
 
   async update(id: number, input: UpdateProjectInput): Promise<Project> {
-    const projectdetails = await this.projectdetailsRepository.findOne({
+    const projectdetails = await this.projectRepository.findOne({
       where: { id },
     });
     if (!projectdetails) {
       throw new Error(`Entrepreneur with ID ${id} not found`);
     }
     Object.assign(projectdetails, input);
-    return this.projectdetailsRepository.save(projectdetails);
+    return this.projectRepository.save(projectdetails);
   }
 
   async delete(id: number) {
-    const project_details = this.projectdetailsRepository.findOne({
+    const project_details = this.projectRepository.findOne({
       where: { id },
     });
     if (!project_details) {
       throw new Error(`You haven't registered your startup yet`);
     }
-    await this.projectdetailsRepository.delete({ id });
+    console.log(project_details);
+    console.log('id', id);
+    await this.projectRepository.delete({ id });
     return { status: 'success' };
   }
 
-  private convertTeamMemberToJSON(teamMembers: TeamMember[]): TeamMember[] {
+  private async convertTeamMemberToJSON(teamMembers: TeamMember[]) {
     const team_members = [];
     let id = 1;
     for (const teamMember of teamMembers) {
@@ -107,9 +112,7 @@ export class ProjectService {
     return team_members;
   }
 
-  private convertPriorInvestorToJSON(
-    priorInvestors: PriorInvestor[],
-  ): PriorInvestor[] {
+  private async convertPriorInvestorToJSON(priorInvestors: PriorInvestor[]) {
     const prior_investors = [];
     let id = 1;
     for (const priorInvestor of priorInvestors) {

@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -13,7 +14,7 @@ import { Project } from '../../project/entities/project.entity';
 
 @ObjectType()
 @Entity()
-export class Bid {
+export class Bid extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn('increment')
   id: number;

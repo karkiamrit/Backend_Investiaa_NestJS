@@ -9,14 +9,16 @@ import { ProjectService } from '../project/project.service';
 import { ProjectRepository } from '../project/project.repository';
 import { EntrepreneurRepository } from '../entrepreneur/entrepreneur.repository';
 import { EntrepreneurService } from '../entrepreneur/entrepreneur.service';
-import { ProjectModule } from 'src/project/project.module';
-import { InvestorModule } from 'src/investor/investor.module';
+import { ProjectModule } from '../project/project.module';
+import { InvestorModule } from '../investor/investor.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
     TypeOrmExModule.forCustomRepository([BidRepository]),
+    UserModule,
     ProjectModule,
-    InvestorModule
+    InvestorModule,
   ],
   providers: [
     BidService,

@@ -9,6 +9,7 @@ import {
 import { User } from '../user/entities/user.entity';
 import { PriorInvestment } from './inputs/prior_investment.type';
 import { BidService } from '../bid/bid.service';
+import { FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class InvestorService {
@@ -19,7 +20,11 @@ export class InvestorService {
   }
 
   getOne(qs: OneRepoQuery<Investor>, query?: string) {
-    return this.investorRepository.getOne(qs, query);
+    if (query) {
+      return this.investorRepository.getOne(qs, query);
+    } else {
+      return this.investorRepository.findOne(qs as FindOneOptions<Investor>);
+    }
   }
 
   private convertPriorInvestmentToJSON(priorInvestments: PriorInvestment[]) {

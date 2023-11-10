@@ -26,7 +26,7 @@ export class InvestorResolver {
     return this.investorService.getMany(qs, query);
   }
 
-  @Query(() => Investor)
+  @Query(() => Investor || null)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
   getOneInvestor(
     @Args({ name: 'input' })

@@ -25,7 +25,7 @@ export class ProjectResolver {
   }
 
   @Query(() => Project)
-  // @UseGuards(new GraphqlPassportAuthGuard('admin'))
+  @UseGuards(new GraphqlPassportAuthGuard('admin'))
   getOneProject(
     @Args({ name: 'input' })
     qs: GetOneInput<Project>,
@@ -74,7 +74,6 @@ export class ProjectResolver {
   ) {
     const currentEntrepreneur =
       await this.projectService.validateEntrepreneur(user);
-    console.log(currentEntrepreneur.id);
     const fixedEntrepreneurField = {
       entrepreneur: { id: currentEntrepreneur.id },
     };
