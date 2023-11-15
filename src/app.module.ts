@@ -1,3 +1,5 @@
+import { InvestmentModule } from './investment/investment.module';
+import { Startup_investmentModule } from './startup_investment/startup_investment.module';
 import { BidModule } from './bid/bid.module';
 import { InvestorModule } from './investor/investor.module';
 import { ProjectModule } from './project/project.module';
@@ -50,6 +52,8 @@ import { HealthModule } from './health/health.module';
     MailModule,
     EntrepreneurModule,
     InvestorModule,
+    Startup_investmentModule,
+    InvestmentModule,
     ProjectModule,
     BidModule,
     TokenModule,
