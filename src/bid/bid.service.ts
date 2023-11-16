@@ -97,11 +97,11 @@ export class BidService {
 
   async validateBid(query: string, user: User, id: number) {
     const currentInvestor = await this.validateInvestor(user);
-    let myBids = await this.getMany(
+    const myBids = await this.getMany(
       { where: { investor: { id: currentInvestor.id } } },
       query,
     );
-    let selectedBid = await this.getOne({ where: { id: id } }, query);
+    const selectedBid = await this.getOne({ where: { id: id } }, query);
     if (selectedBid === null) {
       throw new Error('Bid does not exist');
     }

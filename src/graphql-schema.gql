@@ -42,6 +42,10 @@ input CreateEntrepreneurInput {
   profession: ProfessionInput
 }
 
+input CreateInvestmentInput {
+  type: String!
+}
+
 input CreateInvestorInput {
   investment_preferences: [String!]!
   investment_range: InvestmentRangeInput!
@@ -68,6 +72,10 @@ input CreateProjectInput {
   tax_clearence_docs: String!
   team_members: [TeamMemberInput!]
   usp: String!
+}
+
+input CreateStartup_investmentInput {
+  project_id: Float
 }
 
 input CreateUserInput {
@@ -124,6 +132,11 @@ type GetEntrepreneurType {
   data: [Entrepreneur!]
 }
 
+type GetInvestmentType {
+  count: Float
+  data: [Investment!]
+}
+
 type GetInvestorType {
   count: Float
   data: [Investor!]
@@ -150,6 +163,11 @@ type GetProjectType {
   data: [Project!]
 }
 
+type GetStartup_investmentType {
+  count: Float
+  data: [Startup_investment!]
+}
+
 type GetUserType {
   count: Float
   data: [User!]
@@ -161,6 +179,13 @@ input IPagination {
 
   """Size of page"""
   size: Int!
+}
+
+type Investment {
+  createdAt: DateTime!
+  id: ID!
+  type: String!
+  updatedAt: DateTime!
 }
 
 type InvestmentRange {
@@ -210,19 +235,25 @@ type Mutation {
   SignUp(input: SignUpInput!): User!
   createBid(input: CreateBidInput!, projectID: Float!): Bid!
   createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
+  createInvestment(input: CreateInvestmentInput!): Investment!
   createInvestor(input: CreateInvestorInput!): Investor!
   createManyBid(input: [CreateBidInput!]!): [Bid!]!
+  createManyInvestment(input: [CreateInvestmentInput!]!): [Investment!]!
+  createManyStartup_investment(input: [CreateStartup_investmentInput!]!): [Startup_investment!]!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
   createProject(input: CreateProjectInput!): Project!
+  createStartup_investment(input: CreateStartup_investmentInput!): Startup_investment!
   createUser(input: CreateUserInput!): User!
   deleteBid(id: Float!): Bid!
   deleteBidProfile(id: Float!): Bid!
   deleteEntrepreneur(id: Float!): JSON!
   deleteEntrepreneurProfile: JSON!
+  deleteInvestment(id: Float!): Investment!
   deleteInvestor(id: Float!): Investor!
   deleteInvestorProfile: JSON!
   deleteProject(id: Float!): JSON!
   deleteProjectProfile(id: Float!): Project!
+  deleteStartup_investment(id: Float!): Startup_investment!
   deleteUser(id: Float!): JSON!
   forgotPassword(email: String!): Boolean!
   logout(accessToken: String!): Boolean!
@@ -233,11 +264,13 @@ type Mutation {
   updateBidProfile(id: Float!, input: UpdateBidInput!): Bid!
   updateEntrepreneur(id: Float!, input: UpdateEntrepreneurInput!): Entrepreneur!
   updateEntrepreneurProfile(input: UpdateEntrepreneurInput!): Entrepreneur!
+  updateInvestment(id: Float!, input: UpdateInvestmentInput!): Investment!
   updateInvestor(id: Float!, input: UpdateInvestorInput!): Investor!
   updateInvestorProfile(input: UpdateInvestorInput!): Investor!
   updateMe(input: UpdateUserInput!): User!
   updateProject(id: Float!, input: UpdateProjectInput!): Project!
   updateProjectProfile(id: Float!, input: UpdateProjectInput!): Project!
+  updateStartup_investment(id: Float!, input: UpdateStartup_investmentInput!): Startup_investment!
   updateUser(id: Float!, input: UpdateUserInputAdmin!): User!
   verifyPhone(otpCode: String!, phone: String!): Boolean!
 }
@@ -306,8 +339,10 @@ type Project {
 type Query {
   getManyBids(input: GetManyInput): GetBidType!
   getManyEntrepreneurs(input: GetManyInput): GetEntrepreneurType!
+  getManyInvestments(input: GetManyInput): GetInvestmentType!
   getManyInvestors(input: GetManyInput): GetInvestorType!
   getManyProjects(input: GetManyInput): GetProjectType!
+  getManyStartup_investments(input: GetManyInput): GetStartup_investmentType!
   getManyUsers(input: GetManyInput): GetUserType!
   getMe: User!
   getMyBidProfile(input: GetManyInput): GetBidType!
@@ -316,8 +351,10 @@ type Query {
   getMyProjectProfile(input: GetManyInput): GetProjectType!
   getOneBid(input: GetOneInput!): Bid!
   getOneEntrepreneur(input: GetOneInput!): Entrepreneur!
+  getOneInvestment(input: GetOneInput!): Investment!
   getOneInvestor(input: GetOneInput!): Investor!
   getOneProject(input: GetOneInput!): Project!
+  getOneStartup_investment(input: GetOneInput!): Startup_investment!
   getOneUser(input: GetOneInput!): User!
   getProjectProfiles: [Project!]!
 }
@@ -332,6 +369,11 @@ input SignUpInput {
   password: String!
   phone: String!
   username: String!
+}
+
+type Startup_investment {
+  id: ID!
+  project_id: Float
 }
 
 type TeamMember {
@@ -372,6 +414,10 @@ input UpdateEntrepreneurInput {
   profession: ProfessionInput
 }
 
+input UpdateInvestmentInput {
+  type: String!
+}
+
 input UpdateInvestorInput {
   investment_preferences: [String!]
   investment_range: InvestmentRangeInput
@@ -398,6 +444,10 @@ input UpdateProjectInput {
   tax_clearence_docs: String
   team_members: [TeamMemberInput!]
   usp: String
+}
+
+input UpdateStartup_investmentInput {
+  project_id: Float
 }
 
 input UpdateUserInput {
