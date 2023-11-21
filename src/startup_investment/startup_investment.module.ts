@@ -1,14 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmExModule } from '../modules/decorators/typeorm.module';
-import { Startup_investmentService } from './startup_investment.service';
-import { Startup_investmentRepository } from './startup_investment.repository';
-import { Startup_investmentResolver } from './startup_investment.resolver';
+import { StartupInvestmentService } from './startup_investment.service';
+import { StartupInvestmentRepository } from './startup_investment.repository';
 
 @Module({
-  imports: [
-    TypeOrmExModule.forCustomRepository([Startup_investmentRepository]),
-  ],
-  providers: [Startup_investmentService, Startup_investmentResolver],
-  exports: [Startup_investmentService],
+  imports: [TypeOrmExModule.forCustomRepository([StartupInvestmentRepository])],
+  providers: [StartupInvestmentService],
+  exports: [StartupInvestmentService],
 })
-export class Startup_investmentModule {}
+export class StartupInvestmentModule {}
