@@ -135,11 +135,11 @@ export class ProjectService {
 
   async validateProject(query: string, user: User, id: number) {
     const currentInvestor = await this.validateEntrepreneur(user);
-    let myProjects = await this.getMany(
+    const myProjects = await this.getMany(
       { where: { entrepreneur: { id: currentInvestor.id } } },
       query,
     );
-    let selectedProject = await this.getOne({ where: { id: id } }, query);
+    const selectedProject = await this.getOne({ where: { id: id } }, query);
     if (selectedProject === null) {
       throw new Error('Project does not exist');
     }

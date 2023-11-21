@@ -23,7 +23,7 @@ export class Investor extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @OneToMany(()=> Bid, bid => bid.investor)
+  @OneToMany(() => Bid, (bid) => bid.investor)
   bids: Bid[];
 
   @Field(() => Profession)

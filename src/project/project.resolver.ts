@@ -15,7 +15,7 @@ export class ProjectResolver {
   constructor(private readonly projectService: ProjectService) {}
 
   @Query(() => GetProjectType)
-  @UseGuards(new GraphqlPassportAuthGuard('admin'))
+  @UseGuards(new GraphqlPassportAuthGuard())
   getManyProjects(
     @Args({ name: 'input', nullable: true })
     qs: GetManyInput<Project>,
