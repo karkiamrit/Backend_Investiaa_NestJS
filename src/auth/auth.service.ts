@@ -19,7 +19,7 @@ import { OtpType } from 'src/otp/entities/otp.entity';
 import { TokenService } from 'src/token/token.service';
 import { ApolloError } from 'apollo-server-core';
 import { Http } from 'src/util/http';
-const crypto = require('crypto');
+import crypto from 'crypto'; //if issue with this change to require('crypto')
 
 @Injectable()
 export class AuthService {
