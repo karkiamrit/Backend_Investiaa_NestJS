@@ -2,18 +2,21 @@ import { GraphqlPassportAuthGuard } from '../modules/guards/graphql-passport-aut
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BidService } from './bid.service';
-import { GetManyInput, GetOneInput } from 'src/declare/inputs/custom.input';
-import { CurrentQuery } from 'src/modules/decorators/query.decorator';
+import { GetManyInput, GetOneInput } from '../declare/inputs/custom.input';
+import { CurrentQuery } from '../modules/decorators/query.decorator';
 import { GetBidType, Bid } from './entities/bid.entity';
 import { CreateBidInput, UpdateBidInput } from './inputs/bid.input';
-import { CurrentUser } from 'src/modules/decorators/user.decorator';
+import { CurrentUser } from '../modules/decorators/user.decorator';
 import { User } from '../user/entities/user.entity';
-import { BidRepository } from './bid.repository';
+
+import GraphQLJSON from 'graphql-type-json';
 @Resolver()
 export class BidResolver {
   constructor(private readonly bidService: BidService) {}
 
-  @Query(() => GetBidType)
+  @Query(() => GetBidType, {
+    description: 'Returns multiple bids based on the provided input',
+  })
   @UseGuards(new GraphqlPassportAuthGuard())
   getManyBids(
     @Args({ name: 'input', nullable: true })
@@ -23,7 +26,10 @@ export class BidResolver {
     return this.bidService.getMany(qs, query);
   }
 
-  @Query(() => Bid || null)
+  @Query(() => Bid || null, {
+    description:
+      'Returns a single bid based on the bid id; only applicable for admin',
+  })
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
   getOneBid(
     @Args({ name: 'input' })
@@ -81,7 +87,10 @@ export class BidResolver {
     return this.bidService.delete(id);
   }
 
-  @Query(() => GetBidType)
+  @Query(() => GetBidType, {
+    description:
+      'get bids associated with the current investor; only applicable for investor',
+  })
   @UseGuards(new GraphqlPassportAuthGuard())
   async getMyBidProfile(
     @Args({ name: 'input', nullable: true })
@@ -107,5 +116,11 @@ export class BidResolver {
   @UseGuards(new GraphqlPassportAuthGuard())
   deleteBid(@Args('id') id: number) {
     return this.bidService.delete(id);
+  }
+
+  @Mutation(() => GraphQLJSON)
+  @UseGuards(new GraphqlPassportAuthGuard())
+  async acceptBid(@Args('bidID') bidID: number) {
+    return await this.bidService.acceptBid(bidID);
   }
 }
