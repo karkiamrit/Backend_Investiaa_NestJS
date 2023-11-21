@@ -1,22 +1,37 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Entrepreneur } from 'src/entrepreneur/entities/entrepreneur.entity';
+import { Bid } from 'src/bid/entities/bid.entity';
 
 @ObjectType()
 @Entity()
-export class Startup_investment {
+export class StartupInvestment extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Field(() => Number, { nullable: true })
-  @Column({ nullable: true })
-  project_id?: number;
+  @Field(() => Entrepreneur)
+  @OneToOne(() => Entrepreneur, { eager: true })
+  @JoinColumn({ name: 'entrepreneur_id' })
+  entrepreneur: Entrepreneur;
+
+  @Field(() => Bid, { nullable: true })
+  @OneToOne(() => Bid, { eager: true })
+  @JoinColumn({ name: 'bid_id' })
+  bid: Bid;
 }
 
 @ObjectType()
-export class GetStartup_investmentType {
-  @Field(() => [Startup_investment], { nullable: true })
-  data?: Startup_investment[];
+export class GetStartupInvestmentType {
+  @Field(() => [StartupInvestment], { nullable: true })
+  data?: StartupInvestment[];
 
   @Field(() => Number, { nullable: true })
   count?: number;
