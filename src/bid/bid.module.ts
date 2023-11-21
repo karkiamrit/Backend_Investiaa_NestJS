@@ -3,15 +3,12 @@ import { TypeOrmExModule } from '../modules/decorators/typeorm.module';
 import { BidService } from './bid.service';
 import { BidRepository } from './bid.repository';
 import { BidResolver } from './bid.resolver';
-import { InvestorService } from '../investor/investor.service';
-import { InvestorRepository } from '../investor/investor.repository';
-import { ProjectService } from '../project/project.service';
-import { ProjectRepository } from '../project/project.repository';
-import { EntrepreneurRepository } from '../entrepreneur/entrepreneur.repository';
-import { EntrepreneurService } from '../entrepreneur/entrepreneur.service';
 import { ProjectModule } from '../project/project.module';
 import { InvestorModule } from '../investor/investor.module';
 import { UserModule } from '../user/user.module';
+import { StartupInvestmentModule } from '../startup_investment/startup_investment.module';
+
+import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
 
 @Module({
   imports: [
@@ -19,17 +16,10 @@ import { UserModule } from '../user/user.module';
     UserModule,
     ProjectModule,
     InvestorModule,
+    StartupInvestmentModule,
+    EntrepreneurModule,
   ],
-  providers: [
-    BidService,
-    BidResolver,
-    InvestorService,
-    InvestorRepository,
-    ProjectRepository,
-    ProjectService,
-    EntrepreneurService,
-    EntrepreneurRepository,
-  ],
+  providers: [BidService, BidResolver],
   exports: [BidService],
 })
 export class BidModule {}
