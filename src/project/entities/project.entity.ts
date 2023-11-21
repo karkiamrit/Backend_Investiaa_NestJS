@@ -6,7 +6,6 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -88,6 +87,14 @@ export class Project extends BaseEntity {
   @Field(() => [PriorInvestor])
   @Column('json', { nullable: true })
   prior_investors: PriorInvestor[];
+
+  @Field(() => Date)
+  @Column()
+  bid_opening: Date;
+
+  @Field(() => Date)
+  @Column()
+  bid_closing: Date;
 
   @Field(() => Entrepreneur)
   @ManyToOne(() => Entrepreneur, (entrepreneur) => entrepreneur.projects, {

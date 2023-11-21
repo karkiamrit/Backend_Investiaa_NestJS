@@ -69,12 +69,20 @@ export class CreateProjectInput {
   social_media_links: string[];
 
   @Field(() => [TeamMember], { nullable: true })
-  @IsNotEmpty()
-  team_members: TeamMember[];
+  @IsOptional()
+  team_members?: TeamMember[];
 
   @Field(() => [PriorInvestor], { nullable: true })
+  @IsOptional()
+  prior_investors?: PriorInvestor[];
+
+  @Field(() => Date)
   @IsNotEmpty()
-  prior_investors: PriorInvestor[];
+  bid_opening: Date;
+
+  @Field(() => Date)
+  @IsNotEmpty()
+  bid_closing: Date;
 }
 
 @InputType()
@@ -144,4 +152,12 @@ export class UpdateProjectInput {
   @Field(() => [PriorInvestor], { nullable: true })
   @IsOptional()
   prior_investors?: PriorInvestor[];
+
+  @Field(() => Date)
+  @IsOptional()
+  bid_opening: Date;
+
+  @Field(() => Date)
+  @IsOptional()
+  bid_closing: Date;
 }

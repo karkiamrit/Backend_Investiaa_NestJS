@@ -70,6 +70,10 @@ export class Bid extends BaseEntity {
     type: 'timestamp with time zone',
   })
   updatedAt: Date;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  accepted: boolean;
 }
 
 @ObjectType()
