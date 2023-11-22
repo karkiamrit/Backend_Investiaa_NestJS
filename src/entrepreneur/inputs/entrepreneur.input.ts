@@ -20,6 +20,11 @@ export class CreateEntrepreneurInput extends Entrepreneur {
   @IsBoolean()
   @IsNotEmpty()
   has_prior_startups: boolean;
+
+  @Field()
+  @IsBoolean()
+  @IsOptional()
+  is_student: boolean;
 }
 
 @InputType()
@@ -33,4 +38,9 @@ export class UpdateEntrepreneurInput implements Partial<Entrepreneur> {
   @IsOptional()
   @IsBoolean()
   has_prior_startups?: boolean;
+
+  @Field()
+  @IsBoolean()
+  @IsOptional()
+  is_student: boolean;
 }

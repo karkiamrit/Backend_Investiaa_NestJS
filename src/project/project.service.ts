@@ -2,12 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { OneRepoQuery, RepoQuery } from 'src/declare/types';
 import { ProjectRepository } from './project.repository';
 import { Project } from './entities/project.entity';
-import { CreateProjectInput, UpdateProjectInput } from './inputs/project.input';
+import {
+  CreateProjectInput,
+  CreateProjectInputStudent,
+  UpdateProjectInput,
+} from './inputs/project.input';
 import { User } from 'src/user/entities/user.entity';
 import { EntrepreneurService } from 'src/entrepreneur/entrepreneur.service';
 import { TeamMember } from './inputs/team_members.input';
 import { PriorInvestor } from './inputs/prior_investors';
 import { FindOneOptions } from 'typeorm';
+import { Entrepreneur } from '../entrepreneur/entities/entrepreneur.entity';
 
 @Injectable()
 export class ProjectService {
@@ -38,41 +43,54 @@ export class ProjectService {
     return this.projectRepository.findProjectsByEntrepreneurId(entrepreneur.id);
   }
 
-  async create(input: CreateProjectInput, CurrentUser: User): Promise<Project> {
+  async create(
+    input: CreateProjectInput,
+    currentUser: User,
+    currentEntrepreneur: Entrepreneur,
+  ): Promise<Project | undefined> {
     try {
-      if (CurrentUser.kyc_verified === false) {
-        throw new Error(
-          `Please complete your KYC verification before registering your startup`,
-        );
-      }
-      const projectdetails = new Project();
-      Object.assign(projectdetails, input);
-      const currentEntrepreneur =
-        await this.entrepreneurService.findEntrepreneurByUserId(CurrentUser.id);
-      let team_members = [];
-      let prior_investors = [];
-      if (input.team_members) {
-        team_members = await this.convertTeamMemberToJSON(input.team_members);
-      }
-      if (input.prior_investors) {
-        prior_investors = await this.convertPriorInvestorToJSON(
-          input.prior_investors,
-        );
-      }
+      this.validateKYCVerification(currentUser);
+
+      const projectdetails = this.createProjectDetails(input);
+      const teamMembers = await this.convertEntitiesToJSON(
+        input.team_members,
+        TeamMember,
+      );
+      const priorInvestors = await this.convertEntitiesToJSON(
+        input.prior_investors,
+        PriorInvestor,
+      );
+
       if (!currentEntrepreneur) {
         throw new Error(
-          `Please register as an entrepreneur before begining your startup registeration`,
+          `Please register as an entrepreneur before beginning your startup registration`,
         );
-      } else {
-        projectdetails.team_members = team_members;
-        projectdetails.prior_investors = prior_investors;
-        projectdetails.entrepreneur = currentEntrepreneur;
-        return await this.projectRepository.save(projectdetails);
       }
+
+      projectdetails.team_members = teamMembers;
+      projectdetails.prior_investors = priorInvestors;
+      projectdetails.entrepreneur = currentEntrepreneur;
+
+      return await this.projectRepository.save(projectdetails);
     } catch (error) {
       // Handle any unexpected errors here
       console.log(error);
+      return undefined;
     }
+  }
+
+  private validateKYCVerification(currentUser: User): void {
+    if (!currentUser.kyc_verified) {
+      throw new Error(
+        `Please complete your KYC verification before registering your startup`,
+      );
+    }
+  }
+
+  private createProjectDetails(input: CreateProjectInput): Project {
+    const projectdetails = new Project();
+    Object.assign(projectdetails, input);
+    return projectdetails;
   }
 
   async update(id: number, input: UpdateProjectInput): Promise<Project> {
@@ -99,29 +117,60 @@ export class ProjectService {
     return { status: 'success' };
   }
 
-  private async convertTeamMemberToJSON(teamMembers: TeamMember[]) {
-    const team_members = [];
-    let id = 1;
-    for (const teamMember of teamMembers) {
-      const newTeamMember = new TeamMember();
-      Object.assign(newTeamMember, teamMember);
-      newTeamMember.id = id;
-      team_members.push(newTeamMember);
-      id = id + 1;
+  async checkForStudent(currentEntrepreneur: Entrepreneur, input: any) {
+    let projectInput: any;
+    if (currentEntrepreneur?.is_student) {
+      projectInput = Object.assign(new CreateProjectInputStudent(), input);
+    } else {
+      projectInput = Object.assign(new CreateProjectInput(), input);
+      if (
+        !input.adhoc_file ||
+        !input.registeration_docs ||
+        !input.tax_clearence_docs ||
+        !input.financial_projection_docs
+      ) {
+        throw new Error(`Please upload all the required documents`);
+      }
     }
-    return team_members;
+    return projectInput;
   }
 
-  private async convertPriorInvestorToJSON(priorInvestors: PriorInvestor[]) {
-    const prior_investors = [];
+  // private async convertTeamMemberToJSON(teamMembers: TeamMember[]) {
+  //   const team_members = [];
+  //   let id = 1;
+  //   for (const teamMember of teamMembers) {
+  //     const newTeamMember = new TeamMember();
+  //     Object.assign(newTeamMember, teamMember);
+  //     newTeamMember.id = id;
+  //     team_members.push(newTeamMember);
+  //     id = id + 1;
+  //   }
+  //   return team_members;
+  // }
+
+  // private async convertPriorInvestorToJSON(priorInvestors: PriorInvestor[]) {
+  //   const prior_investors = [];
+  //   let id = 1;
+  //   for (const priorInvestor of priorInvestors) {
+  //     const newPriorInvestor = new PriorInvestor();
+  //     Object.assign(newPriorInvestor, priorInvestor);
+  //     prior_investors.push(newPriorInvestor);
+  //     id = id + 1;
+  //   }
+  //   return prior_investors;
+  // }
+
+  private async convertEntitiesToJSON(entities: any[], entityClass: any) {
+    const convertedEntities = [];
     let id = 1;
-    for (const priorInvestor of priorInvestors) {
-      const newPriorInvestor = new PriorInvestor();
-      Object.assign(newPriorInvestor, priorInvestor);
-      prior_investors.push(newPriorInvestor);
+    for (const entity of entities) {
+      const newEntity = new entityClass();
+      Object.assign(newEntity, entity);
+      newEntity.id = id;
+      convertedEntities.push(newEntity);
       id = id + 1;
     }
-    return prior_investors;
+    return convertedEntities;
   }
 
   async validateEntrepreneur(user: User) {
