@@ -32,6 +32,10 @@ export class Entrepreneur extends BaseEntity {
   @Column('json')
   profession: Profession;
 
+  @Field(() => Boolean)
+  @Column({ default: false })
+  is_student: boolean;
+
   @OneToMany(() => Project, (project) => project.entrepreneur)
   projects: Project[];
 }
