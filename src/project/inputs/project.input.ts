@@ -10,7 +10,7 @@ import { PriorInvestor } from './prior_investors';
 // import { GraphQLUpload, Upload } from 'graphql-upload-ts';
 
 @InputType()
-export class CreateProjectInput {
+export class CreateProjectInputStudent {
   @Field(() => String)
   @IsNotEmpty()
   name: string;
@@ -41,23 +41,7 @@ export class CreateProjectInput {
 
   @Field(() => String)
   @IsNotEmpty()
-  tax_clearence_docs: string;
-
-  @Field(() => String)
-  @IsNotEmpty()
-  registeration_docs: string;
-
-  @Field(() => String)
-  @IsNotEmpty()
-  financial_projection_docs: string;
-
-  @Field(() => String)
-  @IsNotEmpty()
   pitch_deck: string;
-
-  @Field(() => String)
-  @IsNotEmpty()
-  adhoc_file: string;
 
   @Field(() => String)
   @IsNotEmpty()
@@ -83,6 +67,25 @@ export class CreateProjectInput {
   @Field(() => Date)
   @IsNotEmpty()
   bid_closing: Date;
+}
+
+@InputType()
+export class CreateProjectInput extends CreateProjectInputStudent {
+  @Field(() => String)
+  @IsNotEmpty()
+  tax_clearence_docs: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  registeration_docs: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  adhoc_file: string;
+
+  @Field(() => String)
+  @IsNotEmpty()
+  financial_projection_docs: string;
 }
 
 @InputType()
