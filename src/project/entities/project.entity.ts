@@ -51,24 +51,24 @@ export class Project extends BaseEntity {
   @Column()
   tagline: string;
 
-  @Field(() => String)
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
   tax_clearence_docs: string;
 
-  @Field(() => String)
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
   registeration_docs: string;
 
-  @Field(() => String)
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
   financial_projection_docs: string;
 
   @Field(() => String)
   @Column()
   pitch_deck: string;
 
-  @Field(() => String)
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
   adhoc_file: string;
 
   @Field(() => String)
