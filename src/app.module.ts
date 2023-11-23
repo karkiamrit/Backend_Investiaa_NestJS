@@ -1,3 +1,4 @@
+import { IncubatorModule } from './incubator/incubator.module';
 import { StartupInvestmentModule } from './startup_investment/startup_investment.module';
 import { BidModule } from './bid/bid.module';
 import { InvestorModule } from './investor/investor.module';
@@ -52,6 +53,7 @@ import { HealthModule } from './health/health.module';
     EntrepreneurModule,
     InvestorModule,
     ProjectModule,
+    IncubatorModule,
     BidModule,
     StartupInvestmentModule,
     TokenModule,

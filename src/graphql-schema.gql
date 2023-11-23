@@ -20,12 +20,14 @@ type Bid {
   equity: Float
   equity_amount: Float
   id: ID!
+  incubator: Incubator
   investor: Investor
   loan_amount: Float
   loan_percent: Float
   loan_years: Float
   project: Project
   service_offered: [String!]
+  type: String!
   updatedAt: DateTime!
 }
 
@@ -34,13 +36,20 @@ input CreateBidInput {
   equity_amount: Float!
   loan_amount: Float
   loan_percent: Float
-  loan_years: Float!
+  loan_years: Float
   service_offered: [String!]!
+  type: String!
 }
 
 input CreateEntrepreneurInput {
   has_prior_startups: Boolean!
+  is_student: Boolean!
   profession: ProfessionInput
+}
+
+input CreateIncubatorInput {
+  preferred_roi_type: [String!]!
+  services_offered: [String!]!
 }
 
 input CreateInvestorInput {
@@ -50,27 +59,6 @@ input CreateInvestorInput {
   prior_investments: [PriorInvestmentInput!]!
   profession: ProfessionInput
   profession_experience: Float
-}
-
-input CreateProjectInput {
-  adhoc_file: String!
-  bid_closing: DateTime!
-  bid_opening: DateTime!
-  description: String!
-  domain: String!
-  financial_projection_docs: String!
-  fund_preference: String!
-  logo: String!
-  name: String!
-  pitch_deck: String!
-  prior_investors: [PriorInvestorInput!]
-  registeration_docs: String!
-  social_media_links: [String!]!
-  status: String!
-  tagline: String!
-  tax_clearence_docs: String!
-  team_members: [TeamMemberInput!]
-  usp: String!
 }
 
 input CreateUserInput {
@@ -113,6 +101,7 @@ type EducationInput {
 type Entrepreneur {
   has_prior_startups: Boolean!
   id: ID!
+  is_student: Boolean!
   profession: Profession
   user: User
 }
@@ -125,6 +114,11 @@ type GetBidType {
 type GetEntrepreneurType {
   count: Float
   data: [Entrepreneur!]
+}
+
+type GetIncubatorType {
+  count: Float
+  data: [Incubator!]
 }
 
 type GetInvestorType {
@@ -166,6 +160,15 @@ input IPagination {
   size: Int!
 }
 
+type Incubator {
+  createdAt: DateTime!
+  id: ID!
+  preferred_roi_type: [String!]!
+  services_offered: [String!]!
+  updatedAt: DateTime!
+  user: User
+}
+
 type Investment {
   createdAt: DateTime!
   id: ID!
@@ -201,6 +204,11 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject
+
 type JwtWithUser {
   jwt: String!
   user: User!
@@ -221,15 +229,20 @@ type Mutation {
   acceptBid(bidID: Float!): JSON!
   createBid(input: CreateBidInput!, projectID: Float!): Bid!
   createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
+  createIncubator(input: CreateIncubatorInput!): Incubator!
   createInvestor(input: CreateInvestorInput!): Investor!
   createManyBid(input: [CreateBidInput!]!): [Bid!]!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
-  createProject(input: CreateProjectInput!): Project!
+
+  """Creates a new project"""
+  createProjectforInvestor(input: JSONObject!): Project!
   createUser(input: CreateUserInput!): User!
   deleteBid(id: Float!): Bid!
   deleteBidProfile(id: Float!): Bid!
   deleteEntrepreneur(id: Float!): JSON!
   deleteEntrepreneurProfile: JSON!
+  deleteIncubator(id: Float!): Incubator!
+  deleteIncubatorProfile: JSON!
   deleteInvestor(id: Float!): Investor!
   deleteInvestorProfile: JSON!
   deleteProject(id: Float!): JSON!
@@ -244,6 +257,8 @@ type Mutation {
   updateBidProfile(id: Float!, input: UpdateBidInput!): Bid!
   updateEntrepreneur(id: Float!, input: UpdateEntrepreneurInput!): Entrepreneur!
   updateEntrepreneurProfile(input: UpdateEntrepreneurInput!): Entrepreneur!
+  updateIncubator(id: Float!, input: UpdateIncubatorInput!): Incubator!
+  updateIncubatorProfile(input: UpdateIncubatorInput!): Incubator!
   updateInvestor(id: Float!, input: UpdateInvestorInput!): Investor!
   updateInvestorProfile(input: UpdateInvestorInput!): Investor!
   updateMe(input: UpdateUserInput!): User!
@@ -292,25 +307,25 @@ input ProfessionInput {
 }
 
 type Project {
-  adhoc_file: String!
+  adhoc_file: String
   bid_closing: DateTime!
   bid_opening: DateTime!
   createdAt: DateTime!
   description: String!
   domain: String!
   entrepreneur: Entrepreneur!
-  financial_projection_docs: String!
+  financial_projection_docs: String
   fund_preference: String!
   id: ID!
   logo: String!
   name: String!
   pitch_deck: String!
   prior_investors: [PriorInvestor!]!
-  registeration_docs: String!
+  registeration_docs: String
   social_media_links: [String!]!
   status: String!
   tagline: String!
-  tax_clearence_docs: String!
+  tax_clearence_docs: String
   team_members: [TeamMember!]!
   updatedAt: DateTime!
   usp: String!
@@ -320,6 +335,7 @@ type Query {
   """Returns multiple bids based on the provided input"""
   getManyBids(input: GetManyInput): GetBidType!
   getManyEntrepreneurs(input: GetManyInput): GetEntrepreneurType!
+  getManyIncubators(input: GetManyInput): GetIncubatorType!
   getManyInvestors(input: GetManyInput): GetInvestorType!
   getManyProjects(input: GetManyInput): GetProjectType!
   getManyUsers(input: GetManyInput): GetUserType!
@@ -328,14 +344,21 @@ type Query {
   """
   get bids associated with the current investor; only applicable for investor
   """
-  getMyBidProfile(input: GetManyInput): GetBidType!
+  getMyBidProfileByIncubatorID(input: GetManyInput): GetBidType!
+
+  """
+  get bids associated with the current investor; only applicable for investor
+  """
+  getMyBidProfileByInvestorID(input: GetManyInput): GetBidType!
   getMyEntrepreneurProfile: Entrepreneur!
+  getMyIncubatorProfile: Incubator!
   getMyInvestorProfile: Investor!
   getMyProjectProfile(input: GetManyInput): GetProjectType!
 
   """Returns a single bid based on the bid id; only applicable for admin"""
   getOneBid(input: GetOneInput!): Bid!
   getOneEntrepreneur(input: GetOneInput!): Entrepreneur!
+  getOneIncubator(input: GetOneInput!): Incubator!
   getOneInvestor(input: GetOneInput!): Investor!
   getOneProject(input: GetOneInput!): Project!
   getOneUser(input: GetOneInput!): User!
@@ -395,7 +418,13 @@ input UpdateBidInput {
 
 input UpdateEntrepreneurInput {
   has_prior_startups: Boolean
+  is_student: Boolean!
   profession: ProfessionInput
+}
+
+input UpdateIncubatorInput {
+  preferred_roi_type: [String!]!
+  services_offered: [String!]!
 }
 
 input UpdateInvestorInput {

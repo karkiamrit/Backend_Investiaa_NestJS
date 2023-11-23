@@ -9,6 +9,7 @@ import { UserModule } from '../user/user.module';
 import { StartupInvestmentModule } from '../startup_investment/startup_investment.module';
 
 import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
+import { IncubatorModule } from 'src/incubator/incubator.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { EntrepreneurModule } from 'src/entrepreneur/entrepreneur.module';
     UserModule,
     ProjectModule,
     InvestorModule,
+    IncubatorModule,
     StartupInvestmentModule,
     EntrepreneurModule,
   ],

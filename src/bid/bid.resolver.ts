@@ -92,20 +92,44 @@ export class BidResolver {
       'get bids associated with the current investor; only applicable for investor',
   })
   @UseGuards(new GraphqlPassportAuthGuard())
-  async getMyBidProfile(
+  async getMyBidProfileByInvestorID(
     @Args({ name: 'input', nullable: true })
     qs: GetManyInput<Bid>,
     @CurrentUser() user: User,
     @CurrentQuery() query: string,
   ) {
-    const currentInvestor = await this.bidService.validateInvestor(user);
-    console.log(currentInvestor.id);
+    const { currentInvestor, currentIncubator } =
+      await this.bidService.validateUser(user);
     const fixedInvestorField = {
       investor: { id: currentInvestor.id },
     };
 
     const queryString: GetManyInput<Bid> = {
       where: { ...fixedInvestorField },
+      order: qs.order,
+      pagination: qs.pagination,
+    };
+    return await this.bidService.getMany(queryString, query);
+  }
+
+  @Query(() => GetBidType, {
+    description:
+      'get bids associated with the current investor; only applicable for investor',
+  })
+  @UseGuards(new GraphqlPassportAuthGuard())
+  async getMyBidProfileByIncubatorID(
+    @Args({ name: 'input', nullable: true })
+    qs: GetManyInput<Bid>,
+    @CurrentUser() user: User,
+    @CurrentQuery() query: string,
+  ) {
+    const { currentIncubator } = await this.bidService.validateUser(user);
+    const fixedIncubatorField = {
+      incubator: { id: currentIncubator.id },
+    };
+
+    const queryString: GetManyInput<Bid> = {
+      where: { ...fixedIncubatorField },
       order: qs.order,
       pagination: qs.pagination,
     };

@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsArray, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
@@ -15,13 +15,17 @@ export class CreateBidInput {
   @IsNotEmpty()
   equity: number;
 
-  @Field(() => Number)
-  @IsNotEmpty()
+  @Field(() => Number, { nullable: true })
+  @IsOptional()
   loan_years: number;
 
   @Field(() => Number)
   @IsNotEmpty()
   equity_amount: number;
+
+  @Field()
+  @IsNotEmpty()
+  type: 'incubator' | 'investor';
 
   @Field(() => [String])
   @IsArray()

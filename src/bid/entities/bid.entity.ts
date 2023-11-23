@@ -11,6 +11,7 @@ import {
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Investor } from '../../investor/entities/investor.entity';
 import { Project } from '../../project/entities/project.entity';
+import { Incubator } from 'src/incubator/entities/incubator.entity';
 
 @ObjectType()
 @Entity()
@@ -20,12 +21,18 @@ export class Bid extends BaseEntity {
   id: number;
 
   @ManyToOne(() => Investor, (investor) => investor.bids, {
-    onDelete: 'CASCADE',
     eager: true,
   })
   @Field(() => Investor, { nullable: true })
   @JoinColumn({ name: 'investor_id' })
   investor: Investor;
+
+  @ManyToOne(() => Investor, (investor) => investor.bids, {
+    eager: true,
+  })
+  @Field(() => Incubator, { nullable: true })
+  @JoinColumn({ name: 'incubator_id' })
+  incubator: Incubator;
 
   @ManyToOne(() => Project, (project) => project.bids, {
     onDelete: 'CASCADE',
@@ -74,6 +81,10 @@ export class Bid extends BaseEntity {
   @Field(() => Boolean)
   @Column({ default: false })
   accepted: boolean;
+
+  @Field()
+  @Column()
+  type: 'incubator' | 'investor';
 }
 
 @ObjectType()
