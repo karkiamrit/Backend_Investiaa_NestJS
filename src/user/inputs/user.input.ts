@@ -30,10 +30,6 @@ export class CreateUserInput {
   })
   username: string;
 
-  @Field(() => String)
-  @IsNotEmpty()
-  role: 'admin' | 'user';
-
   @Field(() => String, { nullable: true })
   @IsNotEmpty()
   name: string;

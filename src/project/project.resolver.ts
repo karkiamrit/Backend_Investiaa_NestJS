@@ -6,8 +6,9 @@ import { GetManyInput, GetOneInput } from 'src/declare/inputs/custom.input';
 import { CurrentQuery } from 'src/modules/decorators/query.decorator';
 import { Project, GetProjectType } from './entities/project.entity';
 import {
-  CreateProjectInput,
+  CreateProjectInputInvestor,
   CreateProjectInputStudent,
+  CreateProjectInputIncubator,
   UpdateProjectInput,
 } from './inputs/project.input';
 import { User } from 'src/user/entities/user.entity';
@@ -23,7 +24,7 @@ export class ProjectResolver {
   ) {}
 
   @Query(() => GetProjectType)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   getManyProjects(
     @Args({ name: 'input', nullable: true })
     qs: GetManyInput<Project>,
@@ -52,7 +53,7 @@ export class ProjectResolver {
   // }
 
   @Mutation(() => Project, { description: 'Creates a new project' })
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   async createProjectforInvestor(
     @Args('input', { type: () => GraphQLJSONObject }) input: any,
     @CurrentUser() user: User,
@@ -69,6 +70,17 @@ export class ProjectResolver {
     return this.projectService.create(projectInput, user, currentEntrepreneur);
   }
 
+  @Mutation(() => Project, { description: 'Creates a new project' })
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
+  async createProjectforIncubator(
+    @Args('input') input: CreateProjectInputIncubator,
+    @CurrentUser() user: User,
+  ) {
+    const currentEntrepreneur =
+      await this.entrepreneurService.findEntrepreneurByUserId(user.id);
+    // return this.projectService.create(input, currentEntrepreneur);
+  }
+
   @Mutation(() => Project)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))
   updateProject(
@@ -79,7 +91,7 @@ export class ProjectResolver {
   }
 
   @Mutation(() => GraphQLJSON)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   deleteProject(@Args('id') id: number) {
     return this.projectService.delete(id);
   }
@@ -91,7 +103,7 @@ export class ProjectResolver {
   }
 
   @Query(() => GetProjectType)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   async getMyProjectProfile(
     @Args({ name: 'input', nullable: true })
     qs: GetManyInput<Project>,
@@ -113,7 +125,7 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Project)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   async updateProjectProfile(
     @Args('id') id: number,
     @Args('input') input: UpdateProjectInput,
@@ -125,7 +137,7 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Project)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   async deleteProjectProfile(
     @Args('id') id: number,
     @CurrentUser() user: User,

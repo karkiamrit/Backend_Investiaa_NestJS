@@ -37,7 +37,7 @@ export class InvestorResolver {
   }
 
   @Mutation(() => Investor)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   createInvestor(
     @Args('input') input: CreateInvestorInput,
     @CurrentUser() user: User,

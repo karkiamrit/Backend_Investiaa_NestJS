@@ -31,7 +31,7 @@ export class User extends BaseEntity {
   username: string;
 
   @Field(() => String, { defaultValue: 'user' })
-  @Column()
+  @Column({ default: 'user' })
   role: 'admin' | 'user';
 
   @Field(() => Date)

@@ -54,7 +54,7 @@ export class EntrepreneurResolver {
   }
 
   @Mutation(() => Entrepreneur)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   async createEntrepreneur(
     @Args('input') input: CreateEntrepreneurInput,
     @CurrentUser() user: User,

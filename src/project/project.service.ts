@@ -3,7 +3,7 @@ import { OneRepoQuery, RepoQuery } from 'src/declare/types';
 import { ProjectRepository } from './project.repository';
 import { Project } from './entities/project.entity';
 import {
-  CreateProjectInput,
+  CreateProjectInputInvestor,
   CreateProjectInputStudent,
   UpdateProjectInput,
 } from './inputs/project.input';
@@ -44,7 +44,7 @@ export class ProjectService {
   }
 
   async create(
-    input: CreateProjectInput,
+    input: CreateProjectInputInvestor,
     currentUser: User,
     currentEntrepreneur: Entrepreneur,
   ): Promise<Project | undefined> {
@@ -87,7 +87,7 @@ export class ProjectService {
     }
   }
 
-  private createProjectDetails(input: CreateProjectInput): Project {
+  private createProjectDetails(input: CreateProjectInputInvestor): Project {
     const projectdetails = new Project();
     Object.assign(projectdetails, input);
     return projectdetails;
@@ -122,7 +122,7 @@ export class ProjectService {
     if (currentEntrepreneur?.is_student) {
       projectInput = Object.assign(new CreateProjectInputStudent(), input);
     } else {
-      projectInput = Object.assign(new CreateProjectInput(), input);
+      projectInput = Object.assign(new CreateProjectInputInvestor(), input);
       if (
         !input.adhoc_file ||
         !input.registeration_docs ||

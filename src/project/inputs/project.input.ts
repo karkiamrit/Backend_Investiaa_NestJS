@@ -70,7 +70,7 @@ export class CreateProjectInputStudent {
 }
 
 @InputType()
-export class CreateProjectInput extends CreateProjectInputStudent {
+export class CreateProjectInputInvestor extends CreateProjectInputStudent {
   @Field(() => String)
   @IsNotEmpty()
   tax_clearence_docs: string;
@@ -85,6 +85,25 @@ export class CreateProjectInput extends CreateProjectInputStudent {
 
   @Field(() => String)
   @IsNotEmpty()
+  financial_projection_docs: string;
+}
+
+@InputType()
+export class CreateProjectInputIncubator extends CreateProjectInputStudent {
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  tax_clearence_docs: string;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  registeration_docs: string;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
+  adhoc_file: string;
+
+  @Field(() => String, { nullable: true })
+  @IsOptional()
   financial_projection_docs: string;
 }
 

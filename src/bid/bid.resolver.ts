@@ -17,7 +17,7 @@ export class BidResolver {
   @Query(() => GetBidType, {
     description: 'Returns multiple bids based on the provided input',
   })
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   getManyBids(
     @Args({ name: 'input', nullable: true })
     qs: GetManyInput<Bid>,
@@ -40,7 +40,7 @@ export class BidResolver {
   }
 
   @Mutation(() => Bid)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   createBid(
     @Args('input') input: CreateBidInput,
     @Args('projectID') projectID: number,
@@ -65,7 +65,7 @@ export class BidResolver {
   }
 
   @Mutation(() => Bid)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   async updateBidProfile(
     @Args('id') id: number,
     @Args('input') input: UpdateBidInput,
@@ -77,7 +77,7 @@ export class BidResolver {
   }
 
   @Mutation(() => Bid)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   async deleteBidProfile(
     @Args('id') id: number,
     @CurrentUser() user: User,

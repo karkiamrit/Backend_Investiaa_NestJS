@@ -61,6 +61,27 @@ input CreateInvestorInput {
   profession_experience: Float
 }
 
+input CreateProjectInputIncubator {
+  adhoc_file: String
+  bid_closing: DateTime!
+  bid_opening: DateTime!
+  description: String!
+  domain: String!
+  financial_projection_docs: String
+  fund_preference: String!
+  logo: String!
+  name: String!
+  pitch_deck: String!
+  prior_investors: [PriorInvestorInput!]
+  registeration_docs: String
+  social_media_links: [String!]!
+  status: String!
+  tagline: String!
+  tax_clearence_docs: String
+  team_members: [TeamMemberInput!]
+  usp: String!
+}
+
 input CreateUserInput {
   address: [Address!]
   avatar: String
@@ -77,7 +98,6 @@ input CreateUserInput {
   phone_verified: Boolean = false
   preferred_sector: [String!]
   reset_token: Float
-  role: String!
   twitter: String
   username: String!
   whatsapp: String
@@ -233,6 +253,9 @@ type Mutation {
   createInvestor(input: CreateInvestorInput!): Investor!
   createManyBid(input: [CreateBidInput!]!): [Bid!]!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
+
+  """Creates a new project"""
+  createProjectforIncubator(input: CreateProjectInputIncubator!): Project!
 
   """Creates a new project"""
   createProjectforInvestor(input: JSONObject!): Project!

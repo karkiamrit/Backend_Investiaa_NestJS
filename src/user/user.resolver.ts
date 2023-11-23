@@ -62,7 +62,7 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   async updateMe(
     @CurrentUser() user: User,
     @Args('input') input: UpdateUserInput,

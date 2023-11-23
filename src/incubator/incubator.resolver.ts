@@ -37,7 +37,7 @@ export class IncubatorResolver {
   }
 
   @Mutation(() => Incubator)
-  @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   createIncubator(
     @Args('input') input: CreateIncubatorInput,
     @CurrentUser() user: User,
