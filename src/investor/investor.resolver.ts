@@ -75,35 +75,35 @@ export class InvestorResolver {
     @Args('input') input: UpdateInvestorInput,
     @CurrentUser() user: User,
   ) {
-    const entrepreneur = await this.investorService.getOneByUserId(user.id);
-    if (!entrepreneur) {
+    const investor = await this.investorService.getOneByUserId(user.id);
+    if (!investor) {
       throw new Error('Investor profile not found for the user.');
     }
 
     // Check if the user owns the profile
-    if (entrepreneur.user.id !== user.id) {
+    if (investor.user.id !== user.id) {
       throw new Error('Unauthorized to update this profile.');
     }
 
     // Update the profile
-    return this.investorService.update(entrepreneur.id, input);
+    return this.investorService.update(investor.id, input);
   }
 
   @Mutation(() => GraphQLJSON)
   @UseGuards(new GraphqlPassportAuthGuard('user'))
   async deleteInvestorProfile(@CurrentUser() user: User) {
-    const entrepreneur = await this.investorService.getOneByUserId(user.id);
-    if (!entrepreneur) {
+    const investor = await this.investorService.getOneByUserId(user.id);
+    if (!investor) {
       throw new Error('Investor profile not found for the user.');
     }
 
     // Check if the user owns the profile
-    if (entrepreneur.user.id !== user.id) {
+    if (investor.user.id !== user.id) {
       throw new Error('Unauthorized to delete this profile.');
     }
 
     // Delete the profile
-    this.investorService.delete(entrepreneur.id);
+    this.investorService.delete(investor.id);
 
     return { status: 'success' };
   }

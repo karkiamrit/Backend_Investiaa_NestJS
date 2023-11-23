@@ -8,7 +8,6 @@ import {
 } from './inputs/investor.input';
 import { User } from '../user/entities/user.entity';
 import { PriorInvestment } from './inputs/prior_investment.type';
-import { BidService } from '../bid/bid.service';
 import { FindOneOptions } from 'typeorm';
 
 @Injectable()
