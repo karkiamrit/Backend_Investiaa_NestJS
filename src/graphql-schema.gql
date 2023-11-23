@@ -254,10 +254,10 @@ type Mutation {
   createManyBid(input: [CreateBidInput!]!): [Bid!]!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
 
-  """Creates a new project"""
+  """Apply for incubation by creating project"""
   createProjectforIncubator(input: CreateProjectInputIncubator!): Project!
 
-  """Creates a new project"""
+  """Apply for investment by creating this project"""
   createProjectforInvestor(input: JSONObject!): Project!
   createUser(input: CreateUserInput!): User!
   deleteBid(id: Float!): Bid!

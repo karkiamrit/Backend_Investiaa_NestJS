@@ -52,7 +52,9 @@ export class ProjectResolver {
   //   return this.projectService.create(input, user);
   // }
 
-  @Mutation(() => Project, { description: 'Creates a new project' })
+  @Mutation(() => Project, {
+    description: 'Apply for investment by creating this project',
+  })
   @UseGuards(new GraphqlPassportAuthGuard('user'))
   async createProjectforInvestor(
     @Args('input', { type: () => GraphQLJSONObject }) input: any,
@@ -70,7 +72,9 @@ export class ProjectResolver {
     return this.projectService.create(projectInput, user, currentEntrepreneur);
   }
 
-  @Mutation(() => Project, { description: 'Creates a new project' })
+  @Mutation(() => Project, {
+    description: 'Apply for incubation by creating project',
+  })
   @UseGuards(new GraphqlPassportAuthGuard('user'))
   async createProjectforIncubator(
     @Args('input') input: CreateProjectInputIncubator,
@@ -78,7 +82,7 @@ export class ProjectResolver {
   ) {
     const currentEntrepreneur =
       await this.entrepreneurService.findEntrepreneurByUserId(user.id);
-    // return this.projectService.create(input, currentEntrepreneur);
+    return this.projectService.create(input, user, currentEntrepreneur);
   }
 
   @Mutation(() => Project)

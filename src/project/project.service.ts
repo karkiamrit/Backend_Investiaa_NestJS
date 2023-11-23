@@ -44,7 +44,7 @@ export class ProjectService {
   }
 
   async create(
-    input: CreateProjectInputInvestor,
+    input: any,
     currentUser: User,
     currentEntrepreneur: Entrepreneur,
   ): Promise<Project | undefined> {
