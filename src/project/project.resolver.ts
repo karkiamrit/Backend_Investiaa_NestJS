@@ -5,14 +5,22 @@ import { ProjectService } from './project.service';
 import { GetManyInput, GetOneInput } from 'src/declare/inputs/custom.input';
 import { CurrentQuery } from 'src/modules/decorators/query.decorator';
 import { Project, GetProjectType } from './entities/project.entity';
-import { CreateProjectInput, UpdateProjectInput } from './inputs/project.input';
+import {
+  CreateProjectInput,
+  CreateProjectInputStudent,
+  UpdateProjectInput,
+} from './inputs/project.input';
 import { User } from 'src/user/entities/user.entity';
 import { CurrentUser } from 'src/modules/decorators/user.decorator';
-import GraphQLJSON from 'graphql-type-json';
+import GraphQLJSON, { GraphQLJSONObject } from 'graphql-type-json';
+import { EntrepreneurService } from '../entrepreneur/entrepreneur.service';
 
 @Resolver()
 export class ProjectResolver {
-  constructor(private readonly projectService: ProjectService) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly entrepreneurService: EntrepreneurService,
+  ) {}
 
   @Query(() => GetProjectType)
   @UseGuards(new GraphqlPassportAuthGuard())
@@ -34,13 +42,31 @@ export class ProjectResolver {
     return this.projectService.getOne(qs, query);
   }
 
-  @Mutation(() => Project)
+  // @Mutation(() => Project)
+  // @UseGuards(new GraphqlPassportAuthGuard())
+  // async createProject(
+  //   // @Args('input') input: CreateProjectInput,
+  //   @CurrentUser() user: User,
+  // ) {
+  //   return this.projectService.create(input, user);
+  // }
+
+  @Mutation(() => Project, { description: 'Creates a new project' })
   @UseGuards(new GraphqlPassportAuthGuard())
-  async createProject(
-    @Args('input') input: CreateProjectInput,
+  async createProjectforInvestor(
+    @Args('input', { type: () => GraphQLJSONObject }) input: any,
     @CurrentUser() user: User,
   ) {
-    return this.projectService.create(input, user);
+    let projectInput: any;
+    const currentEntrepreneur =
+      await this.entrepreneurService.findEntrepreneurByUserId(user.id);
+    // Check if the user is a student
+    projectInput = await this.projectService.checkForStudent(
+      currentEntrepreneur,
+      input,
+    );
+
+    return this.projectService.create(projectInput, user, currentEntrepreneur);
   }
 
   @Mutation(() => Project)
