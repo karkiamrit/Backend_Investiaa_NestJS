@@ -8,7 +8,7 @@ import { InvestorService } from '../investor/investor.service';
 import { ProjectService } from '../project/project.service';
 import { Project } from '../project/entities/project.entity';
 import { FindOneOptions } from 'typeorm';
-import { StartupInvestmentService } from 'src/startup_investment/startup_investment.service';
+import { StartupContractService } from 'src/startup_contract/startup_contract.service';
 import { IncubatorService } from '../incubator/incubator.service';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class BidService {
     private readonly bidRepository: BidRepository,
     private readonly investorService: InvestorService,
     private readonly projectService: ProjectService,
-    private readonly startupInvestmentService: StartupInvestmentService,
+    private readonly startupContract: StartupContractService,
     private readonly incubatorService: IncubatorService,
   ) {}
 
@@ -137,10 +137,7 @@ export class BidService {
     }
     bid.accepted = true;
     const savedBid = await bid.save();
-    await this.startupInvestmentService.create(
-      savedBid,
-      bid.project.entrepreneur,
-    );
+    await this.startupContract.create(savedBid, bid.project.entrepreneur);
 
     return { success: true };
   }

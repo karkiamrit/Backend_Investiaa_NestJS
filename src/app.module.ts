@@ -1,5 +1,5 @@
 import { IncubatorModule } from './incubator/incubator.module';
-import { StartupInvestmentModule } from './startup_investment/startup_investment.module';
+import { StartupContractModule } from './startup_contract/startup_contract.module';
 import { BidModule } from './bid/bid.module';
 import { InvestorModule } from './investor/investor.module';
 import { ProjectModule } from './project/project.module';
@@ -55,7 +55,7 @@ import { HealthModule } from './health/health.module';
     ProjectModule,
     IncubatorModule,
     BidModule,
-    StartupInvestmentModule,
+    StartupContractModule,
     TokenModule,
   ],
 })

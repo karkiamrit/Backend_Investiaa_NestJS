@@ -43,7 +43,7 @@ export class Investor extends BaseEntity {
   @Column('json', { nullable: true })
   investment_range: InvestmentRange;
 
-  @Field(() => [PriorInvestment])
+  @Field(() => [PriorInvestment], { nullable: true })
   @Column('json', { nullable: true })
   prior_investments: PriorInvestment[];
 

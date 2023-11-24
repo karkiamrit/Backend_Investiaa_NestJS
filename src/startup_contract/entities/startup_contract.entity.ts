@@ -12,7 +12,7 @@ import { Bid } from 'src/bid/entities/bid.entity';
 
 @ObjectType()
 @Entity()
-export class StartupInvestment extends BaseEntity {
+export class StartupContract extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -29,9 +29,9 @@ export class StartupInvestment extends BaseEntity {
 }
 
 @ObjectType()
-export class GetStartupInvestmentType {
-  @Field(() => [StartupInvestment], { nullable: true })
-  data?: StartupInvestment[];
+export class GetStartupContractType {
+  @Field(() => [StartupContract], { nullable: true })
+  data?: StartupContract[];
 
   @Field(() => Number, { nullable: true })
   count?: number;

@@ -214,7 +214,7 @@ type Investor {
   investment_preferences: [String!]!
   investment_range: InvestmentRange
   preferred_investment_stage: [String!]!
-  prior_investments: [PriorInvestment!]!
+  prior_investments: [PriorInvestment!]
   profession: Profession!
   profession_experience: Float
   updatedAt: DateTime!
@@ -400,6 +400,12 @@ input SignUpInput {
   password: String!
   phone: String!
   username: String!
+}
+
+type StartupContract {
+  bid: Bid
+  entrepreneur: Entrepreneur!
+  id: ID!
 }
 
 type StartupInvestment {
