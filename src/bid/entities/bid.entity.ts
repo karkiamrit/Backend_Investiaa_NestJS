@@ -66,6 +66,10 @@ export class Bid extends BaseEntity {
   @Column('text', { array: true, nullable: true })
   service_offered: string[];
 
+  @Field(() => Number, { nullable: true })
+  @Column({ nullable: true })
+  fee?: number;
+
   @Field()
   @CreateDateColumn({
     type: 'timestamp with time zone',

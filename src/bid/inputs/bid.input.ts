@@ -23,6 +23,10 @@ export class CreateBidInput {
   @IsNotEmpty()
   equity_amount: number;
 
+  @Field(() => Number)
+  @IsOptional()
+  fee: number;
+
   @Field()
   @IsNotEmpty()
   type: 'incubator' | 'investor';
@@ -46,6 +50,10 @@ export class UpdateBidInput {
   @Field(() => Number, { nullable: true })
   @IsOptional()
   equity: number;
+
+  @Field(() => Number, { nullable: true })
+  @IsOptional()
+  fee: number;
 
   @Field(() => Number, { nullable: true })
   @IsOptional()

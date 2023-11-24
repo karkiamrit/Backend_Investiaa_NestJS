@@ -79,14 +79,14 @@ export class Project extends BaseEntity {
   @Column('simple-array')
   social_media_links: string[];
 
-  @Field(() => [TeamMember])
-  @Column('json', { nullable: true, default: null })
+  @Field(() => [TeamMember], { nullable: true })
+  @Column('json', { nullable: true })
   @ArrayMaxSize(5)
-  team_members: TeamMember[];
+  team_members?: TeamMember[];
 
-  @Field(() => [PriorInvestor])
-  @Column('json', { nullable: true, default: null })
-  prior_investors: PriorInvestor[];
+  @Field(() => [PriorInvestor], { nullable: true })
+  @Column('json', { nullable: true })
+  prior_investors?: PriorInvestor[];
 
   @Field(() => Date)
   @Column()

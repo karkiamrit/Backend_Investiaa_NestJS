@@ -19,6 +19,7 @@ type Bid {
   createdAt: DateTime!
   equity: Float
   equity_amount: Float
+  fee: Float
   id: ID!
   incubator: Incubator
   investor: Investor
@@ -34,6 +35,7 @@ type Bid {
 input CreateBidInput {
   equity: Float!
   equity_amount: Float!
+  fee: Float!
   loan_amount: Float
   loan_percent: Float
   loan_years: Float
@@ -343,13 +345,13 @@ type Project {
   logo: String!
   name: String!
   pitch_deck: String!
-  prior_investors: [PriorInvestor!]!
+  prior_investors: [PriorInvestor!]
   registeration_docs: String
   social_media_links: [String!]!
   status: String!
   tagline: String!
   tax_clearence_docs: String
-  team_members: [TeamMember!]!
+  team_members: [TeamMember!]
   updatedAt: DateTime!
   usp: String!
 }
@@ -433,6 +435,7 @@ input TeamMemberInput {
 input UpdateBidInput {
   equity: Float
   equity_amount: Float
+  fee: Float
   loan_amount: Float
   loan_percent: Float
   loan_years: Float
