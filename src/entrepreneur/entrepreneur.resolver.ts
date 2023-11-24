@@ -13,15 +13,11 @@ import {
   UpdateEntrepreneurInput,
 } from './inputs/entrepreneur.input';
 import { User } from '../user/entities/user.entity';
-import { UserService } from '../user/user.service';
 import { CurrentUser } from '../modules/decorators/user.decorator';
 import GraphQLJSON from 'graphql-type-json';
 @Resolver()
 export class EntrepreneurResolver {
-  constructor(
-    private readonly entrepreneurService: EntrepreneurService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly entrepreneurService: EntrepreneurService) {}
 
   @Query(() => GetEntrepreneurType)
   @UseGuards(new GraphqlPassportAuthGuard('admin'))

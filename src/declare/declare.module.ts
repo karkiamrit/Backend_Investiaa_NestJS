@@ -83,7 +83,7 @@ export class DeclareModule {
       const { relations, select } = getInfoFromQuery<T>(query, true);
 
       const condition: FindManyOptions<T> = {
-        relations,
+        // relations,
         select,
         ...(where && !isEmpty(where) && { where: processWhere(where) }),
         ...(order && { order }),
@@ -108,15 +108,15 @@ export class DeclareModule {
       { where }: OneRepoQuery<T>,
       query: string,
     ): Promise<T> {
-      console.log(this);
       const { relations, select } = getInfoFromQuery<T>(query);
 
       const condition: FindOneOptions<T> = {
-        relations,
+        // relations,
         select,
         ...(where && { where: processWhere(where) }),
       };
-      return this.findOne(condition);
+      console.log(condition);
+      return await this.findOne(condition);
     };
   }
 }

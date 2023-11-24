@@ -80,12 +80,12 @@ export class Project extends BaseEntity {
   social_media_links: string[];
 
   @Field(() => [TeamMember])
-  @Column('json', { nullable: true })
+  @Column('json', { nullable: true, default: null })
   @ArrayMaxSize(5)
   team_members: TeamMember[];
 
   @Field(() => [PriorInvestor])
-  @Column('json', { nullable: true })
+  @Column('json', { nullable: true, default: null })
   prior_investors: PriorInvestor[];
 
   @Field(() => Date)

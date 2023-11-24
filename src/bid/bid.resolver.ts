@@ -144,7 +144,7 @@ export class BidResolver {
 
   @Mutation(() => GraphQLJSON)
   @UseGuards(new GraphqlPassportAuthGuard())
-  async acceptBid(@Args('bidID') bidID: number) {
-    return await this.bidService.acceptBid(bidID);
+  async acceptBidInvestor(@Args('bidID') bidID: number) {
+    return await this.bidService.acceptBidInvestor(bidID);
   }
 }

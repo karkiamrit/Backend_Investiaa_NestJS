@@ -3,17 +3,14 @@ import { TypeOrmExModule } from '../modules/decorators/typeorm.module';
 import { EntrepreneurService } from './entrepreneur.service';
 import { EntrepreneurRepository } from './entrepreneur.repository';
 import { EntrepreneurResolver } from './entrepreneur.resolver';
-import { UserService } from '../user/user.service';
-import { UserRepository } from '../user/user.repository';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
-    TypeOrmExModule.forCustomRepository([
-      EntrepreneurRepository,
-      UserRepository,
-    ]),
+    TypeOrmExModule.forCustomRepository([EntrepreneurRepository]),
+    UserModule,
   ],
-  providers: [EntrepreneurService, UserService, EntrepreneurResolver],
+  providers: [EntrepreneurService, EntrepreneurResolver],
 
   exports: [EntrepreneurService],
 })

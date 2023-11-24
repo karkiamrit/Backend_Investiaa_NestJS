@@ -246,7 +246,7 @@ type Mail {
 
 type Mutation {
   SignUp(input: SignUpInput!): User!
-  acceptBid(bidID: Float!): JSON!
+  acceptBidInvestor(bidID: Float!): JSON!
   createBid(input: CreateBidInput!, projectID: Float!): Bid!
   createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
   createIncubator(input: CreateIncubatorInput!): Incubator!
@@ -461,8 +461,8 @@ input UpdateInvestorInput {
 
 input UpdateProjectInput {
   adhoc_file: String
-  bid_closing: DateTime!
-  bid_opening: DateTime!
+  bid_closing: DateTime
+  bid_opening: DateTime
   description: String
   domain: String
   financial_projection_docs: String

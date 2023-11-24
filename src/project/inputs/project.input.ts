@@ -175,11 +175,11 @@ export class UpdateProjectInput {
   @IsOptional()
   prior_investors?: PriorInvestor[];
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   @IsOptional()
-  bid_opening: Date;
+  bid_opening?: Date;
 
-  @Field(() => Date)
+  @Field(() => Date, { nullable: true })
   @IsOptional()
-  bid_closing: Date;
+  bid_closing?: Date;
 }

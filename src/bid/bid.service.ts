@@ -127,7 +127,7 @@ export class BidService {
     return bid;
   }
 
-  async acceptBid(bidID: number): Promise<{ success: boolean }> {
+  async acceptBidInvestor(bidID: number): Promise<{ success: boolean }> {
     const bid = await this.bidRepository.findOne({ where: { id: bidID } });
     if (!bid) {
       throw new Error(`Bid with ID ${bidID} not found`);
