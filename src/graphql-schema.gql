@@ -63,6 +63,12 @@ input CreateInvestorInput {
   profession_experience: Float
 }
 
+input CreateKycInput {
+  citizenship: String!
+  driving_license: String!
+  passport: String!
+}
+
 input CreateProjectInputIncubator {
   adhoc_file: String
   bid_closing: DateTime!
@@ -146,6 +152,11 @@ type GetIncubatorType {
 type GetInvestorType {
   count: Float
   data: [Investor!]
+}
+
+type GetKycType {
+  count: Float
+  data: [Kyc!]
 }
 
 input GetManyInput {
@@ -236,6 +247,16 @@ type JwtWithUser {
   user: User!
 }
 
+type Kyc {
+  citizenship: String!
+  createdAt: DateTime!
+  driving_licence: String!
+  id: ID!
+  passport: String!
+  updatedAt: DateTime!
+  user: User
+}
+
 type Mail {
   createdAt: DateTime!
   html_content: String!
@@ -253,6 +274,7 @@ type Mutation {
   createEntrepreneur(input: CreateEntrepreneurInput!): Entrepreneur!
   createIncubator(input: CreateIncubatorInput!): Incubator!
   createInvestor(input: CreateInvestorInput!): Investor!
+  createKyc(input: CreateKycInput!): Kyc!
   createManyBid(input: [CreateBidInput!]!): [Bid!]!
   createManyUsers(input: [CreateUserInput!]!): [User!]!
 
@@ -270,6 +292,7 @@ type Mutation {
   deleteIncubatorProfile: JSON!
   deleteInvestor(id: Float!): Investor!
   deleteInvestorProfile: JSON!
+  deleteKyc(id: Float!): Kyc!
   deleteProject(id: Float!): JSON!
   deleteProjectProfile(id: Float!): Project!
   deleteUser(id: Float!): JSON!
@@ -286,6 +309,7 @@ type Mutation {
   updateIncubatorProfile(input: UpdateIncubatorInput!): Incubator!
   updateInvestor(id: Float!, input: UpdateInvestorInput!): Investor!
   updateInvestorProfile(input: UpdateInvestorInput!): Investor!
+  updateKyc(id: Float!, input: UpdateKycInput!): Kyc!
   updateMe(input: UpdateUserInput!): User!
   updateProject(id: Float!, input: UpdateProjectInput!): Project!
   updateProjectProfile(id: Float!, input: UpdateProjectInput!): Project!
@@ -362,6 +386,7 @@ type Query {
   getManyEntrepreneurs(input: GetManyInput): GetEntrepreneurType!
   getManyIncubators(input: GetManyInput): GetIncubatorType!
   getManyInvestors(input: GetManyInput): GetInvestorType!
+  getManyKycs(input: GetManyInput): GetKycType!
   getManyProjects(input: GetManyInput): GetProjectType!
   getManyUsers(input: GetManyInput): GetUserType!
   getMe: User!
@@ -385,6 +410,7 @@ type Query {
   getOneEntrepreneur(input: GetOneInput!): Entrepreneur!
   getOneIncubator(input: GetOneInput!): Incubator!
   getOneInvestor(input: GetOneInput!): Investor!
+  getOneKyc(input: GetOneInput!): Kyc!
   getOneProject(input: GetOneInput!): Project!
   getOneUser(input: GetOneInput!): User!
   getProjectProfiles: [Project!]!
@@ -466,6 +492,12 @@ input UpdateInvestorInput {
   prior_investments: [PriorInvestmentInput!]
   profession: ProfessionInput
   profession_experience: Float
+}
+
+input UpdateKycInput {
+  citizenship: String!
+  driving_license: String!
+  passport: String!
 }
 
 input UpdateProjectInput {

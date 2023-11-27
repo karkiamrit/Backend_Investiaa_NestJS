@@ -15,10 +15,7 @@ export class StartupContractService {
     return this.startupContractRepository.getOne(qs, query);
   }
 
-  async create(
-    bid: Bid,
-    entrepreneur: Entrepreneur,
-  ): Promise<StartupContract> {
+  async create(bid: Bid, entrepreneur: Entrepreneur): Promise<StartupContract> {
     const startupContract = new StartupContract();
     startupContract.bid = bid;
     startupContract.entrepreneur = entrepreneur;

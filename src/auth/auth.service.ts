@@ -4,16 +4,12 @@ import { SignInInput, SignUpInput } from 'src/auth/inputs/auth.input';
 import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
 import { JwtService } from '@nestjs/jwt';
-import { pick } from 'lodash';
+// import { pick } from 'lodash';
 import { User } from 'src/user/entities/user.entity';
 import { JwtWithUser } from './entities/auth._entity';
 import { OtpService } from '../otp/otp.service';
 import { MailService } from '../mail/mail.service';
-import {
-  ACCESS_TOKEN_EXPIRY,
-  FULL_WEB_URL,
-  REFRESH_TOKEN_EXPIRY,
-} from 'src/util/config/config';
+import { FULL_WEB_URL } from 'src/util/config/config';
 import { OtpType } from 'src/otp/entities/otp.entity';
 // import { ApolloError } from 'apollo-server-core';
 import { TokenService } from 'src/token/token.service';
@@ -100,7 +96,7 @@ export class AuthService {
   async forgotPassword(email: string): Promise<boolean> {
     const user = await this.userService.getOne({ where: { email } });
     if (!user) {
-      throw new ApolloError("Phone number doesn't exist!", 'PHONE_NOT_FOUND', {
+      throw new ApolloError("Email doesn't exist!", 'EMAIL_NOT_FOUND', {
         statusCode: 404, // Not Found
       });
     }

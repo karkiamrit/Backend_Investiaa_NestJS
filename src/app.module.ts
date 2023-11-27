@@ -1,3 +1,4 @@
+import { KycModule } from './kyc/kyc.module';
 import { IncubatorModule } from './incubator/incubator.module';
 import { StartupContractModule } from './startup_contract/startup_contract.module';
 import { BidModule } from './bid/bid.module';
@@ -54,6 +55,7 @@ import { HealthModule } from './health/health.module';
     InvestorModule,
     ProjectModule,
     IncubatorModule,
+    KycModule,
     BidModule,
     StartupContractModule,
     TokenModule,
