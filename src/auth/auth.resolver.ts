@@ -58,7 +58,7 @@ export class AuthResolver {
   }
 
   @Mutation(() => Boolean)
-  // @UseGuards(new GraphqlPassportAuthGuard())
+  @UseGuards(new GraphqlPassportAuthGuard('user'))
   async logout(
     @CurrentUser() user: User,
     @Args('accessToken') accessToken: string,

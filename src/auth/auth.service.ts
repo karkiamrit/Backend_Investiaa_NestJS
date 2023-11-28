@@ -42,7 +42,6 @@ export class AuthService {
       role: user.role,
       // Include other claims as needed
     };
-
     return this.jwtService.sign(payload);
   }
 
@@ -189,7 +188,9 @@ export class AuthService {
       if (otpCode === '123456') {
         // For testing purposes, you can consider the phone verified with a dummy OTP.
         // Remove this block when implementing OTP verification.
-        await this.userService.update(user.id, { phone_verified: true });
+        await this.userService.updateVerification(user.id, {
+          phone_verified: true,
+        });
         return true;
       }
 
@@ -197,7 +198,9 @@ export class AuthService {
       // Retrieve the OTP associated with the user and check if it matches otpCode
 
       // If the OTP is valid, set user.phone_verified to true and update the user
-      await this.userService.update(user.id, { phone_verified: true });
+      await this.userService.updateVerification(user.id, {
+        phone_verified: true,
+      });
 
       return true;
     } catch (error) {
@@ -211,15 +214,15 @@ export class AuthService {
     const expirationInSeconds = 24 * 60 * 60; // 1 day in seconds
 
     const tokenPayload: any = this.jwtService.decode(accessToken);
+    console.log(accessToken);
     const tokenIdentifier: string = tokenPayload.jti;
 
-    // Check if the token is in the blacklist
-    if (await this.tokenService.isTokenBlacklisted(tokenIdentifier)) {
-      // Token is already invalidated, return false
-      return false;
-    }
+    // // Check if the token is in the blacklist
+    // if (await this.tokenService.isTokenBlacklisted(tokenIdentifier)) {
+    //   // Token is already invalidated, return false
+    //   return false;
+    // }
 
-    // Add the token's JTI to the blacklist
     await this.tokenService.blacklistToken(
       tokenIdentifier,
       expirationInSeconds,
