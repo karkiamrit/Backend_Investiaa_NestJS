@@ -1,24 +1,19 @@
 # NestJS/TypeORM/GraphQL/PostgresQL
 
-NestJS boilerplate with TypeORM, GraphQL and PostgreSQL
-
-## Open for Contribution
-
-Totally open for any Pull Request, please feel free to contribute in any ways.
-There can be errors related with type or something. It would be very helpful to me for you to fix these errors.
+Backend with TypeORM, GraphQL and PostgreSQL
 
 ## [NestJS](https://docs.nestjs.com/)
 
-Base NestJS, We like it
+Base NestJS
 
 ## [TypeORM](https://typeorm.io/)
 
 We use [Nestjs/TypeORM](https://docs.nestjs.com/techniques/database)
-In this template, We've been trying not to use `Pure SQL` to make the most of TypeORM.
+In this project, I've been trying not to use `Pure SQL` to make the most of TypeORM.
 
 ## [PostgresQL Database](https://www.postgresql.org/)
 
-We use postgresQL for backend database, The default database taht will be used is named 'postgres'
+I've used postgresQL for backend database, The default database taht will be used is named 'postgres'
 You have to have postgresql Database server before getting started.
 You can use [Docker postgresQL](https://hub.docker.com/_/postgres) to have server easily
 
@@ -28,10 +23,9 @@ You can use [Docker postgresQL](https://hub.docker.com/_/postgres) to have serve
 
 We use GraphQL in a Code First approach (our code will create the GraphQL Schemas).
 
-We don't use [swagger](https://docs.nestjs.com/openapi/introduction) now, but you can use this if you want to.
-You can see [playground](http://localhost:8000/graphql)
+You can see [playground](http://localhost:8000/graphql) for documentation.
 
-We use apollographql as playground. but if you want to use default playground, you can do like below.
+I have used apollographql as playground. but if you want to use default playground, you can do like below.
 
 ```js
 // app.modules.js
@@ -183,18 +177,6 @@ You can just create postgresql by below code, sync with .development.env
 $ docker run -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=1q2w3e4r -d postgres
 ```
 
-## Todo
-
-- [ ] Get Jest(e2e or unit test) to be work
-- [ ] Add Many OAUths (Both of front and back end)
-
-  - [ ] Kakao
-  - [ ] Google
-  - [ ] Apple
-  - [ ] Naver
-
-- [x] GraphQL Upload
-- [x] Healthcheck
 - [x] Divide usefactory
 - [ ] Redis
 - [ ] ElasticSearch
